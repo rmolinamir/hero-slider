@@ -10,16 +10,17 @@ const app = () => {
 
   return (
     <>
-      <h1>Hello world</h1>
+      <h1>Fancy Slider test</h1>
       <button onClick={() => previousSlideHandler.current()}>Previous Slide</button>
       <button onClick={() => nextSlideHandler.current()}>Next Slide</button>
       <FancySlider
         nextSlide={nextSlideHandler}
         previousSlide={previousSlideHandler}
-        slidingAnimation='top-to-bottom'
+        slidingAnimation='right-to-left'
         bSmartSliding={true}
         settings={{
-          bShouldAutoplay: true,
+          slidingDuration: 600,
+          bShouldAutoplay: false,
           autoplayDuration: 6000
         }}>
         <Slide style={{

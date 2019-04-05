@@ -52,7 +52,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * Initial settings for the carousel.
    */
   const initialSettings: ISettings = {
-    slidingDuration: 800,
+    slidingDuration: 500,
     slidingDelay: 0,
     slidingAnimation: setSlidingAnimation(props.slidingAnimation),
     bShouldAutoplay: false,
@@ -97,7 +97,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
       switch (props.slidingAnimation) {
       case EAnimations.TOP_TO_BOTTOM:
       case EAnimations.BOTTOM_TO_TOP:
-        if (nextSlide > activeSlide) {
+        if (nextSlide > activeSlideWatcher.current) {
           setSettings({
             ...settings,
             slidingAnimation: classes.Sliding_Top_To_Bottom
@@ -112,7 +112,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
       case EAnimations.RIGHT_TO_LEFT:
       case EAnimations.LEFT_TO_RIGHT:
       default:
-        if (nextSlide > activeSlide) {
+        if (nextSlide > activeSlideWatcher.current) {
           setSettings({
             ...settings,
             slidingAnimation: classes.Sliding_Right_To_Left
@@ -258,7 +258,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * over the slider.
    */
   const onMouseMoveCaptureHandler = (): void => {
-    autoplayHandler()
+    if (settings.bShouldAutoplay) {
+      autoplayHandler()
+    }
   }
 
   /**
@@ -266,7 +268,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * out of the slider.
    */
   const onMouseOutCaptureHandler = (): void => {
-    autoplayInstance.reset()
+    if (settings.bShouldAutoplay) {
+      autoplayInstance.reset()
+    }
   }
 
   /**
