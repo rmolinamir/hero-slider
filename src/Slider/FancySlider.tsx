@@ -14,6 +14,7 @@ interface ISettings {
   slidingDuration: number
   slidingDelay: number
   slidingAnimation: string
+  bSmartSliding: boolean
   bShouldAutoplay: boolean
   autoplayDuration: number
   autoplayHandlerTimeout: number
@@ -55,6 +56,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
     slidingDuration: 500,
     slidingDelay: 0,
     slidingAnimation: setSlidingAnimation(props.slidingAnimation),
+    bSmartSliding: true,
     bShouldAutoplay: false,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
@@ -80,9 +82,6 @@ const fancySlider = React.memo((props: ISliderProps) => {
    */
   const changeSlide = (nextSlide: number): void => {
     if (bIsDoneSlidingWatcher.current) {
-      if (props.bSmartSliding ) {
-        smartAnimations(nextSlide)
-      }
       setActiveSlide(nextSlide)
       onSlidingHandler()
     }
@@ -186,6 +185,13 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * Changes the active slide to the next one.
    */
   const setNextSlide = () => {
+    /**
+     * Forces the animation to be set as the same always, it will slide from right to left,
+     * or from top to bottom.
+     */
+    if (settings.bSmartSliding) {
+      smartAnimations(slidesArray.length + 1)
+    }
     changeSlideHandler(getNextSlide(activeSlideWatcher.current))
   }
 
@@ -211,17 +217,15 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * Changes the active slide to the previous one.
    */
   const setPreviousSlide = () => {
+    /**
+     * Similar to `setNextSlide`, it will always slide from left to right,
+     * or from bottom to top.
+     */
+    if (settings.bSmartSliding) {
+      smartAnimations(1)
+    }
     changeSlideHandler(getPreviousSlide(activeSlideWatcher.current))
   }
-
-  React.useEffect(() => {
-    if (props.nextSlide) {
-      props.nextSlide.current = setNextSlide
-    }
-    if (props.previousSlide) {
-      props.previousSlide.current = setPreviousSlide
-    }
-  }, [])
 
   /**
    * Handles clicking on the slide, it changes current slide to the next one. If the user interacts
@@ -294,6 +298,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * `autoplay` is the callback sent to the autoplay instance.
    */
   const autoplay = (): void => {
+    const nextSlide = getNextSlide(activeSlideWatcher.current)
+    if (settings.bSmartSliding) {
+      smartAnimations(nextSlide)
+    }
     changeSlide(getNextSlide(activeSlideWatcher.current))
   }
 
@@ -338,8 +346,20 @@ const fancySlider = React.memo((props: ISliderProps) => {
    */
   React.useEffect(() => {
     activeSlideWatcher.current = activeSlide
+    /**
+     * Turn on autoplay if `props.bShouldAutoplay` is true.
+     */
     if (settings.bShouldAutoplay) {
       autoplayInstance.start()
+    }
+    /**
+     * Sets up the `nextSlide` and `previousSlide` reference object if they exist.
+     */
+    if (props.nextSlide) {
+      props.nextSlide.current = setNextSlide
+    }
+    if (props.previousSlide) {
+      props.previousSlide.current = setPreviousSlide
     }
     /**
      * Clearing any existing timeouts to avoid memory leaks.

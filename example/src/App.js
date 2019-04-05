@@ -20,7 +20,7 @@ const app = () => {
         bSmartSliding={true}
         settings={{
           slidingDuration: 600,
-          bShouldAutoplay: false,
+          bShouldAutoplay: true,
           autoplayDuration: 6000
         }}>
         <Slide style={{
