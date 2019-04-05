@@ -7,9 +7,15 @@ import FancySlider, { Slide } from 'react-fancy-slider'
 export default class App extends Component {
   render () {
     return (
-      <FancySlider>
+      <FancySlider
+        slidingAnimation='top-to-bottom'
+        bSmartSliding={true}
+        settings={{
+          bShouldAutoplay: true,
+          autoplayDuration: 6000
+        }}>
         <Slide style={{
-          backgroundColor: 'rgba(46, 138, 138, 0.8)',
+          backgroundColor: '#6d9b98',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg')",
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed',
@@ -18,8 +24,9 @@ export default class App extends Component {
         }}>
           <h1>Black Widow</h1>
         </Slide>
+
         <Slide style={{
-          backgroundColor: 'rgba(192, 60, 96, 0.8)',
+          backgroundColor: '#8a8a8a',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg')",
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed',
@@ -27,6 +34,17 @@ export default class App extends Component {
           backgroundSize: 'cover'
         }}>
           <h1>Captain America</h1>
+        </Slide>
+
+        <Slide style={{
+          backgroundColor: '#ea2329',
+          backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg')",
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover'
+        }}>
+          <h1>Iron Man</h1>
         </Slide>
       </FancySlider>
     )

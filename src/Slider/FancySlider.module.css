@@ -61,7 +61,35 @@
 
 @keyframes slide-left-to-right {
   0% {
+    clip-path: inset(0% 100% 0% 0%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.Sliding_Right_To_Left {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-right-to-left var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-right-to-left {
+  0% {
     clip-path: inset(0% 0% 0% 100%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.Sliding_Top_To_Bottom {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-top-to-bottom var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-top-to-bottom {
+  0% {
+    clip-path: inset(0% 0% 100% 0%);
   }
   100% {
     clip-path: inset(0% 0% 0% 0%);
