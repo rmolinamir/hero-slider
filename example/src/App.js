@@ -1,13 +1,21 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import FancySlider, { Slide } from 'react-fancy-slider'
 
 // import ExampleComponent from './FancySlider'
 
-export default class App extends Component {
-  render () {
-    return (
+const app = () => {
+  const nextSlideHandler = React.useRef()
+  const previousSlideHandler = React.useRef()
+
+  return (
+    <>
+      <h1>Hello world</h1>
+      <button onClick={() => previousSlideHandler.current()}>Previous Slide</button>
+      <button onClick={() => nextSlideHandler.current()}>Next Slide</button>
       <FancySlider
+        nextSlide={nextSlideHandler}
+        previousSlide={previousSlideHandler}
         slidingAnimation='top-to-bottom'
         bSmartSliding={true}
         settings={{
@@ -18,7 +26,7 @@ export default class App extends Component {
           backgroundColor: '#6d9b98',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg')",
           backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          // backgroundAttachment: 'fixed',
           backgroundPosition: 'center',
           backgroundSize: 'cover'
         }}>
@@ -29,7 +37,7 @@ export default class App extends Component {
           backgroundColor: '#8a8a8a',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg')",
           backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          // backgroundAttachment: 'fixed',
           backgroundPosition: 'center',
           backgroundSize: 'cover'
         }}>
@@ -40,13 +48,15 @@ export default class App extends Component {
           backgroundColor: '#ea2329',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg')",
           backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          // backgroundAttachment: 'fixed',
           backgroundPosition: 'center',
           backgroundSize: 'cover'
         }}>
           <h1>Iron Man</h1>
         </Slide>
       </FancySlider>
-    )
-  }
+    </>
+  )
 }
+
+export default app

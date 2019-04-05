@@ -37,19 +37,14 @@ const setSlidingAnimation = (animation?: EAnimations): string => {
   }
 }
 
-/**
- * Global scopped variable to help the autoplay instance keep track of the active slide.
- * Mainly used for the timeouts and intervals. It is set during the `useEffects` subscribed
- * to the `activeSlide` state and by the `onClickHandler` function whenever the user goes
- * changes slide. Initialized as 1.
- */
-let autoplayActiveSlideWatcher = 1
-
 interface ISliderProps {
   children: React.ReactElement[] | React.ReactElement
   settings?: ISettings
   slidingAnimation?: EAnimations
   bSmartSliding?: boolean
+  initialSlide?: number
+  nextSlide?: React.MutableRefObject<any>
+  previousSlide?: React.MutableRefObject<any>
 }
 
 const fancySlider = React.memo((props: ISliderProps) => {
@@ -80,10 +75,11 @@ const fancySlider = React.memo((props: ISliderProps) => {
 
   /**
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle the smooth transition and
-   * set `bIsDoneSliding` as true. While `bIsDoneSliding` is true, no the slides won't change.
+   * set `bIsDoneSlidingWatcher.current` (like a pointer) as true. While `bIsDoneSliding` is true, no the
+   * slides won't change.
    */
   const changeSlide = (nextSlide: number): void => {
-    if (bIsDoneSliding) {
+    if (bIsDoneSlidingWatcher.current) {
       if (props.bSmartSliding ) {
         smartAnimations(nextSlide)
       }
@@ -92,6 +88,11 @@ const fancySlider = React.memo((props: ISliderProps) => {
     }
   }
 
+  /**
+   * `smartAnimations` decides which animation to do next depending on the chosen
+   * animation set by the programmer, the current and next slides, and if
+   * `props.slidingAnimation` is `true`.
+   */
   const smartAnimations = (nextSlide: number): void => {
       switch (props.slidingAnimation) {
       case EAnimations.TOP_TO_BOTTOM:
@@ -126,10 +127,107 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   /**
+   * `getSlides` will filter the `props.children` array looking for any children that is not a `Slider` component.
+   * If a children is not a `Slider` component then it simply is filtered by using the `Array.filter()` method.
+   */
+  const getSlides = () => {
+    return React.Children.toArray(props.children).filter(child => {
+      if (typeof child.type === 'function' && React.isValidElement(child)) {
+        const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
+        const displayName = RFC_Child.displayName
+        if (displayName === 'react-fancy-slider/slide') {
+          return true
+        } else {
+          return false
+        }
+      }
+      return false
+    })
+  }
+
+  /**
+   * `setUpSlides` clones the necessary properties for each slide to work.
+   */
+  const setUpSlides = () => {
+    return React.Children.map(slidesArray, (child, index) => {
+      const currentSlide = index + 1
+      return (
+        React.cloneElement(
+          child as React.ReactElement<any>, 
+          {
+            bIsActive: activeSlide === currentSlide,
+            bIsDoneSliding: bIsDoneSliding,
+            slidingAnimation: settings.slidingAnimation
+          }
+        )
+      )
+    })
+  }
+
+  /**
+   * Calculates the next slide based on the current slide (`activeSlide` by default)
+   * based on the total amount of slides.
+   */
+  const getNextSlide = (currentSlide: number = activeSlide) => {
+    const totalSlides = slidesArray.length
+    let nextSlide: number;
+    /**
+     * If **not** at the last slide, then add one. Otherwise set the next slide back to 1.
+     */
+    if (currentSlide <= (totalSlides - 1)) {
+      nextSlide = currentSlide + 1
+    } else {
+      nextSlide = 1
+    }
+    return nextSlide
+  }
+
+  /**
+   * Changes the active slide to the next one.
+   */
+  const setNextSlide = () => {
+    changeSlideHandler(getNextSlide(activeSlideWatcher.current))
+  }
+
+  /**
+   * Calculates the previous slide similar to `getNextSlide`.
+   */
+  const getPreviousSlide = (currentSlide: number = activeSlide) => {
+    const totalSlides = slidesArray.length
+    let nextSlide: number;
+    /**
+     * If **not** at the first slide, then add one. Otherwise set the next slide to the
+     * last one.
+     */
+    if (currentSlide > 1) {
+      nextSlide = currentSlide - 1
+    } else {
+      nextSlide = totalSlides
+    }
+    return nextSlide
+  }
+
+  /**
+   * Changes the active slide to the previous one.
+   */
+  const setPreviousSlide = () => {
+    changeSlideHandler(getPreviousSlide(activeSlideWatcher.current))
+  }
+
+  React.useEffect(() => {
+    if (props.nextSlide) {
+      props.nextSlide.current = setNextSlide
+    }
+    if (props.previousSlide) {
+      props.previousSlide.current = setPreviousSlide
+    }
+  }, [])
+
+  /**
    * Handles clicking on the slide, it changes current slide to the next one. If the user interacts
    * with the slide, the timer of the autoplay instance is reset.
    */
-  const onClickHandler = (nextSlide: number): void => {
+  const changeSlideHandler = (nextSlide: number): void => {
     if (settings.bShouldAutoplay) {
       autoplayInstance.reset()
     }
@@ -156,6 +254,22 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   /**
+   * `onMouseMoveCaptureHandler` executes `autoplayHandler` whenever the user moves the mouse
+   * over the slider.
+   */
+  const onMouseMoveCaptureHandler = (): void => {
+    autoplayHandler()
+  }
+
+  /**
+   * `onMouseOutCaptureHandler` resets the autoplay instance whenever the user moves the mouse
+   * out of the slider.
+   */
+  const onMouseOutCaptureHandler = (): void => {
+    autoplayInstance.reset()
+  }
+
+  /**
    * `autoplayHandler` will pause the autoplay timer whenever the mouse moves over the
    * slider. If the mouse stops moving the autoplay will resume. If not, `onMouseMoveCaptureHandler`
    * will also clear the `autoplayInstance`resume `setTimeout` callbacks if any exist, so that the slides
@@ -176,46 +290,55 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * `autoplay` is the callback sent to the autoplay instance.
    */
   const autoplay = (): void => {
-    const nextSlide = autoplayActiveSlideWatcher === 1 ? 2 : 1
-    autoplayActiveSlideWatcher = nextSlide
-    changeSlide(nextSlide)
+    changeSlide(getNextSlide(activeSlideWatcher.current))
   }
 
+  const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1)
+  const [bIsDoneSliding, setIsDoneSliding] = React.useState(true)
   /**
-   * `onMouseMoveCaptureHandler` executes `autoplayHandler` whenever the user moves the mouse
-   * over the slider.
+   * `activeSlideWatcher` `bIsDoneSlidingWatcher` are a mutable objects that will persist for the full
+   * lifetime of the component.
+   *  - `bIsDoneSlidingWatcher` will serve as a pointer in case a `nextSlide` event is called from outside.
+   *  - `activeSlideWatcher` serves as a pointer to the `activeSlide` so that the auto play instance won't
+   *    be out of sync with the current slide. It is updated during the `useEffects` subscribed to the `activeSlide`
+   *    state whenever the user changes slide.
    */
-  const onMouseMoveCaptureHandler = (): void => {
-    autoplayHandler()
-  }
-
-  /**
-   * `onMouseOutCaptureHandler` resets the autoplay instance whenever the user moves the mouse
-   * out of the slider.
-   */
-  const onMouseOutCaptureHandler = (): void => {
-    autoplayInstance.reset()
-  }
-
-  const [activeSlide, setActiveSlide] = React.useState(1)
-  const [bIsDoneSliding, setIsDoneSliding] = React.useState<boolean>(true)
+  const bIsDoneSlidingWatcher = React.useRef<boolean>(true)
+  const activeSlideWatcher = React.useRef(activeSlide)
 
   const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>()
 
   const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = React.useState<NodeJS.Timeout>()
-  const [autoplayInstance] = React.useState(new IntervalTimer(autoplay, settings.autoplayDuration + slidingTimeoutDuration))
+  const [autoplayInstance] = React.useState(React.useMemo(() => {
+    return new IntervalTimer(autoplay, settings.autoplayDuration + slidingTimeoutDuration)
+  }, []))
+
+  /**
+   * Sets up initial slides array, `useMemo` is used for performance optimization since a loop is
+   * ran inside `getSlides`.
+   */
+  const [slidesArray] = React.useState(React.useMemo(() => {
+    return getSlides()
+  }, []))
 
   React.useEffect(() => {
-    autoplayActiveSlideWatcher = activeSlide
+    activeSlideWatcher.current = activeSlide
   }, [activeSlide])
 
   React.useEffect(() => {
-    autoplayActiveSlideWatcher = activeSlide
+    bIsDoneSlidingWatcher.current = bIsDoneSliding
+  }, [bIsDoneSliding])
+
+  /**
+   * After mounting, akin to `componentDidMount`.
+   */
+  React.useEffect(() => {
+    activeSlideWatcher.current = activeSlide
     if (settings.bShouldAutoplay) {
       autoplayInstance.start()
     }
     /**
-     * Clearing any existing timeout to avoid memory dumps.
+     * Clearing any existing timeouts to avoid memory leaks.
      */
     return () => {
       clearTimeout(slidingTimeout && +slidingTimeout)
@@ -225,49 +348,6 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }, [])
 
   /**
-   * `setUpSlides` will filter the `props.children` array looking for any children that is not a `Slider` component.
-   * If a children is not a `Slider` component then it simply is filtered by using the `Array.filter()` method.
-   */
-  const setUpSlides = () => {
-    console.log('settings', settings)
-    const filteredArray = React.Children.toArray(props.children).filter(child => {
-      if (typeof child.type === 'function' && React.isValidElement(child)) {
-        const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
-        const displayName = RFC_Child.displayName
-        if (displayName === 'react-fancy-slider/slide') {
-          return true
-        } else {
-          return false
-        }
-      }
-      return false
-    })
-
-    // Thank god for sync code.
-    return React.Children.map(filteredArray, (child, index) => {
-      const slideIndex = index + 1
-      let nextSlide: number;
-      if (index !== (filteredArray.length - 1)) {
-        nextSlide = slideIndex + 1
-      } else {
-        nextSlide = 1
-      }
-
-      return (
-        React.cloneElement(
-          child as React.ReactElement<any>, 
-          {
-            bIsActive: activeSlide === slideIndex,
-            bIsDoneSliding: bIsDoneSliding,
-            onClick: () => onClickHandler(nextSlide),
-            slidingAnimation: settings.slidingAnimation
-          }
-        )
-      )
-    })
-  }
-
-    /**
    * Performance optimization to avoid re-rendering after mouse over captures.
    * Only update if `activeSlide` or `bIsDoneSliding` change.
    */
@@ -277,6 +357,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
 
   return (
     <div
+      onScroll={(event) => console.log(event)}
       onClick={autoplayHandler}
       style={CSSVariables as React.CSSProperties}
       onMouseMoveCapture={onMouseMoveCaptureHandler}

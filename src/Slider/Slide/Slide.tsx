@@ -5,7 +5,6 @@ import classes from '../FancySlider.module.css'
 interface ISlide {
   bIsActive: boolean
   bIsDoneSliding: boolean
-  onClick: TAnyFunction
   slidingAnimation: string
   style: React.CSSProperties
   children: React.ReactChildren
@@ -15,7 +14,6 @@ const FancySlide = (props: ISlide) => {
   return (
       <div
         style={props.style}
-        onClick={props.onClick}
         className={[
           classes.Slide,
           props.bIsActive && classes.Active,
