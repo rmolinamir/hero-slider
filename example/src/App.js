@@ -16,11 +16,10 @@ const app = () => {
       <FancySlider
         nextSlide={nextSlideHandler}
         previousSlide={previousSlideHandler}
-        // slidingAnimation='right-to-left'
-        slidingAnimation='top-to-bottom'
-        bSmartSliding={false}
+        slidingAnimation='right-to-left'
         settings={{
           slidingDuration: 600,
+          // slidingDelay: 1000,
           bShouldAutoplay: false,
           autoplayDuration: 6000
         }}>

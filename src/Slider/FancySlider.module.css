@@ -38,14 +38,51 @@
 .Container {
   backface-visibility: hidden;
   /* property name | duration | timing function | delay */
-  transition: all 300ms ease-in-out 0ms;
+  transition: all 300ms ease-in-out var(--sliding-delay, 200ms);;
 }
 
 .Container:not(.Active) {
   z-index: 1;
   opacity: 0;
   /* property name | duration | timing function | delay */
-  transition: all 200ms ease-in-out 0ms;
+  transition: all 200ms ease-in-out var(--sliding-delay, 200ms);
+}
+
+.Mask {
+  overflow: hidden;
+  position: absolute;
+  left: 33.33%;
+  top: 15%;
+  width: 50.25vh;
+  height: 67vh;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, 6vh 0, 6vh 61vh, 44vh 61vh, 44vh 6vh, 6vh 6vh);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, 6vh 0, 6vh 61vh, 44vh 61vh, 44vh 6vh, 6vh 6vh);
+  transform: translate3d(-33.33%, 0, 0);
+  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+}
+
+.Mask:not(.Active) {
+  opacity: 0;
+  z-index: 1;
+  transform: translate3d(33.33%, 0, 0);
+  /* property name | duration | timing function | delay */
+  transition: all calc(var(--sliding-duration, 200ms)) ease-in-out 0s;
+}
+
+.Inner {
+  z-index: -1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate3d(-50%, -50%, 0);
+  background-size: cover;
+  background-position: center center;
+  background-blend-mode: luminosity;
+  -webkit-transform-origin: 50% 16.5vh;
+  transform-origin: 50% 16.5vh;
+  transition-timing-function: ease-in-out;
 }
 
 /**
@@ -62,9 +99,11 @@
 @keyframes slide-left-to-right {
   0% {
     clip-path: inset(0% 100% 0% 0%);
+    -webkit-clip-path: inset(0% 100% 0% 0%);
   }
   100% {
     clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
   }
 }
 
@@ -76,9 +115,11 @@
 @keyframes slide-right-to-left {
   0% {
     clip-path: inset(0% 0% 0% 100%);
+    -webkit-clip-path: inset(0% 0% 0% 100%);
   }
   100% {
     clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
   }
 }
 
@@ -90,9 +131,11 @@
 @keyframes slide-top-to-bottom {
   0% {
     clip-path: inset(0% 0% 100% 0%);
+    -webkit-clip-path: inset(0% 0% 100% 0%);
   }
   100% {
     clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
   }
 }
 
@@ -104,8 +147,10 @@
 @keyframes slide-bottom-to-top {
   0% {
     clip-path: inset(100% 0% 0% 0%);
+    -webkit-clip-path: inset(100% 0% 0% 0%);
   }
   100% {
     clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
   }
 }

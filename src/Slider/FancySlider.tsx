@@ -55,7 +55,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
    */
   const initialSettings: ISettings = {
     slidingDuration: 500,
-    slidingDelay: 0,
+    slidingDelay: 200,
     slidingAnimation: setSlidingAnimation(props.slidingAnimation),
     bSmartSliding: true,
     bShouldAutoplay: false,

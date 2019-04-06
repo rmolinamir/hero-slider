@@ -20,6 +20,21 @@ const FancySlide = (props: ISlide) => {
           (props.bIsActive && props.bIsDoneSliding) && classes.Sliding,
           (props.bIsActive && !props.bIsDoneSliding) && props.slidingAnimation
         ].join(' ')}>
+        {/* Inner Mask */}
+        <div
+          className={[
+            classes.Mask,
+            (props.bIsActive && props.bIsDoneSliding) ? classes.Active : classes.Inactive,
+            props.bIsActive && !props.bIsDoneSliding && classes.Sliding
+          ].join(' ')}>
+          <div
+            style={props.style}
+            className={[
+              classes.Inner,
+              !props.bIsDoneSliding && classes.Sliding
+            ].join(' ')} />
+        </div>
+        {/* Content */}
         <div
           className={[
             classes.Container,
