@@ -1,0 +1,88 @@
+.Wrapper {
+  position: absolute;
+  top: 0;
+  z-index: 3;
+  height: 100%;
+  width: 20%;
+  min-width: 120px;
+  max-width: 220px;
+}
+
+.Wrapper,
+.Wrapper * {
+  /* To disable double-tap zoom */
+  touch-action: manipulation;
+}
+
+.Previous {
+  left: 0;
+}
+
+.Next {
+  right: 0;
+}
+
+.Container {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: all 400ms;
+}
+
+.Button {
+  /* Disabling button styling */
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.Container:hover {
+  --x: 100%;
+}
+
+.Previous .Container {
+  left: 33%;
+  transform: translateX(-50%) scaleX(-1);
+  background: linear-gradient(
+    90deg,
+    var(--c1, transparent) 50%,
+    var(--c2, rgb(47, 47, 47, .05)) 60%,
+    var(--c3, rgb(47, 47, 47, 0.5)) 85%
+  ) var(--x, 0) / 200%;
+}
+
+.Next .Container {
+  right: 33%;
+  transform: translateX(50%);
+  background: linear-gradient(
+    90deg,
+    var(--c1, transparent) 50%,
+    var(--c2, rgb(47, 47, 47, .05)) 60%,
+    var(--c3, rgb(47, 47, 47, 0.5)) 85%
+  ) var(--x, 0) / 200%;
+}
+
+.Button svg {
+  opacity: 0.5;
+  width: 60px;
+  height: 60px;
+  transition: all 200ms ease-in-out;
+  color: #FFF; 
+}
+
+.Button:hover svg {
+  opacity: 1;
+  width: 80px;
+  height: 80px;
+  color: #FFF; 
+}

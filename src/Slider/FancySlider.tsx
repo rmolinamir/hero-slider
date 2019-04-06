@@ -2,6 +2,7 @@ import * as React from 'react'
 import IntervalTimer from '../IntervalTimer'
 // CSS
 import classes from './FancySlider.module.css'
+import Buttons from './Buttons/Buttons'
 
 enum EAnimations {
   TOP_TO_BOTTOM = 'top-to-bottom',
@@ -388,6 +389,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
       onMouseOutCapture={onMouseOutCaptureHandler}
       className={classes.Wrapper}>
       {slides}
+      <Buttons
+        previousSlide={setPreviousSlide}
+        nextSlide={setNextSlide} />
     </div>
   )
 })

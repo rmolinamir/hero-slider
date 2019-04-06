@@ -17,6 +17,7 @@ const FancySlide = (props: ISlide) => {
         className={[
           classes.Slide,
           props.bIsActive && classes.Active,
+          (props.bIsActive && props.bIsDoneSliding) && classes.Sliding,
           (props.bIsActive && !props.bIsDoneSliding) && props.slidingAnimation
         ].join(' ')}>
         <div
