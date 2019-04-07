@@ -7,6 +7,7 @@ interface ISlide {
   bIsDoneSliding: boolean
   slidingAnimation: string
   style: React.CSSProperties
+  sliderDimensions: any // TODO
   children: React.ReactChildren
 }
 
@@ -20,27 +21,29 @@ const FancySlide = (props: ISlide) => {
           (props.bIsActive && props.bIsDoneSliding) && classes.Sliding,
           (props.bIsActive && !props.bIsDoneSliding) && props.slidingAnimation
         ].join(' ')}>
-        {/* Inner Mask */}
-        <div
-          className={[
-            classes.Mask,
-            (props.bIsActive && props.bIsDoneSliding) ? classes.Active : classes.Inactive,
-            props.bIsActive && !props.bIsDoneSliding && classes.Sliding
-          ].join(' ')}>
+        <div className={classes.Wrapper}>
+          {/* Inner Mask */}
           <div
-            style={props.style}
             className={[
-              classes.Inner,
-              !props.bIsDoneSliding && classes.Sliding
-            ].join(' ')} />
-        </div>
-        {/* Content */}
-        <div
-          className={[
-            classes.Container,
-            (props.bIsActive && props.bIsDoneSliding) && classes.Active
-          ].join(' ')}>
-          {props.children}
+              classes.Mask,
+              (props.bIsActive && props.bIsDoneSliding) ? classes.Active : classes.Inactive,
+              props.bIsActive && !props.bIsDoneSliding && classes.Sliding
+            ].join(' ')}>
+            <div
+              style={props.style}
+              className={[
+                classes.Inner,
+                !props.bIsDoneSliding && classes.Sliding
+              ].join(' ')} />
+          </div>
+          {/* Container */}
+          <div
+            className={[
+              classes.Container,
+              (props.bIsActive && props.bIsDoneSliding) && classes.Active
+            ].join(' ')}>
+            {props.children}
+          </div>
         </div>
       </div>
   )

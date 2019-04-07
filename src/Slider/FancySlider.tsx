@@ -49,6 +49,11 @@ interface ISliderProps {
   previousSlide?: React.MutableRefObject<any>
 }
 
+interface ISliderDimensions {
+  width?: number
+  height?: number
+}
+
 const fancySlider = React.memo((props: ISliderProps) => {
   /**
    * Initial settings for the carousel.
@@ -65,16 +70,6 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   const [settings, setSettings] = React.useState<ISettings>(initialSettings)
-
-  /**
-   * CSS variables for the transitions.
-   */
-  const CSSVariables = {
-    '--sliding-duration': `${settings.slidingDuration}ms`, // Default: 800ms
-    '--sliding-delay': `${settings.slidingDelay}ms`, // Default: 0ms
-    '--sliding-animation': `${settings.slidingAnimation}`, // Default: classes.Sliding_Left_To_Right.
-    '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms` // Default: 800ms
-  }
 
   /**
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle the smooth transition and
@@ -146,9 +141,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   /**
-   * `setUpSlides` clones the necessary properties for each slide to work.
+   * `setSlides` clones the necessary properties for each slide to work.
    */
-  const setUpSlides = () => {
+  const setSlides = () => {
     return React.Children.map(slidesArray, (child, index) => {
       const currentSlide = index + 1
       return (
@@ -157,7 +152,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
           {
             bIsActive: activeSlide === currentSlide,
             bIsDoneSliding: bIsDoneSliding,
-            slidingAnimation: settings.slidingAnimation
+            slidingAnimation: settings.slidingAnimation,
+            sliderRef: sliderRef
           }
         )
       )
@@ -334,10 +330,26 @@ const fancySlider = React.memo((props: ISliderProps) => {
     return getSlides()
   }, []))
 
+  /**
+   * Slider reference object to calculate its dimensions.
+   */
+  const sliderRef = React.useRef<HTMLDivElement>(null)
+  const [sliderDimensions, setSliderDimensions] = React.useState<ISliderDimensions>({})  
+
+  const setSliderDimensionsHandler = (): void => {
+    const sliderDimensions: ISliderDimensions = {
+      width: sliderRef.current ? sliderRef.current.clientWidth : undefined,
+      height: sliderRef.current ? sliderRef.current.clientHeight : undefined
+    }
+    setSliderDimensions(sliderDimensions)
+  }
+
+  /**
+   * Update the respective watchers' current values.
+   */
   React.useEffect(() => {
     activeSlideWatcher.current = activeSlide
   }, [activeSlide])
-
   React.useEffect(() => {
     bIsDoneSlidingWatcher.current = bIsDoneSliding
   }, [bIsDoneSliding])
@@ -363,6 +375,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
       props.previousSlide.current = setPreviousSlide
     }
     /**
+     * Calculates the initial dimensions of the slider.
+     */
+    setSliderDimensionsHandler()
+    /**
      * Clearing any existing timeouts to avoid memory leaks.
      */
     return () => {
@@ -377,17 +393,30 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * Only update if `activeSlide` or `bIsDoneSliding` change.
    */
   const slides = React.useMemo(() => {
-    return props.children && setUpSlides()
+    return props.children && setSlides()
   }, [activeSlide, bIsDoneSliding])
+
+  /**
+   * CSS variables for the transitions.
+   */
+  const CSSVariables = {
+    '--sliding-duration': `${settings.slidingDuration}ms`, // Default: 800ms
+    '--sliding-delay': `${settings.slidingDelay}ms`, // Default: 0ms
+    '--sliding-animation': `${settings.slidingAnimation}`, // Default: classes.Sliding_Left_To_Right.
+    '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
+    '--slider-width': `${sliderDimensions.width}px`,
+    '--slider-height': `${sliderDimensions.height}px`
+  }
 
   return (
     <div
+      ref={sliderRef}
       onScroll={(event) => console.log(event)}
       onClick={autoplayHandler}
       style={CSSVariables as React.CSSProperties}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
       onMouseOutCapture={onMouseOutCaptureHandler}
-      className={classes.Wrapper}>
+      className={classes.Slider}>
       {slides}
       <Buttons
         previousSlide={setPreviousSlide}
