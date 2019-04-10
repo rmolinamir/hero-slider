@@ -80,12 +80,12 @@
     clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
   }
   .Inner {
-    transform: translate3d(-25%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
     width: calc(var(--slider-height, 100vw) * 0.5);
     height: calc(var(--slider-height, 100vh) * 0.5);
   }
   .Inner:not(.Active) {
-    transform: translate3d(-25%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
   }
 }
 
@@ -110,7 +110,11 @@
   background-blend-mode: luminosity;
   -webkit-transform-origin: 50% 16.5vh;
   transform-origin: 50% 16.5vh;
-  transition-timing-function: ease-in-out;
+  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+}
+.Inner.Sliding {
+  transition: all var(--sliding-duration, 200ms) ease-in-out 0s;
+  transform: translate3d(-100%, -50%, 0);
 }
 
 /**
