@@ -5,8 +5,8 @@
   top: 50%;
   width: calc(var(--slider-widht, 100vw) * 0.66);
   height: calc(var(--slider-height, 100vh) * 0.66);
-  max-width: 33.33%;
-  max-height: 66.66%;
+  max-width: 25%;
+  max-height: 50%;
   -webkit-clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   transform: translate3d(-33.33%, -50%, 0);
@@ -43,8 +43,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 100vw;
-  height: 100vh;
+  width: 200%;
+  height: 200%;
   transform: translate3d(-50%, -50%, 0);
   background-size: cover;
   background-position: center center;
@@ -55,5 +55,5 @@
 }
 .Inner.Sliding {
   transition: all var(--mask-duration, 200ms) ease-in-out 0s;
-  transform: translate3d(-100%, -50%, 0);
+  transform: translate3d(-85%, -50%, 0);
 }

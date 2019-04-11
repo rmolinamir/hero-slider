@@ -5,10 +5,16 @@ import classes from './FancySlider.module.css'
 import Buttons from './Buttons/Buttons'
 
 enum EAnimations {
-  TOP_TO_BOTTOM = 'top-to-bottom',
-  BOTTOM_TO_TOP = 'bottom-to-top',
-  LEFT_TO_RIGHT = 'left-to-right',
-  RIGHT_TO_LEFT = 'right-to-left'
+  TOP_TO_BOTTOM = 'top_to_bottom',
+  BOTTOM_TO_TOP = 'bottom_to_top',
+  LEFT_TO_RIGHT = 'left_to_right',
+  RIGHT_TO_LEFT = 'right_to_left',
+  FADE = 'fade'
+}
+
+enum EOrientation {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal'
 }
 
 interface ISettings {
@@ -16,6 +22,19 @@ interface ISettings {
   slidingDelay: number
   initialSlidingAnimation: EAnimations
   slidingAnimation: string
+  sliderOrientation: EOrientation
+  sliderColor: string
+  isSmartSliding: boolean
+  shouldAutoplay: boolean
+  autoplayDuration: number
+  autoplayHandlerTimeout: number
+}
+
+interface ISettingsProps {
+  slidingDuration: number
+  slidingDelay: number
+  sliderOrientation: EOrientation
+  sliderColor: string
   isSmartSliding: boolean
   shouldAutoplay: boolean
   autoplayDuration: number
@@ -24,6 +43,8 @@ interface ISettings {
 
 const setInitialSlidingAnimation = (animation?: EAnimations): string => {
   switch (animation) {
+    case EAnimations.FADE:
+      return classes.Sliding_Fade_In
     // Top to bottom.
     case EAnimations.TOP_TO_BOTTOM:
       return classes.Sliding_Top_To_Bottom
@@ -51,7 +72,7 @@ interface ITouchState {
 
 interface ISliderProps {
   children: React.ReactElement[] | React.ReactElement
-  settings?: ISettings
+  settings?: ISettingsProps
   slidingAnimation?: EAnimations
   isSmartSliding?: boolean
   initialSlide?: number
@@ -73,6 +94,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
     slidingDelay: 200,
     initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
     slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
+    sliderOrientation: EOrientation.HORIZONTAL,
+    sliderColor: 'inherit',
     isSmartSliding: true,
     shouldAutoplay: false,
     autoplayDuration: 8000,
@@ -81,6 +104,13 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   const [settings, setSettings] = React.useState<ISettings>(initialSettings)
+
+  /**
+   * Subscribes to any changes made to the settings, then resets them through `setSettings`.
+   */
+  React.useEffect(() => {
+    setSettings(props.settings as ISettings)
+  }, [props.settings])
 
   const setSlidingAnimation = (newAnimation: string) => {
     setSettings({
@@ -104,10 +134,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
   /**
    * `smartAnimations` decides which animation to do next depending on the chosen
    * animation set by the programmer, the current and next slides, and if
-   * `props.slidingAnimation` is `true`.
+   * `settings.initialSlidingAnimation` is `true`.
    */
   const smartAnimations = (nextSlide: number): void => {
-      switch (props.slidingAnimation) {
+    switch (settings.initialSlidingAnimation) {
       case EAnimations.TOP_TO_BOTTOM:
       case EAnimations.BOTTOM_TO_TOP:
         if (nextSlide > activeSlideWatcher.current) {
@@ -118,7 +148,6 @@ const fancySlider = React.memo((props: ISliderProps) => {
         break
       case EAnimations.RIGHT_TO_LEFT:
       case EAnimations.LEFT_TO_RIGHT:
-      default:
         if (nextSlide > activeSlideWatcher.current) {
           setSlidingAnimation(classes.Sliding_Right_To_Left)
         } else {
@@ -220,12 +249,12 @@ const fancySlider = React.memo((props: ISliderProps) => {
   /**
    * Changes the active slide to the previous one.
    */
-  const setPreviousSlide = (isTouch?: boolean) => {
+  const setPreviousSlide = () => {
     /**
      * Similar to `setNextSlide`, it will always slide from left to right,
      * or from bottom to top - unless it's triggered by a touch event.
      */
-    if (settings.isSmartSliding && (isTouch !== true)) {
+    if (settings.isSmartSliding) {
       smartAnimations(1)
     }
     changeSlideHandler(getPreviousSlide(activeSlideWatcher.current))
@@ -352,6 +381,87 @@ const fancySlider = React.memo((props: ISliderProps) => {
   }
 
   /**
+   * `onTouchStartHandler` sets the initial coordinates of the touch event.
+   */
+  const onTouchStartHandler = (event: React.TouchEvent<HTMLDivElement>) => {
+    const initialX = event.touches[0].clientX
+    const initialY = event.touches[0].clientY
+    setTouchState({
+      ...touchState,
+      initialX,
+      initialY
+    })
+  }
+
+  /**
+   * `onTouchMoveHandler` sets the current coordinates of the touch event to the state.
+   */
+  const onTouchMoveHandler = (event: React.TouchEvent<HTMLDivElement>) => {
+    const currentX = event.touches[0].clientX
+    const currentY = event.touches[0].clientY
+    setTouchState({
+      ...touchState,
+      currentX,
+      currentY
+    })
+  }
+
+  /**
+   * `onTouchEndHandler` determines in which direction **and** sense the user is sliding.
+   * Animations are then set accordingly depending on which direction the user is dragging and
+   * the slide is changed. Finally the touch state is set back to the initial state, where
+   * everything is undefined.
+   */
+  const onTouchEndHandler = () => {
+    const diffX: number = touchState && Number(touchState.initialX) - Number(touchState.currentX)
+    const diffY: number = touchState && Number(touchState.initialY) - Number(touchState.currentY)
+    const thresholdToSlide: number = 50
+
+    const isSlidingHorizontally: boolean = Math.abs(diffX) > Math.abs(diffY)
+    const isSliderSetHorizontally: boolean = settings.sliderOrientation === EOrientation.HORIZONTAL
+    const isSliderVertically: boolean = settings.sliderOrientation === EOrientation.VERTICAL
+
+    if (
+        isSlidingHorizontally &&
+        isSliderSetHorizontally &&
+        Math.abs(diffX) >= thresholdToSlide
+      ) {
+      // Sliding horizontally.
+      if (diffX > 0) {
+        // Swiped left.
+        setNextSlide()
+      } else {
+        // Swiped right.
+        setPreviousSlide()
+      }
+    } else if (
+        isSliderVertically &&
+        Math.abs(diffY) >= thresholdToSlide
+      ) {
+      // Sliding vertically.
+      if (diffY > 0) {
+        // Swiped up.
+        setNextSlide()
+      } else {
+        // Swiped down.
+        setPreviousSlide()
+      }
+    }
+    setTouchState(initialTouchState)
+  }
+
+  const initialTouchState: ITouchState = {
+    initialX: undefined,
+    initialY: undefined,
+    currentX: undefined,
+    currentY: undefined,
+    finalX: undefined,
+    finalY: undefined
+  }
+
+  const [touchState, setTouchState] = React.useState<ITouchState>(initialTouchState)
+
+  /**
    * Update the respective watchers' current values.
    */
   React.useEffect(() => {
@@ -413,91 +523,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
     '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
     '--slider-width': `${sliderDimensions.width}px`,
     '--slider-height': `${sliderDimensions.height}px`,
+    '--slider-color': `${settings.sliderColor}`,
     '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
   }
-
-  /**
-   * `onTouchStartHandler` sets the initial coordinates of the touch event.
-   */
-  const onTouchStartHandler = (event: React.TouchEvent<HTMLDivElement>) => {
-    const initialX = event.touches[0].clientX
-    const initialY = event.touches[0].clientY
-    setTouchState({
-      ...touchState,
-      initialX,
-      initialY
-    })
-  }
-
-  /**
-   * `onTouchMoveHandler` sets the current coordinates of the touch event to the state.
-   */
-  const onTouchMoveHandler = (event: React.TouchEvent<HTMLDivElement>) => {
-    const currentX = event.touches[0].clientX
-    const currentY = event.touches[0].clientY
-    setTouchState({
-      ...touchState,
-      currentX,
-      currentY
-    })
-  }
-
-  /**
-   * `onTouchEndHandler` determines in which direction **and** sense the user is sliding.
-   * Animations are then set accordingly depending on which direction the user is dragging and
-   * the slide is changed. Finally the touch state is set back to the initial state, where
-   * everything is undefined.
-   */
-  const onTouchEndHandler = () => {
-    const diffX = touchState && Number(touchState.initialX) - Number(touchState.currentX)
-    const diffY = touchState && Number(touchState.initialY) - Number(touchState.currentY)
-    const thresholdToSlide = 50
-
-    const isSlidingHorizontally = Math.abs(diffX) > Math.abs(diffY)
-    const isSliderSetHorizontally = (
-      (settings.initialSlidingAnimation === EAnimations.LEFT_TO_RIGHT) ||
-      (settings.initialSlidingAnimation === EAnimations.RIGHT_TO_LEFT)
-    )
-    const isSliderVertically = (
-      (settings.initialSlidingAnimation === EAnimations.TOP_TO_BOTTOM) ||
-      (settings.initialSlidingAnimation === EAnimations.BOTTOM_TO_TOP)
-    )
-    if (isSlidingHorizontally && isSliderSetHorizontally && Math.abs(diffX) >= thresholdToSlide) {
-      // sliding horizontally
-      if (diffX > 0) {
-        // swiped left
-        setSlidingAnimation(classes.Sliding_Right_To_Left)
-        setPreviousSlide(true)
-      } else {
-        // swiped right
-        setSlidingAnimation(classes.Sliding_Left_To_Right)
-        setNextSlide(true)
-      }
-    } else if (isSliderVertically && Math.abs(diffY) >= thresholdToSlide) {
-      // sliding vertically
-      if (diffY > 0) {
-        // swiped up
-        setSlidingAnimation(classes.Sliding_Bottom_To_Top)
-        setPreviousSlide(true)
-      } else {
-        // swiped down
-        setSlidingAnimation(classes.Sliding_Top_To_Bottom)
-        setNextSlide(true)
-      }
-    }
-    setTouchState(initialTouchState)
-  }
-
-  const initialTouchState: ITouchState = {
-    initialX: undefined,
-    initialY: undefined,
-    currentX: undefined,
-    currentY: undefined,
-    finalX: undefined,
-    finalY: undefined
-  }
-
-  const [touchState, setTouchState] = React.useState<ITouchState>(initialTouchState)
 
   return (
     <div

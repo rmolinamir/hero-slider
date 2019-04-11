@@ -31,7 +31,6 @@ const HeroSlide = (props: ISlide) => {
             isDoneSliding={props.isDoneSliding} />
           {/* Container */}
           <div
-            onDrag={(event) => console.log('drag', event)}
             className={[
               classes.Container,
               (props.isActive && props.isDoneSliding) && classes.Active

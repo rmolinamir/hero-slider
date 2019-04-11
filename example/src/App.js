@@ -2,8 +2,6 @@ import React from 'react'
 
 import FancySlider, { Slide } from 'react-fancy-slider'
 
-// import ExampleComponent from './FancySlider'
-
 const app = () => {
   const nextSlideHandler = React.useRef()
   const previousSlideHandler = React.useRef()
@@ -13,8 +11,9 @@ const app = () => {
       <FancySlider
         nextSlide={nextSlideHandler}
         previousSlide={previousSlideHandler}
-        slidingAnimation='top-to-bottom'
+        slidingAnimation='top_to_bottom'
         settings={{
+          sliderOrientation: 'vertical',
           slidingDuration: 300,
           slidingDelay: 300,
           shouldAutoplay: false,

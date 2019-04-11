@@ -7,12 +7,6 @@
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.Wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
 .Active {
   z-index: 2; /* NOTE: It is imperative for z-index to be here, do not remove. */
   transform: translate3d(0, 0, 0);
@@ -63,6 +57,20 @@
 * ----------ANIMATIONS----------------
 * ------------------------------------
 */
+
+.Sliding_Fade_In {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-fade-in var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 .Sliding_Left_To_Right {
   /* keyframe name | duration | timing function | delay */

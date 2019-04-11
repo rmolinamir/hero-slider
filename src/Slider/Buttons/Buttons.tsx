@@ -1,6 +1,9 @@
 import * as React from 'react'
+import { isMobile as setIsMobile } from '../isMobile'
 // CSS
 import classes from './Buttons.module.css'
+
+const isMobile = setIsMobile()
 
 const ButtonSVG = () => {
   return (
@@ -23,6 +26,10 @@ interface IButtonProps {
 }
 
 const buttons = (props: IButtonProps) => {
+  if (isMobile) {
+    return null
+  }
+
   return (
     <>
       <div className={[
