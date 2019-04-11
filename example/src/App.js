@@ -13,11 +13,11 @@ const app = () => {
       <FancySlider
         nextSlide={nextSlideHandler}
         previousSlide={previousSlideHandler}
-        slidingAnimation='right-to-left'
+        slidingAnimation='top-to-bottom'
         settings={{
           slidingDuration: 600,
-          // slidingDelay: 1000,
-          bShouldAutoplay: false,
+          slidingDelay: 600,
+          shouldAutoplay: false,
           autoplayDuration: 6000
         }}>
         <Slide style={{
@@ -25,6 +25,7 @@ const app = () => {
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg')"
         }}>
           <h1>Black Widow</h1>
+          <p>Hello world.</p>
         </Slide>
 
         <Slide style={{

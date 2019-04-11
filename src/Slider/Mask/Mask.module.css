@@ -1,0 +1,59 @@
+.Mask {
+  overflow: hidden;
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  width: calc(var(--slider-widht, 100vw) * 0.66);
+  height: calc(var(--slider-height, 100vh) * 0.66);
+  max-width: 33.33%;
+  max-height: 66.66%;
+  -webkit-clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
+  clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
+  transform: translate3d(-33.33%, -50%, 0);
+  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+}
+
+@media (max-width: 1024px) {
+  .Mask {
+    max-width: 80%;
+    max-height: 80%;
+    -webkit-clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
+    clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
+  }
+  .Inner {
+    transform: translate3d(-50%, -50%, 0);
+    width: calc(var(--slider-height, 100vw) * 0.5);
+    height: calc(var(--slider-height, 100vh) * 0.5);
+  }
+  .Inner:not(.Active) {
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+.Mask:not(.Active) {
+  opacity: 0;
+  z-index: 1;
+  transform: translate3d(33.33%, -50%, 0);
+  /* property name | duration | timing function | delay */
+  transition: all calc(var(--sliding-duration, 200ms)) ease-in-out 0s;
+}
+
+.Inner {
+  z-index: -1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate3d(-50%, -50%, 0);
+  background-size: cover;
+  background-position: center center;
+  background-blend-mode: luminosity;
+  -webkit-transform-origin: 50% 16.5vh;
+  transform-origin: 50% 16.5vh;
+  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+}
+.Inner.Sliding {
+  transition: all var(--sliding-duration, 200ms) ease-in-out 0s;
+  transform: translate3d(-100%, -50%, 0);
+}

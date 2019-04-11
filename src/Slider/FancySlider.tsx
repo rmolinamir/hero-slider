@@ -14,14 +14,15 @@ enum EAnimations {
 interface ISettings {
   slidingDuration: number
   slidingDelay: number
+  initialSlidingAnimation: EAnimations
   slidingAnimation: string
-  bSmartSliding: boolean
-  bShouldAutoplay: boolean
+  isSmartSliding: boolean
+  shouldAutoplay: boolean
   autoplayDuration: number
   autoplayHandlerTimeout: number
 }
 
-const setSlidingAnimation = (animation?: EAnimations): string => {
+const setInitialSlidingAnimation = (animation?: EAnimations): string => {
   switch (animation) {
     // Top to bottom.
     case EAnimations.TOP_TO_BOTTOM:
@@ -39,11 +40,20 @@ const setSlidingAnimation = (animation?: EAnimations): string => {
   }
 }
 
+interface ITouchState {
+  initialX?: number
+  initialY?: number
+  currentX?: number
+  currentY?: number
+  finalX?: number
+  finalY?: number
+}
+
 interface ISliderProps {
   children: React.ReactElement[] | React.ReactElement
   settings?: ISettings
   slidingAnimation?: EAnimations
-  bSmartSliding?: boolean
+  isSmartSliding?: boolean
   initialSlide?: number
   nextSlide?: React.MutableRefObject<any>
   previousSlide?: React.MutableRefObject<any>
@@ -61,9 +71,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
   const initialSettings: ISettings = {
     slidingDuration: 500,
     slidingDelay: 200,
-    slidingAnimation: setSlidingAnimation(props.slidingAnimation),
-    bSmartSliding: true,
-    bShouldAutoplay: false,
+    initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
+    slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
+    isSmartSliding: true,
+    shouldAutoplay: false,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
     ...props.settings
@@ -71,9 +82,16 @@ const fancySlider = React.memo((props: ISliderProps) => {
 
   const [settings, setSettings] = React.useState<ISettings>(initialSettings)
 
+  const setSlidingAnimation = (newAnimation: string) => {
+    setSettings({
+      ...settings,
+      slidingAnimation: newAnimation
+    })
+  }
+
   /**
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle the smooth transition and
-   * set `bIsDoneSlidingWatcher.current` (like a pointer) as true. While `bIsDoneSliding` is true, no the
+   * set `bIsDoneSlidingWatcher.current` (like a pointer) as true. While `isDoneSliding` is true, no the
    * slides won't change.
    */
   const changeSlide = (nextSlide: number): void => {
@@ -93,30 +111,18 @@ const fancySlider = React.memo((props: ISliderProps) => {
       case EAnimations.TOP_TO_BOTTOM:
       case EAnimations.BOTTOM_TO_TOP:
         if (nextSlide > activeSlideWatcher.current) {
-          setSettings({
-            ...settings,
-            slidingAnimation: classes.Sliding_Top_To_Bottom
-          })
+          setSlidingAnimation(classes.Sliding_Bottom_To_Top)
         } else {
-          setSettings({
-            ...settings,
-            slidingAnimation: classes.Sliding_Bottom_To_Top
-          })
+          setSlidingAnimation(classes.Sliding_Top_To_Bottom)
         }
         break
       case EAnimations.RIGHT_TO_LEFT:
       case EAnimations.LEFT_TO_RIGHT:
       default:
         if (nextSlide > activeSlideWatcher.current) {
-          setSettings({
-            ...settings,
-            slidingAnimation: classes.Sliding_Right_To_Left
-          })
+          setSlidingAnimation(classes.Sliding_Right_To_Left)
         } else {
-          setSettings({
-            ...settings,
-            slidingAnimation: classes.Sliding_Left_To_Right
-          })
+          setSlidingAnimation(classes.Sliding_Left_To_Right)
         }
     }
   }
@@ -150,8 +156,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
         React.cloneElement(
           child as React.ReactElement<any>, 
           {
-            bIsActive: activeSlide === currentSlide,
-            bIsDoneSliding: bIsDoneSliding,
+            isActive: activeSlide === currentSlide,
+            isDoneSliding: isDoneSliding,
             slidingAnimation: settings.slidingAnimation,
             sliderRef: sliderRef
           }
@@ -181,12 +187,13 @@ const fancySlider = React.memo((props: ISliderProps) => {
   /**
    * Changes the active slide to the next one.
    */
-  const setNextSlide = () => {
+  const setNextSlide = (isTouch?: boolean) => {
     /**
-     * Forces the animation to be set as the same always, it will slide from right to left,
-     * or from top to bottom.
+     * Unless the change is triggered by a touch event, this forces the animation to be set as the
+     * same always, it will slide from right to left, or from top to bottom.
+     * `isTouch` has to be strictly compared to `true` because it might be an event.
      */
-    if (settings.bSmartSliding) {
+    if (settings.isSmartSliding && (isTouch !== true)) {
       smartAnimations(slidesArray.length + 1)
     }
     changeSlideHandler(getNextSlide(activeSlideWatcher.current))
@@ -213,12 +220,12 @@ const fancySlider = React.memo((props: ISliderProps) => {
   /**
    * Changes the active slide to the previous one.
    */
-  const setPreviousSlide = () => {
+  const setPreviousSlide = (isTouch?: boolean) => {
     /**
      * Similar to `setNextSlide`, it will always slide from left to right,
-     * or from bottom to top.
+     * or from bottom to top - unless it's triggered by a touch event.
      */
-    if (settings.bSmartSliding) {
+    if (settings.isSmartSliding && (isTouch !== true)) {
       smartAnimations(1)
     }
     changeSlideHandler(getPreviousSlide(activeSlideWatcher.current))
@@ -229,7 +236,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * with the slide, the timer of the autoplay instance is reset.
    */
   const changeSlideHandler = (nextSlide: number): void => {
-    if (settings.bShouldAutoplay) {
+    if (settings.shouldAutoplay) {
       autoplayInstance.reset()
     }
     changeSlide(nextSlide)
@@ -242,8 +249,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
   const slidingTimeoutDuration = (settings.slidingDuration + settings.slidingDelay) * 1.1 // 110% safety factor.
 
   /**
-   * `onSlidingHandler` sets `bIsDoneSliding` as false when executed and triggers a `setTimeout` that will set
-   * `bIsDoneSliding` as true after the time it takes for the slide to change passes.
+   * `onSlidingHandler` sets `isDoneSliding` as false when executed and triggers a `setTimeout` that will set
+   * `isDoneSliding` as true after the time it takes for the slide to change passes.
    * Saves the timeout ID to `slidingTimeout`.
    */
   const onSlidingHandler = (): void => {
@@ -259,7 +266,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * over the slider.
    */
   const onMouseMoveCaptureHandler = (): void => {
-    if (settings.bShouldAutoplay) {
+    if (settings.shouldAutoplay) {
       autoplayHandler()
     }
   }
@@ -269,7 +276,7 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * out of the slider.
    */
   const onMouseOutCaptureHandler = (): void => {
-    if (settings.bShouldAutoplay) {
+    if (settings.shouldAutoplay) {
       autoplayInstance.reset()
     }
   }
@@ -296,14 +303,14 @@ const fancySlider = React.memo((props: ISliderProps) => {
    */
   const autoplay = (): void => {
     const nextSlide = getNextSlide(activeSlideWatcher.current)
-    if (settings.bSmartSliding) {
+    if (settings.isSmartSliding) {
       smartAnimations(nextSlide)
     }
     changeSlide(getNextSlide(activeSlideWatcher.current))
   }
 
   const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1)
-  const [bIsDoneSliding, setIsDoneSliding] = React.useState(true)
+  const [isDoneSliding, setIsDoneSliding] = React.useState(true)
   /**
    * `activeSlideWatcher` `bIsDoneSlidingWatcher` are a mutable objects that will persist for the full
    * lifetime of the component.
@@ -351,8 +358,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
     activeSlideWatcher.current = activeSlide
   }, [activeSlide])
   React.useEffect(() => {
-    bIsDoneSlidingWatcher.current = bIsDoneSliding
-  }, [bIsDoneSliding])
+    bIsDoneSlidingWatcher.current = isDoneSliding
+  }, [isDoneSliding])
 
   /**
    * After mounting, akin to `componentDidMount`.
@@ -360,9 +367,9 @@ const fancySlider = React.memo((props: ISliderProps) => {
   React.useEffect(() => {
     activeSlideWatcher.current = activeSlide
     /**
-     * Turn on autoplay if `props.bShouldAutoplay` is true.
+     * Turn on autoplay if `props.shouldAutoplay` is true.
      */
-    if (settings.bShouldAutoplay) {
+    if (settings.shouldAutoplay) {
       autoplayInstance.start()
     }
     /**
@@ -390,11 +397,11 @@ const fancySlider = React.memo((props: ISliderProps) => {
 
   /**
    * Performance optimization to avoid re-rendering after mouse over captures.
-   * Only update if `activeSlide` or `bIsDoneSliding` change.
+   * Only update if `activeSlide` or `isDoneSliding` change.
    */
   const slides = React.useMemo(() => {
     return props.children && setSlides()
-  }, [activeSlide, bIsDoneSliding])
+  }, [activeSlide, isDoneSliding])
 
   /**
    * CSS variables for the transitions.
@@ -408,11 +415,97 @@ const fancySlider = React.memo((props: ISliderProps) => {
     '--slider-height': `${sliderDimensions.height}px`
   }
 
+  /**
+   * `onTouchStartHandler` sets the initial coordinates of the touch event.
+   */
+  const onTouchStartHandler = (event: React.TouchEvent<HTMLDivElement>) => {
+    const initialX = event.touches[0].clientX
+    const initialY = event.touches[0].clientY
+    setTouchState({
+      ...touchState,
+      initialX,
+      initialY
+    })
+  }
+
+  /**
+   * `onTouchMoveHandler` sets the current coordinates of the touch event to the state.
+   */
+  const onTouchMoveHandler = (event: React.TouchEvent<HTMLDivElement>) => {
+    const currentX = event.touches[0].clientX
+    const currentY = event.touches[0].clientY
+    setTouchState({
+      ...touchState,
+      currentX,
+      currentY
+    })
+  }
+
+  /**
+   * `onTouchEndHandler` determines in which direction **and** sense the user is sliding.
+   * Animations are then set accordingly depending on which direction the user is dragging and
+   * the slide is changed. Finally the touch state is set back to the initial state, where
+   * everything is undefined.
+   */
+  const onTouchEndHandler = () => {
+    const diffX = touchState && Number(touchState.initialX) - Number(touchState.currentX)
+    const diffY = touchState && Number(touchState.initialY) - Number(touchState.currentY)
+    const thresholdToSlide = 50
+
+    const isSlidingHorizontally = Math.abs(diffX) > Math.abs(diffY)
+    const isSliderSetHorizontally = (
+      (settings.initialSlidingAnimation === EAnimations.LEFT_TO_RIGHT) ||
+      (settings.initialSlidingAnimation === EAnimations.RIGHT_TO_LEFT)
+    )
+    const isSliderVertically = (
+      (settings.initialSlidingAnimation === EAnimations.TOP_TO_BOTTOM) ||
+      (settings.initialSlidingAnimation === EAnimations.BOTTOM_TO_TOP)
+    )
+    if (isSlidingHorizontally && isSliderSetHorizontally && Math.abs(diffX) >= thresholdToSlide) {
+      // sliding horizontally
+      if (diffX > 0) {
+        // swiped left
+        setSlidingAnimation(classes.Sliding_Right_To_Left)
+        setPreviousSlide(true)
+      } else {
+        // swiped right
+        setSlidingAnimation(classes.Sliding_Left_To_Right)
+        setNextSlide(true)
+      }
+    } else if (isSliderVertically && Math.abs(diffY) >= thresholdToSlide) {
+      // sliding vertically
+      if (diffY > 0) {
+        // swiped up
+        setSlidingAnimation(classes.Sliding_Bottom_To_Top)
+        setPreviousSlide(true)
+      } else {
+        // swiped down
+        setSlidingAnimation(classes.Sliding_Top_To_Bottom)
+        setNextSlide(true)
+      }
+    }
+    setTouchState(initialTouchState)
+  }
+
+  const initialTouchState: ITouchState = {
+    initialX: undefined,
+    initialY: undefined,
+    currentX: undefined,
+    currentY: undefined,
+    finalX: undefined,
+    finalY: undefined
+  }
+
+  const [touchState, setTouchState] = React.useState<ITouchState>(initialTouchState)
+
   return (
     <div
       ref={sliderRef}
       onScroll={(event) => console.log(event)}
       onClick={autoplayHandler}
+      onTouchStart={onTouchStartHandler}
+      onTouchMove={onTouchMoveHandler}
+      onTouchEnd={onTouchEndHandler}
       style={CSSVariables as React.CSSProperties}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
       onMouseOutCapture={onMouseOutCaptureHandler}

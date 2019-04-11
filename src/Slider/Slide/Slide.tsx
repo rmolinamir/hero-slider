@@ -1,46 +1,40 @@
 import * as React from 'react'
 // CSS
-import classes from '../FancySlider.module.css'
+import classes from './Slide.module.css'
+// JSX
+import Mask from '../Mask/Mask'
 
 interface ISlide {
-  bIsActive: boolean
-  bIsDoneSliding: boolean
+  isActive: boolean
+  isDoneSliding: boolean
   slidingAnimation: string
   style: React.CSSProperties
   sliderDimensions: any // TODO
   children: React.ReactChildren
 }
 
-const FancySlide = (props: ISlide) => {
+const HeroSlide = (props: ISlide) => {
   return (
       <div
         style={props.style}
         className={[
           classes.Slide,
-          props.bIsActive && classes.Active,
-          (props.bIsActive && props.bIsDoneSliding) && classes.Sliding,
-          (props.bIsActive && !props.bIsDoneSliding) && props.slidingAnimation
+          props.isActive && classes.Active,
+          (props.isActive && props.isDoneSliding) && classes.Sliding,
+          (props.isActive && !props.isDoneSliding) && props.slidingAnimation
         ].join(' ')}>
         <div className={classes.Wrapper}>
           {/* Inner Mask */}
-          <div
-            className={[
-              classes.Mask,
-              (props.bIsActive && props.bIsDoneSliding) ? classes.Active : classes.Inactive,
-              props.bIsActive && !props.bIsDoneSliding && classes.Sliding
-            ].join(' ')}>
-            <div
-              style={props.style}
-              className={[
-                classes.Inner,
-                !props.bIsDoneSliding && classes.Sliding
-              ].join(' ')} />
-          </div>
+          <Mask
+            style={props.style}
+            isActive={props.isActive}
+            isDoneSliding={props.isDoneSliding} />
           {/* Container */}
           <div
+            onDrag={(event) => console.log('drag', event)}
             className={[
               classes.Container,
-              (props.bIsActive && props.bIsDoneSliding) && classes.Active
+              (props.isActive && props.isDoneSliding) && classes.Active
             ].join(' ')}>
             {props.children}
           </div>
@@ -49,5 +43,5 @@ const FancySlide = (props: ISlide) => {
   )
 }
 
-export const Slide = (props: ISlide): JSX.Element => <FancySlide {...props} />
+export const Slide = (props: ISlide): JSX.Element => <HeroSlide {...props} />
 (Slide as React.FunctionComponent).displayName = 'react-fancy-slider/slide'
