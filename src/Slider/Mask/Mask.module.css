@@ -10,7 +10,7 @@
   -webkit-clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   transform: translate3d(-33.33%, -50%, 0);
-  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+  transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
 }
 
 @media (max-width: 1024px) {
@@ -35,7 +35,7 @@
   z-index: 1;
   transform: translate3d(33.33%, -50%, 0);
   /* property name | duration | timing function | delay */
-  transition: all calc(var(--sliding-duration, 200ms)) ease-in-out 0s;
+  transition: all var(--mask-duration, 200ms) ease-in-out 0s;
 }
 
 .Inner {
@@ -51,9 +51,9 @@
   background-blend-mode: luminosity;
   -webkit-transform-origin: 50% 16.5vh;
   transform-origin: 50% 16.5vh;
-  transition: all calc(var(--sliding-duration, 200ms) * 1.5) ease-in-out 0s;
+  transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
 }
 .Inner.Sliding {
-  transition: all var(--sliding-duration, 200ms) ease-in-out 0s;
+  transition: all var(--mask-duration, 200ms) ease-in-out 0s;
   transform: translate3d(-100%, -50%, 0);
 }

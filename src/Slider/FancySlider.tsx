@@ -412,7 +412,8 @@ const fancySlider = React.memo((props: ISliderProps) => {
     '--sliding-animation': `${settings.slidingAnimation}`, // Default: classes.Sliding_Left_To_Right.
     '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
     '--slider-width': `${sliderDimensions.width}px`,
-    '--slider-height': `${sliderDimensions.height}px`
+    '--slider-height': `${sliderDimensions.height}px`,
+    '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
   }
 
   /**

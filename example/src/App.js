@@ -15,8 +15,8 @@ const app = () => {
         previousSlide={previousSlideHandler}
         slidingAnimation='top-to-bottom'
         settings={{
-          slidingDuration: 600,
-          slidingDelay: 600,
+          slidingDuration: 300,
+          slidingDelay: 300,
           shouldAutoplay: false,
           autoplayDuration: 6000
         }}>
