@@ -11,9 +11,9 @@ const app = () => {
       <FancySlider
         nextSlide={nextSlideHandler}
         previousSlide={previousSlideHandler}
-        slidingAnimation='top_to_bottom'
+        slidingAnimation='left_to_right'
+        orientation='horizontal'
         settings={{
-          sliderOrientation: 'vertical',
           slidingDuration: 300,
           slidingDelay: 300,
           shouldAutoplay: false,

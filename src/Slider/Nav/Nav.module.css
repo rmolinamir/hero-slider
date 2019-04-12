@@ -1,0 +1,25 @@
+.Wrapper {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.Button {
+  position: relative;
+  color: currentColor;
+  display: inline-block;
+  max-width: 15vw;
+  width: 5.5rem;
+  height: 4rem;
+  border-bottom: 2px solid;
+  border-color: #fff;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.Active {
+  border-color: currentColor
+}

@@ -1,25 +1,12 @@
 .Wrapper {
   position: absolute;
-  top: 0;
   z-index: 2;
-  height: 100%;
-  width: 20%;
-  min-width: 120px;
-  max-width: 220px;
 }
 
 .Wrapper,
 .Wrapper * {
   /* To disable double-tap zoom */
   touch-action: manipulation;
-}
-
-.Previous {
-  left: 0;
-}
-
-.Next {
-  right: 0;
 }
 
 .Container {
@@ -46,32 +33,6 @@
 	outline: inherit;
 }
 
-.Container:hover {
-  --x: 100%;
-}
-
-.Previous .Container {
-  left: 33%;
-  transform: translateX(-50%) scaleX(-1);
-  background: linear-gradient(
-    90deg,
-    var(--c1, transparent) 50%,
-    var(--c2, rgb(47, 47, 47, .05)) 60%,
-    var(--c3, rgb(47, 47, 47, 0.5)) 85%
-  ) var(--x, 0) / 200%;
-}
-
-.Next .Container {
-  right: 33%;
-  transform: translateX(50%);
-  background: linear-gradient(
-    90deg,
-    var(--c1, transparent) 50%,
-    var(--c2, rgb(47, 47, 47, .05)) 60%,
-    var(--c3, rgb(47, 47, 47, 0.5)) 85%
-  ) var(--x, 0) / 200%;
-}
-
 .Button svg {
   opacity: 0.5;
   width: 60px;
@@ -85,4 +46,100 @@
   width: 80px;
   height: 80px;
   color: #FFF; 
+}
+
+/**
+* --------------------------------------
+* -------------HORIZONTAL---------------
+* --------------------------------------
+*/
+
+.Horizontal.Wrapper {
+  top: 0;
+  width: 20%;
+  height: 100%;
+  min-width: 120px;
+  max-width: 220px;
+}
+
+.Horizontal.Previous {
+  left: 0;
+}
+
+.Horizontal.Next {
+  right: 0;
+}
+
+.Horizontal .Container:hover {
+  --shadow: 100%;
+}
+
+.Horizontal.Previous .Container {
+  left: 33%;
+  transform: translateX(-50%) scaleX(-1);
+  background: linear-gradient(
+    90deg,
+    var(--c1, transparent) 50%,
+    var(--c2, rgb(37, 37, 37, .05)) 60%,
+    var(--c3, rgb(37, 37, 37, 0.5)) 85%
+  ) var(--shadow, 0) / 200%;
+}
+
+.Horizontal.Next .Container {
+  right: 33%;
+  transform: translateX(50%);
+  background: linear-gradient(
+    90deg,
+    var(--c1, transparent) 50%,
+    var(--c2, rgb(37, 37, 37, .05)) 60%,
+    var(--c3, rgb(37, 37, 37, 0.5)) 85%
+  ) var(--shadow, 0) / 200%;
+}
+
+/**
+* ------------------------------------
+* -------------VERTICAL---------------
+* ------------------------------------
+*/
+
+.Vertical.Wrapper {
+  width: 100%;
+  height: 15%;
+  max-height: 200px;
+}
+
+.Vertical.Previous {
+  top: 0;
+}
+
+.Vertical.Next {
+  bottom: 0;
+}
+
+.Vertical .Container:hover {
+  --shadow: 0;
+}
+
+.Vertical.Previous .Container {
+  background: linear-gradient(to bottom,
+    rgb(37, 37, 37, 0.66) 0%,
+    rgb(37, 37, 37, 0.33) 50%,
+    rgb(37, 37, 37, 0.15) 75%,
+    rgb(37, 37, 37, 0.01) 100%) no-repeat 0px var(--shadow, -200px);
+}
+
+.Vertical.Previous svg {
+  transform: rotate(-90deg);
+}
+
+.Vertical.Next .Container {
+  background: linear-gradient(to top,
+    rgb(37, 37, 37, 0.66) 0%,
+    rgb(37, 37, 37, 0.33) 50%,
+    rgb(37, 37, 37, 0.15) 75%,
+    rgb(37, 37, 37, 0.01) 100%) no-repeat 0px var(--shadow, 200px);
+}
+
+.Vertical.Next svg {
+  transform: rotate(90deg);
 }

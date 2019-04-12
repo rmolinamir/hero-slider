@@ -21,6 +21,7 @@ const ButtonSVG = () => {
 }
 
 interface IButtonProps {
+  isHorizontal: boolean
   previousSlide: TAnyFunction
   nextSlide: TAnyFunction
 }
@@ -34,7 +35,8 @@ const buttons = (props: IButtonProps) => {
     <>
       <div className={[
         classes.Wrapper,
-        classes.Previous
+        classes.Previous,
+        props.isHorizontal ? classes.Horizontal : classes.Vertical
       ].join(' ')}>
         <div className={classes.Container}>
           <button
@@ -46,7 +48,8 @@ const buttons = (props: IButtonProps) => {
       </div>
       <div className={[
         classes.Wrapper,
-        classes.Next
+        classes.Next,
+        props.isHorizontal ? classes.Horizontal : classes.Vertical
       ].join(' ')}>
         <div className={classes.Container}>
           <button

@@ -2,7 +2,9 @@ import * as React from 'react'
 import IntervalTimer from '../IntervalTimer'
 // CSS
 import classes from './FancySlider.module.css'
+// JSX
 import Buttons from './Buttons/Buttons'
+import Nav from './Nav/Nav'
 
 enum EAnimations {
   TOP_TO_BOTTOM = 'top_to_bottom',
@@ -17,25 +19,18 @@ enum EOrientation {
   HORIZONTAL = 'horizontal'
 }
 
-interface ISettings {
-  slidingDuration: number
-  slidingDelay: number
+interface ISettings extends ISettingsProps {
   initialSlidingAnimation: EAnimations
   slidingAnimation: string
   sliderOrientation: EOrientation
-  sliderColor: string
-  isSmartSliding: boolean
-  shouldAutoplay: boolean
-  autoplayDuration: number
-  autoplayHandlerTimeout: number
 }
 
 interface ISettingsProps {
   slidingDuration: number
   slidingDelay: number
-  sliderOrientation: EOrientation
   sliderColor: string
   isSmartSliding: boolean
+  shouldDisplayButtons: boolean
   shouldAutoplay: boolean
   autoplayDuration: number
   autoplayHandlerTimeout: number
@@ -70,14 +65,37 @@ interface ITouchState {
   finalY?: number
 }
 
+interface INavPosition {
+  top: string
+  left: string
+  bottom: string
+  right: string
+}
+
+interface INavSettings {
+  shouldRenderNavbar: boolean
+  position: INavPosition
+  type: string
+  backgroundColor: string
+  activeColor: string
+}
+
+export interface INavProps extends INavSettings {
+  totalSlides: number
+  activeSlide: number
+  changeSlide: TAnyFunction
+}
+
 interface ISliderProps {
   children: React.ReactElement[] | React.ReactElement
   settings?: ISettingsProps
   slidingAnimation?: EAnimations
   isSmartSliding?: boolean
+  orientation: EOrientation
   initialSlide?: number
   nextSlide?: React.MutableRefObject<any>
   previousSlide?: React.MutableRefObject<any>
+  navSettings: INavSettings
 }
 
 interface ISliderDimensions {
@@ -85,7 +103,7 @@ interface ISliderDimensions {
   height?: number
 }
 
-const fancySlider = React.memo((props: ISliderProps) => {
+const heroSlider = React.memo((props: ISliderProps) => {
   /**
    * Initial settings for the carousel.
    */
@@ -94,9 +112,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
     slidingDelay: 200,
     initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
     slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
-    sliderOrientation: EOrientation.HORIZONTAL,
+    sliderOrientation: props.orientation || EOrientation.HORIZONTAL,
     sliderColor: 'inherit',
     isSmartSliding: true,
+    shouldDisplayButtons: true,
     shouldAutoplay: false,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
@@ -109,7 +128,10 @@ const fancySlider = React.memo((props: ISliderProps) => {
    * Subscribes to any changes made to the settings, then resets them through `setSettings`.
    */
   React.useEffect(() => {
-    setSettings(props.settings as ISettings)
+    setSettings({
+      ...settings,
+      ...props.settings as ISettings
+    })
   }, [props.settings])
 
   const setSlidingAnimation = (newAnimation: string) => {
@@ -519,18 +541,17 @@ const fancySlider = React.memo((props: ISliderProps) => {
   const CSSVariables = {
     '--sliding-duration': `${settings.slidingDuration}ms`, // Default: 800ms
     '--sliding-delay': `${settings.slidingDelay}ms`, // Default: 0ms
-    '--sliding-animation': `${settings.slidingAnimation}`, // Default: classes.Sliding_Left_To_Right.
+    '--sliding-animation': settings.slidingAnimation, // Default: classes.Sliding_Left_To_Right.
     '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
     '--slider-width': `${sliderDimensions.width}px`,
     '--slider-height': `${sliderDimensions.height}px`,
-    '--slider-color': `${settings.sliderColor}`,
+    '--slider-color': settings.sliderColor,
     '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
   }
 
   return (
     <div
       ref={sliderRef}
-      onScroll={(event) => console.log(event)}
       onClick={autoplayHandler}
       onTouchStart={onTouchStartHandler}
       onTouchMove={onTouchMoveHandler}
@@ -540,11 +561,19 @@ const fancySlider = React.memo((props: ISliderProps) => {
       onMouseOutCapture={onMouseOutCaptureHandler}
       className={classes.Slider}>
       {slides}
-      <Buttons
-        previousSlide={setPreviousSlide}
-        nextSlide={setNextSlide} />
+      {settings.shouldDisplayButtons && (
+        <Buttons
+          isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
+          previousSlide={setPreviousSlide}
+          nextSlide={setNextSlide} />
+      )}
+      <Nav
+        {...props.navSettings}
+        changeSlide={changeSlideHandler}
+        activeSlide={activeSlideWatcher.current}
+        totalSlides={slides.length} />
     </div>
   )
 })
 
-export default fancySlider
+export default heroSlider
