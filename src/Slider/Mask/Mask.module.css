@@ -15,8 +15,8 @@
 
 @media (max-width: 1024px) {
   .Mask {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 70%;
+    max-height: 50%;
     -webkit-clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
     clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
   }

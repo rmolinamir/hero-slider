@@ -9,6 +9,7 @@ const nav = (props: INavProps) => {
    * Deconstructing navSettings to set it up.
    */
   const {
+    type,
     backgroundColor,
     activeColor,
     position,
@@ -21,8 +22,8 @@ const nav = (props: INavProps) => {
    * CSS variables for the transitions.
    */
   const CSSVariables = {
-    '--nav-background-color': backgroundColor,
-    '--nav-active-color': activeColor,
+    '--nav-background-color': backgroundColor || 'rgba(189,206,227,.4)',
+    '--nav-active-color': activeColor || 'rgba(189,206,227,1)',
   }
 
   const changeSlideHandler = (navButtonIndex: number) => {
@@ -45,13 +46,14 @@ const nav = (props: INavProps) => {
           ].join(' ')} />
       )
     })
-  }, [activeSlide])
+  }, [type, activeSlide, activeColor, backgroundColor, position])
 
   return (
     <ul
       style={{
-        bottom: !position ? '2rem' : undefined,
-        left: !position ? '2rem' : undefined,
+        bottom: !position ? '1.5rem' : undefined,
+        left: !position ? '50%' : undefined,
+        transform: !position ? 'translateX(-50%)' : undefined,
         ...position,
         ...CSSVariables
       }}

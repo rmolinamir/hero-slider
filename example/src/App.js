@@ -20,7 +20,7 @@ const app = () => {
           autoplayDuration: 6000
         }}>
         <Slide style={{
-          backgroundColor: '#6d9b98',
+          backgroundColor: '#6D9B98',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg')"
         }}>
           <h1>Black Widow</h1>
@@ -28,17 +28,24 @@ const app = () => {
         </Slide>
 
         <Slide style={{
-          backgroundColor: '#8a8a8a',
+          backgroundColor: '#8A8A8A',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg')"
         }}>
           <h1>Captain America</h1>
         </Slide>
 
         <Slide style={{
-          backgroundColor: '#ea2329',
+          backgroundColor: '#EA2329',
           backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg')"
         }}>
           <h1>Iron Man</h1>
+        </Slide>
+
+        <Slide style={{
+          backgroundColor: '#2D7791',
+          backgroundImage: "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/thor.jpg')"
+        }}>
+          <h1>Thor</h1>
         </Slide>
       </FancySlider>
       {/* <h1>Fancy Slider test</h1>

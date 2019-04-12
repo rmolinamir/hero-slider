@@ -70,6 +70,7 @@ interface INavPosition {
   left: string
   bottom: string
   right: string
+  transform: string
 }
 
 interface INavSettings {
@@ -238,16 +239,13 @@ const heroSlider = React.memo((props: ISliderProps) => {
   /**
    * Changes the active slide to the next one.
    */
-  const setNextSlide = (isTouch?: boolean) => {
+  const setNextSlide = () => {
     /**
-     * Unless the change is triggered by a touch event, this forces the animation to be set as the
-     * same always, it will slide from right to left, or from top to bottom.
-     * `isTouch` has to be strictly compared to `true` because it might be an event.
+     * Forces the animation to be set as the same always, it will slide from right to left,
+     * or from top to bottom so long as the initial animation is not fade.
      */
-    if (settings.isSmartSliding && (isTouch !== true)) {
-      smartAnimations(slidesArray.length + 1)
-    }
-    changeSlideHandler(getNextSlide(activeSlideWatcher.current))
+    const animationParam = slidesArray.length + 1
+    changeSlideHandler(getNextSlide(activeSlideWatcher.current), animationParam)
   }
 
   /**
@@ -274,21 +272,23 @@ const heroSlider = React.memo((props: ISliderProps) => {
   const setPreviousSlide = () => {
     /**
      * Similar to `setNextSlide`, it will always slide from left to right,
-     * or from bottom to top - unless it's triggered by a touch event.
+     * or from bottom to top unless the fade animation is active.
      */
-    if (settings.isSmartSliding) {
-      smartAnimations(1)
-    }
-    changeSlideHandler(getPreviousSlide(activeSlideWatcher.current))
+    const animationParam = 1
+    changeSlideHandler(getPreviousSlide(activeSlideWatcher.current), animationParam)
   }
 
   /**
-   * Handles clicking on the slide, it changes current slide to the next one. If the user interacts
-   * with the slide, the timer of the autoplay instance is reset.
+   * Handles slide changes. If the user interacts with the slide, the timer of the
+   * autoplay instance is reset and the next animation is algo decided depending on
+   * the parameter (which is a slide number).
    */
-  const changeSlideHandler = (nextSlide: number): void => {
+  const changeSlideHandler = (nextSlide: number, animationParam: number): void => {
     if (settings.shouldAutoplay) {
       autoplayInstance.reset()
+    }
+    if (settings.isSmartSliding) {
+      smartAnimations(animationParam || nextSlide)
     }
     changeSlide(nextSlide)
   }
