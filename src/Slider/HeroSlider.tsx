@@ -1,7 +1,7 @@
 import * as React from 'react'
 import IntervalTimer from '../IntervalTimer'
 // CSS
-import classes from './FancySlider.module.css'
+import classes from './HeroSlider.module.css'
 // JSX
 import Buttons from './Buttons/Buttons'
 
@@ -85,14 +85,19 @@ export interface INavProps extends INavSettings {
 }
 
 export interface ISideNavProps extends INavProps {
-  right: string,
-  left: string,
+  right: string
+  left: string
   isPositionedRight: boolean
+}
+
+export interface IMenuNavProps extends INavProps {
+  menuDescriptions: string[]
 }
 
 export interface ISlideProps {
   isActive: boolean
   isDoneSliding: boolean
+  menuNavDescription: string
   slidingAnimation: string
   style: React.CSSProperties
   sliderDimensions: any // TODO
@@ -103,6 +108,7 @@ interface IChildren {
   slidesArray: React.ReactElement[]
   navbarsArray: React.ReactElement[]
   othersArray: React.ReactElement[]
+  menuDescriptions: string[]
 }
 
 interface INavbarSettings {
@@ -140,7 +146,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     sliderColor: 'inherit',
     isSmartSliding: true,
     shouldDisplayButtons: true,
-    shouldAutoplay: false,
+    shouldAutoplay: true,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
     ...props.settings
@@ -520,13 +526,14 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }
 
   /**
-   * `getChildren` will categorize the `props.children` array into the `children` variable.
+   * `getChildren` will categorize the `props.children` elements array into the `children` object.
    */
   const getChildren = (): IChildren => {
     const children: IChildren = {
       slidesArray: [],
       navbarsArray: [],
-      othersArray: []
+      othersArray: [],
+      menuDescriptions: []
     }
     React.Children.toArray(props.children).forEach(child => {
       if (typeof child.type === 'function' && React.isValidElement(child)) {
@@ -534,8 +541,11 @@ const heroSlider = React.memo((props: ISliderProps) => {
         const displayName = RFC_Child.displayName
         switch (displayName) {
           case 'react-fancy-slider/slide':
-            return children.slidesArray.push(child)
+          const props = child.props as ISlideProps
+          children.menuDescriptions.push(props.menuNavDescription)
+          return children.slidesArray.push(child)
           case 'react-fancy-slider/nav':
+          case 'react-fancy-slider/menu-nav':
             return children.navbarsArray.push(child)
           default:
             return children.othersArray.push(child)
@@ -585,9 +595,25 @@ const heroSlider = React.memo((props: ISliderProps) => {
 
   /**
    * `setNavbars`, similar to `setSlides`.
+   * If it's a `menu-nav`, then the `menuDescriptions` of each slide are also passed as props.
    */
   const setNavbars = () => {
     return React.Children.map(navbarsArray, child => {
+      const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
+      const isMenuNav = RFC_Child.displayName === 'react-fancy-slider/menu-nav'
+      if (isMenuNav) {
+        return (
+          React.cloneElement(
+            child as React.ReactElement<IMenuNavProps>, 
+            {
+              changeSlide: changeSlideHandler,
+              activeSlide: activeSlideWatcher.current,
+              totalSlides: slides.length,
+              menuDescriptions: children.menuDescriptions
+            }
+          )
+        )
+      }
       return (
         React.cloneElement(
           child as React.ReactElement<INavProps>, 

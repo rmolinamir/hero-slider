@@ -1,12 +1,13 @@
 import * as React from 'react'
 // Types
-import { INavProps } from '../HeroSlider'
+import { IMenuNavProps } from '../HeroSlider'
 // CSS
-import classes from './Nav.module.css'
+import classes from './MenuNav.module.css'
 
-const SliderNav = (props: INavProps) => {
+const SliderNav = (props: IMenuNavProps) => {
+  console.log('MenuNav props', props)
   /**
-   * Deconstructing navSettings to set it up.
+   * Deconstructing MenuNavSettings to set it up.
    */
   const {
     color,
@@ -21,18 +22,18 @@ const SliderNav = (props: INavProps) => {
    * CSS variables for the transitions.
    */
   const CSSVariables = {
-    '--nav-color': color,
-    '--nav-active-color': activeColor,
+    '--MenuNav-color': color,
+    '--MenuNav-active-color': activeColor,
   }
 
-  const changeSlideHandler = (navButtonIndex: number) => {
-    const nextSlide = navButtonIndex + 1
+  const changeSlideHandler = (MenuNavButtonIndex: number) => {
+    const nextSlide = MenuNavButtonIndex + 1
     if (nextSlide !== activeSlide) {
       changeSlide(nextSlide)
     }
   }
 
-  const navButtons = React.useMemo(() => {
+  const MenuNavButtons = React.useMemo(() => {
     const emptyArray = Array.from(new Array(totalSlides))
     return emptyArray.map((_, index) => {
       return (
@@ -57,10 +58,10 @@ const SliderNav = (props: INavProps) => {
         ...CSSVariables
       }}
       className={classes.Wrapper}>
-      {navButtons}
+      {MenuNavButtons}
     </ul>
   )
 }
 
-export const Nav = (props: INavProps): JSX.Element => <SliderNav {...props} />
-(Nav as React.FunctionComponent).displayName = 'react-fancy-slider/nav'
+export const MenuNav = (props: IMenuNavProps): JSX.Element => <SliderNav {...props} />
+(MenuNav as React.FunctionComponent).displayName = 'react-fancy-slider/menu-nav'

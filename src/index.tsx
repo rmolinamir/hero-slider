@@ -1,6 +1,7 @@
-import FancySlider from './Slider/FancySlider'
+import HeroSlider from './Slider/HeroSlider'
 export { Slide } from './Slider/Slide/Slide'
-export { SideNav } from './Slider/SideNav/SideNav'
 export { Nav } from './Slider/Nav/Nav'
+export { SideNav } from './Slider/SideNav/SideNav'
+export { MenuNav } from './Slider/MenuNav/MenuNav'
 
-export default FancySlider
+export default HeroSlider
