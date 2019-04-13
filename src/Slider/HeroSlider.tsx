@@ -173,11 +173,11 @@ const heroSlider = React.memo((props: ISliderProps) => {
 
   /**
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle the smooth transition and
-   * set `bIsDoneSlidingWatcher.current` (like a pointer) as true. While `isDoneSliding` is true, no the
+   * set `isDoneSlidingWatcher.current` (like a pointer) as true. While `isDoneSliding` is true, no the
    * slides won't change.
    */
   const changeSlide = (nextSlide: number): void => {
-    if (bIsDoneSlidingWatcher.current) {
+    if (isDoneSlidingWatcher.current) {
       setActiveSlide(nextSlide)
       onSlidingHandler()
     }
@@ -353,14 +353,14 @@ const heroSlider = React.memo((props: ISliderProps) => {
   const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1)
   const [isDoneSliding, setIsDoneSliding] = React.useState(true)
   /**
-   * `activeSlideWatcher` `bIsDoneSlidingWatcher` are a mutable objects that will persist for the full
+   * `activeSlideWatcher` `isDoneSlidingWatcher` are a mutable objects that will persist for the full
    * lifetime of the component.
-   *  - `bIsDoneSlidingWatcher` will serve as a pointer in case a `nextSlide` event is called from outside.
+   *  - `isDoneSlidingWatcher` will serve as a pointer in case a `nextSlide` event is called from outside.
    *  - `activeSlideWatcher` serves as a pointer to the `activeSlide` so that the auto play instance won't
    *    be out of sync with the current slide. It is updated during the `useEffects` subscribed to the `activeSlide`
    *    state whenever the user changes slide.
    */
-  const bIsDoneSlidingWatcher = React.useRef<boolean>(true)
+  const isDoneSlidingWatcher = React.useRef<boolean>(true)
   const activeSlideWatcher = React.useRef(activeSlide)
 
   const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>()
@@ -411,7 +411,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }
 
   /**
-   * `onTouchEndHandler` determines in which direction **and** sense the user is sliding.
+   * `onTouchEndHandler` determines in which direction **and** sense (vector) the user is sliding.
    * Animations are then set accordingly depending on which direction the user is dragging and
    * the slide is changed. Finally the touch state is set back to the initial state, where
    * everything is undefined.
@@ -472,7 +472,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     activeSlideWatcher.current = activeSlide
   }, [activeSlide])
   React.useEffect(() => {
-    bIsDoneSlidingWatcher.current = isDoneSliding
+    isDoneSlidingWatcher.current = isDoneSliding
   }, [isDoneSliding])
 
   /**

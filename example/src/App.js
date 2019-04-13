@@ -18,10 +18,11 @@ const app = () => {
         previousSlide={previousSlideHandler}
         slidingAnimation='left_to_right'
         orientation='horizontal'
+        initialSlide={3}
         settings={{
-          slidingDuration: 300,
-          slidingDelay: 300,
-          shouldAutoplay: true,
+          slidingDuration: 250,
+          slidingDelay: 100,
+          // shouldAutoplay: false,
           shouldDisplayButtons: false,
           autoplayDuration: 6000
         }}>
@@ -61,7 +62,7 @@ const app = () => {
         <MenuNav />
         <SideNav
           position={{
-            bottom: '0',
+            top: '0',
             right: '0'
           }}
         />

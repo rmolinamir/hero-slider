@@ -15,7 +15,7 @@ const SliderNav = (props: IMenuNavProps) => {
     position,
     totalSlides,
     activeSlide,
-    changeSlide
+    // changeSlide
   } = props
 
   /**
@@ -26,30 +26,30 @@ const SliderNav = (props: IMenuNavProps) => {
     '--MenuNav-active-color': activeColor,
   }
 
-  const changeSlideHandler = (MenuNavButtonIndex: number) => {
-    const nextSlide = MenuNavButtonIndex + 1
-    if (nextSlide !== activeSlide) {
-      changeSlide(nextSlide)
-    }
-  }
+  // const changeSlideHandler = (MenuNavButtonIndex: number) => {
+  //   const nextSlide = MenuNavButtonIndex + 1
+  //   if (nextSlide !== activeSlide) {
+  //     changeSlide(nextSlide)
+  //   }
+  // }
 
-  const MenuNavButtons = React.useMemo(() => {
-    const emptyArray = Array.from(new Array(totalSlides))
-    return emptyArray.map((_, index) => {
-      return (
-        <li
-          onClick={() => changeSlideHandler(index)}
-          key={index}
-          className={[
-            classes.Button,
-            activeSlide === index + 1 && classes.Active
-          ].join(' ')} />
-      )
-    })
-  }, [activeSlide, activeColor, color, position])
+  // const MenuNavButtons = React.useMemo(() => {
+  //   const emptyArray = Array.from(new Array(totalSlides))
+  //   return emptyArray.map((_, index) => {
+  //     return (
+  //       <li
+  //         onClick={() => changeSlideHandler(index)}
+  //         key={index}
+  //         className={[
+  //           classes.Button,
+  //           activeSlide === index + 1 && classes.Active
+  //         ].join(' ')} />
+  //     )
+  //   })
+  // }, [activeSlide, activeColor, color, position])
 
   return (
-    <ul
+    <div
       style={{
         bottom: !position ? '1.5rem' : undefined,
         left: !position ? '50%' : undefined,
@@ -58,8 +58,16 @@ const SliderNav = (props: IMenuNavProps) => {
         ...CSSVariables
       }}
       className={classes.Wrapper}>
-      {MenuNavButtons}
-    </ul>
+      <nav className={classes.Container}>
+        {/* {MenuNavButtons} */}
+        <span
+          style={{
+            width: `${100/totalSlides}%`,
+            transform: `translate3d(${activeSlide - 1}00%, 0, 0)`
+          }}
+          className={classes.Bar} />
+      </nav>
+    </div>
   )
 }
 

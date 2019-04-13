@@ -1,48 +1,22 @@
 .Wrapper {
-  display: inline-flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
   position: absolute;
   z-index: 2;
+  width: 90%; /* May be placeholder. */
+  min-height: 30px; /* Placeholder. */
+  margin: 0 auto;
 }
 
-.Button {
+.Container {
+  display: flex;
   position: relative;
-  color: currentColor;
-  height: 50px;
-  max-width: 60px;
-  min-width: 50px;
-  width: 15%;
-  margin: 0 6px;
-  border-bottom: 2px solid var(--nav-color, rgba(200, 215, 235, 0.6));
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-top: 1px solid rgba(215, 225, 235, 0.6);
 }
 
-.Active {
-  border-color: var(--nav-active-color, rgba(200, 215, 235, 1))
-}
-
-@media (max-width: 1024px) {
-  .Button {
-    display: block;
-    cursor: pointer;
-    color: currentColor;
-    outline: none;
-    height: 14px;
-    width: 14px;
-    min-width: 14px;
-    max-width: 14px;
-    margin: 0 9px;
-    border: 0;
-    font-size: 0;
-    line-height: 0;
-    background: var(--nav-color, rgba(200, 215, 235, 0.6));
-    border-radius: 50%;
-  }
-
-  .Active {
-    background: var(--nav-active-color, rgba(200, 215, 235, 1));
-  }
+.Bar {
+  position: absolute;
+  top: 0px;
+  height: 4px;
+  background-color: #FFF;
+  opacity: 0.75;
+  transition: transform 400ms ease;
 }
