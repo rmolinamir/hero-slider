@@ -1,19 +1,12 @@
 import * as React from 'react'
+// Types
+import { ISlideProps } from '../FancySlider'
 // CSS
 import classes from './Slide.module.css'
 // JSX
 import Mask from '../Mask/Mask'
 
-interface ISlide {
-  isActive: boolean
-  isDoneSliding: boolean
-  slidingAnimation: string
-  style: React.CSSProperties
-  sliderDimensions: any // TODO
-  children: React.ReactChildren
-}
-
-const HeroSlide = (props: ISlide) => {
+const HeroSlide = (props: ISlideProps) => {
   return (
       <div
         style={props.style}
@@ -42,5 +35,5 @@ const HeroSlide = (props: ISlide) => {
   )
 }
 
-export const Slide = (props: ISlide): JSX.Element => <HeroSlide {...props} />
+export const Slide = (props: ISlideProps): JSX.Element => <HeroSlide {...props} />
 (Slide as React.FunctionComponent).displayName = 'react-fancy-slider/slide'

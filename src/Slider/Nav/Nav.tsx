@@ -4,13 +4,12 @@ import { INavProps } from '../FancySlider'
 // CSS
 import classes from './Nav.module.css'
 
-const nav = (props: INavProps) => {
+const SliderNav = (props: INavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */
   const {
-    type,
-    backgroundColor,
+    color,
     activeColor,
     position,
     totalSlides,
@@ -22,8 +21,8 @@ const nav = (props: INavProps) => {
    * CSS variables for the transitions.
    */
   const CSSVariables = {
-    '--nav-background-color': backgroundColor || 'rgba(189,206,227,.4)',
-    '--nav-active-color': activeColor || 'rgba(189,206,227,1)',
+    '--nav-color': color,
+    '--nav-active-color': activeColor,
   }
 
   const changeSlideHandler = (navButtonIndex: number) => {
@@ -46,7 +45,7 @@ const nav = (props: INavProps) => {
           ].join(' ')} />
       )
     })
-  }, [type, activeSlide, activeColor, backgroundColor, position])
+  }, [activeSlide, activeColor, color, position])
 
   return (
     <ul
@@ -63,4 +62,5 @@ const nav = (props: INavProps) => {
   )
 }
 
-export default nav
+export const Nav = (props: INavProps): JSX.Element => <SliderNav {...props} />
+(Nav as React.FunctionComponent).displayName = 'react-fancy-slider/nav'

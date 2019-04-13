@@ -4,7 +4,6 @@ import IntervalTimer from '../IntervalTimer'
 import classes from './FancySlider.module.css'
 // JSX
 import Buttons from './Buttons/Buttons'
-import Nav from './Nav/Nav'
 
 enum EAnimations {
   TOP_TO_BOTTOM = 'top_to_bottom',
@@ -74,10 +73,8 @@ interface INavPosition {
 }
 
 interface INavSettings {
-  shouldRenderNavbar: boolean
   position: INavPosition
-  type: string
-  backgroundColor: string
+  color: string
   activeColor: string
 }
 
@@ -87,16 +84,42 @@ export interface INavProps extends INavSettings {
   changeSlide: TAnyFunction
 }
 
+export interface ISideNavProps extends INavProps {
+  right: string,
+  left: string,
+  isPositionedRight: boolean
+}
+
+export interface ISlideProps {
+  isActive: boolean
+  isDoneSliding: boolean
+  slidingAnimation: string
+  style: React.CSSProperties
+  sliderDimensions: any // TODO
+  children: React.ReactChildren
+}
+
+interface IChildren {
+  slidesArray: React.ReactElement[]
+  navbarsArray: React.ReactElement[]
+  othersArray: React.ReactElement[]
+}
+
+interface INavbarSettings {
+  color: string
+  activeColor: string
+}
+
 interface ISliderProps {
   children: React.ReactElement[] | React.ReactElement
   settings?: ISettingsProps
+  orientation: EOrientation
   slidingAnimation?: EAnimations
   isSmartSliding?: boolean
-  orientation: EOrientation
   initialSlide?: number
   nextSlide?: React.MutableRefObject<any>
   previousSlide?: React.MutableRefObject<any>
-  navSettings: INavSettings
+  navbarSettings?: INavbarSettings
 }
 
 interface ISliderDimensions {
@@ -177,45 +200,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
           setSlidingAnimation(classes.Sliding_Left_To_Right)
         }
     }
-  }
-
-  /**
-   * `getSlides` will filter the `props.children` array looking for any children that is not a `Slider` component.
-   * If a children is not a `Slider` component then it simply is filtered by using the `Array.filter()` method.
-   */
-  const getSlides = () => {
-    return React.Children.toArray(props.children).filter(child => {
-      if (typeof child.type === 'function' && React.isValidElement(child)) {
-        const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
-        const displayName = RFC_Child.displayName
-        if (displayName === 'react-fancy-slider/slide') {
-          return true
-        } else {
-          return false
-        }
-      }
-      return false
-    })
-  }
-
-  /**
-   * `setSlides` clones the necessary properties for each slide to work.
-   */
-  const setSlides = () => {
-    return React.Children.map(slidesArray, (child, index) => {
-      const currentSlide = index + 1
-      return (
-        React.cloneElement(
-          child as React.ReactElement<any>, 
-          {
-            isActive: activeSlide === currentSlide,
-            isDoneSliding: isDoneSliding,
-            slidingAnimation: settings.slidingAnimation,
-            sliderRef: sliderRef
-          }
-        )
-      )
-    })
   }
 
   /**
@@ -381,14 +365,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }, []))
 
   /**
-   * Sets up initial slides array, `useMemo` is used for performance optimization since a loop is
-   * ran inside `getSlides`.
-   */
-  const [slidesArray] = React.useState(React.useMemo(() => {
-    return getSlides()
-  }, []))
-
-  /**
    * Slider reference object to calculate its dimensions.
    */
   const sliderRef = React.useRef<HTMLDivElement>(null)
@@ -528,14 +504,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }, [])
 
   /**
-   * Performance optimization to avoid re-rendering after mouse over captures.
-   * Only update if `activeSlide` or `isDoneSliding` change.
-   */
-  const slides = React.useMemo(() => {
-    return props.children && setSlides()
-  }, [activeSlide, isDoneSliding])
-
-  /**
    * CSS variables for the transitions.
    */
   const CSSVariables = {
@@ -546,8 +514,99 @@ const heroSlider = React.memo((props: ISliderProps) => {
     '--slider-width': `${sliderDimensions.width}px`,
     '--slider-height': `${sliderDimensions.height}px`,
     '--slider-color': settings.sliderColor,
+    '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
+    '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
     '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
   }
+
+  /**
+   * `getChildren` will categorize the `props.children` array into the `children` variable.
+   */
+  const getChildren = (): IChildren => {
+    const children: IChildren = {
+      slidesArray: [],
+      navbarsArray: [],
+      othersArray: []
+    }
+    React.Children.toArray(props.children).forEach(child => {
+      if (typeof child.type === 'function' && React.isValidElement(child)) {
+        const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
+        const displayName = RFC_Child.displayName
+        switch (displayName) {
+          case 'react-fancy-slider/slide':
+            return children.slidesArray.push(child)
+          case 'react-fancy-slider/nav':
+            return children.navbarsArray.push(child)
+          default:
+            return children.othersArray.push(child)
+        }
+      }
+      return children.othersArray.push(child)
+    })
+    return children
+  }
+
+  /**
+   * Sets up initial slides array, `useMemo` is used for performance optimization since a loop is
+   * ran inside `getChildren`.
+   */
+  const children: IChildren = React.useMemo(() => {
+    return getChildren()
+  }, [])
+
+  const { slidesArray, navbarsArray, othersArray} = children
+
+  /**
+   * `setSlides` clones the necessary properties for each slide to work.
+   */
+  const setSlides = () => {
+    return React.Children.map(slidesArray, (child, index) => {
+      const currentSlide = index + 1
+      return (
+        React.cloneElement(
+          child as React.ReactElement<ISlideProps>, 
+          {
+            isActive: activeSlide === currentSlide,
+            isDoneSliding: isDoneSliding,
+            slidingAnimation: settings.slidingAnimation
+          }
+        )
+      )
+    })
+  }
+
+  /**
+   * Performance optimization to avoid re-rendering after mouse over captures.
+   * Only updates if `activeSlide` or `isDoneSliding` change.
+   */
+  const slides = React.useMemo(() => {
+    return children.slidesArray && setSlides()
+  }, [activeSlide, isDoneSliding])
+
+  /**
+   * `setNavbars`, similar to `setSlides`.
+   */
+  const setNavbars = () => {
+    return React.Children.map(navbarsArray, child => {
+      return (
+        React.cloneElement(
+          child as React.ReactElement<INavProps>, 
+          {
+            changeSlide: changeSlideHandler,
+            activeSlide: activeSlideWatcher.current,
+            totalSlides: slides.length
+          }
+        )
+      )
+    })
+  }
+
+  /**
+   * Performance optimization similar to `slides`.
+   */
+  const navbars = React.useMemo(() => {
+    return children.slidesArray && setNavbars()
+  }, [activeSlide, isDoneSliding])
 
   return (
     <div
@@ -559,19 +618,20 @@ const heroSlider = React.memo((props: ISliderProps) => {
       style={CSSVariables as React.CSSProperties}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
       onMouseOutCapture={onMouseOutCaptureHandler}
-      className={classes.Slider}>
+      className={classes.Wrapper}>
       {slides}
+      {navbars}
+      {othersArray.length && (
+        <div className={classes.Container}>
+          {othersArray}
+        </div>
+      )}
       {settings.shouldDisplayButtons && (
         <Buttons
           isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
           previousSlide={setPreviousSlide}
           nextSlide={setNextSlide} />
       )}
-      <Nav
-        {...props.navSettings}
-        changeSlide={changeSlideHandler}
-        activeSlide={activeSlideWatcher.current}
-        totalSlides={slides.length} />
     </div>
   )
 })

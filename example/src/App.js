@@ -1,6 +1,10 @@
 import React from 'react'
 
-import FancySlider, { Slide } from 'react-fancy-slider'
+import FancySlider, {
+  Slide,
+  Nav,
+  SideNav
+} from 'react-fancy-slider'
 
 const app = () => {
   const nextSlideHandler = React.useRef()
@@ -16,7 +20,7 @@ const app = () => {
         settings={{
           slidingDuration: 300,
           slidingDelay: 300,
-          shouldAutoplay: false,
+          // shouldAutoplay: true,
           autoplayDuration: 6000
         }}>
         <Slide style={{
@@ -47,6 +51,13 @@ const app = () => {
         }}>
           <h1>Thor</h1>
         </Slide>
+        <Nav />
+        <SideNav
+          position={{
+            bottom: '0',
+            right: '0'
+          }}
+        />
       </FancySlider>
       {/* <h1>Fancy Slider test</h1>
       <button onClick={() => previousSlideHandler.current()}>Previous Slide</button>
