@@ -13,23 +13,6 @@
   transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
 }
 
-@media (max-width: 1024px) {
-  .Mask {
-    max-width: 70%;
-    max-height: 50%;
-    -webkit-clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
-    clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
-  }
-  .Inner {
-    transform: translate3d(-50%, -50%, 0);
-    width: calc(var(--slider-height, 100vw) * 0.5);
-    height: calc(var(--slider-height, 100vh) * 0.5);
-  }
-  .Inner:not(.Active) {
-    transform: translate3d(-50%, -50%, 0);
-  }
-}
-
 .Mask:not(.Active) {
   opacity: 0;
   z-index: 1;
@@ -53,7 +36,60 @@
   transform-origin: 50% 16.5vh;
   transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
 }
+
 .Inner.Sliding {
   transition: all var(--mask-duration, 200ms) ease-in-out 0s;
   transform: translate3d(-85%, -50%, 0);
+}
+
+@media (max-width: 1024px) {
+  .Mask {
+    max-width: 70%;
+    max-height: 50%;
+    -webkit-clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
+    clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
+  }
+  .Inner {
+    transform: translate3d(-50%, -50%, 0);
+    width: calc(var(--slider-height, 100vw) * 0.5);
+    height: calc(var(--slider-height, 100vh) * 0.5);
+  }
+  .Inner:not(.Active) {
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+/* Mask LazyLoad */
+
+.Loader {
+  opacity: 0;
+  z-index: -1;
+}
+
+.Loading {
+  opacity: 0;
+}
+
+.Loaded {
+  opacity: 0;
+  animation-name: slide-in;
+  animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  animation-fill-mode: forwards;
+  animation-duration: var(--background-fade-in-duration, 1500ms);
+  animation-delay: var(--background-fade-in-delay, 100ms);
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    -webkit-clip-path: inset(50% 50% 50% 50%);
+    clip-path: inset(50% 50% 50% 50%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0);
+  }
 }

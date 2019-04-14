@@ -1,5 +1,24 @@
 import * as React from 'react'
 import IntervalTimer from '../IntervalTimer'
+// Types
+import { 
+  BackdropFilterProperty,
+  BackfaceVisibilityProperty,
+  BackgroundProperty,
+  BackgroundAttachmentProperty,
+  BackgroundBlendModeProperty,
+  BackgroundClipProperty,
+  BackgroundColorProperty,
+  BackgroundImageProperty,
+  BackgroundOriginProperty,
+  BackgroundPositionProperty,
+  BackgroundPositionXProperty,
+  BackgroundPositionYProperty,
+  BackgroundRepeatProperty,
+  BackgroundSizeProperty,
+  WidthProperty,
+  HeightProperty
+} from 'csstype'
 // CSS
 import classes from './HeroSlider.module.css'
 // JSX
@@ -29,13 +48,17 @@ interface ISettingsProps {
   slidingDelay: number
   sliderColor: string
   sliderFadeInDuration: number
+  backgroundFadeInDuration: number
+  backgroundFadeInDelay: number
   navbarFadeInDuration: number
   navbarFadeInDelay: number
   isSmartSliding: boolean
   shouldDisplayButtons: boolean
   shouldAutoplay: boolean
   autoplayDuration: number
-  autoplayHandlerTimeout: number
+  autoplayHandlerTimeout: number,
+  width: WidthProperty<string | number>,
+  height: HeightProperty<string | number>
 }
 
 const setInitialSlidingAnimation = (animation?: EAnimations): string => {
@@ -102,11 +125,11 @@ export interface IMenuNavProps extends INavProps {
 export interface ISlideProps {
   isActive: boolean
   isDoneSliding: boolean
-  shouldRenderMask: boolean
-  menuNavDescription: string
   slidingAnimation: string
+  shouldRenderMask: boolean
+  background: IBackgroundProps
+  menuNavDescription: string
   style: React.CSSProperties
-  sliderDimensions: any // TODO
   children: React.ReactChildren
 }
 
@@ -122,16 +145,39 @@ interface INavbarSettings {
   activeColor: string
 }
 
+export interface IBackgroundProps {
+  backdropFilter?: BackdropFilterProperty
+  backfaceVisibility?: BackfaceVisibilityProperty
+  background?: BackgroundProperty<string | number>
+  backgroundAttachment?: BackgroundAttachmentProperty
+  backgroundBlendMode?: BackgroundBlendModeProperty
+  backgroundClip?: BackgroundClipProperty
+  backgroundColor?: BackgroundColorProperty
+  backgroundImage?: BackgroundImageProperty
+  backgroundOrigin?: BackgroundOriginProperty
+  backgroundPosition?: BackgroundPositionProperty<string | number>
+  backgroundPositionX?: BackgroundPositionXProperty<string | number>
+  backgroundPositionY?: BackgroundPositionYProperty<string | number>
+  backgroundRepeat?: BackgroundRepeatProperty
+  backgroundSize?: BackgroundSizeProperty<string | number>
+  backgroundFadeInDuration?: number
+  backgroundFadeInDelay?: number
+  width?: WidthProperty<string | number>
+  height?: HeightProperty<string | number>
+  src: string | undefined
+}
+
 interface ISliderProps {
-  children: React.ReactElement[] | React.ReactElement
   settings?: ISettingsProps
-  orientation: EOrientation
+  orientation?: EOrientation
   slidingAnimation?: EAnimations
   isSmartSliding?: boolean
   initialSlide?: number
   nextSlide?: React.MutableRefObject<any>
   previousSlide?: React.MutableRefObject<any>
   navbarSettings?: INavbarSettings
+  style: React.CSSProperties
+  children: React.ReactElement[] | React.ReactElement
 }
 
 interface ISliderDimensions {
@@ -144,13 +190,17 @@ const heroSlider = React.memo((props: ISliderProps) => {
    * Initial settings for the carousel.
    */
   const initialSettings: ISettings = {
-    slidingDuration: 500,
-    slidingDelay: 200,
+    // Dependants
     initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
     slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
     sliderOrientation: props.orientation || EOrientation.HORIZONTAL,
+    // Defaults
+    slidingDuration: 500,
+    slidingDelay: 200,
     sliderColor: 'inherit',
     sliderFadeInDuration: 500,
+    backgroundFadeInDuration: 1500,
+    backgroundFadeInDelay: 100,
     navbarFadeInDuration: 1000,
     navbarFadeInDelay: 500,
     isSmartSliding: true,
@@ -158,6 +208,8 @@ const heroSlider = React.memo((props: ISliderProps) => {
     shouldAutoplay: true,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
+    width: '100%',
+    height: '100%',
     ...props.settings
   }
 
@@ -523,21 +575,25 @@ const heroSlider = React.memo((props: ISliderProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    '--sliding-duration': `${settings.slidingDuration}ms`, // Default: 800ms
-    '--sliding-delay': `${settings.slidingDelay}ms`, // Default: 0ms
-    '--sliding-animation': settings.slidingAnimation, // Default: classes.Sliding_Left_To_Right.
-    '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
-    '--slider-width': `${sliderDimensions.width}px`,
-    '--slider-height': `${sliderDimensions.height}px`,
-    '--slider-color': settings.sliderColor,
-    '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
-    '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
-    '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
-    '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
-    '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
-    '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
-  }
+  const CSSVariables = React.useMemo(() => {
+    return {
+      '--sliding-duration': `${settings.slidingDuration}ms`, // Default: 800ms
+      '--sliding-delay': `${settings.slidingDelay}ms`, // Default: 0ms
+      '--sliding-animation': settings.slidingAnimation, // Default: classes.Sliding_Left_To_Right.
+      '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
+      '--slider-width': `${sliderDimensions.width}px`,
+      '--slider-height': `${sliderDimensions.height}px`,
+      '--slider-color': settings.sliderColor,
+      '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
+      '--background-fade-in-duration': `${settings.backgroundFadeInDuration}ms`,
+      '--background-fade-in-delay': `${settings.backgroundFadeInDelay}ms`,
+      '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
+      '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
+      '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
+      '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
+      '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
+    }
+  }, [settings, props.navbarSettings])
 
   /**
    * `getChildren` will categorize the `props.children` elements array into the `children` object.
@@ -650,7 +706,12 @@ const heroSlider = React.memo((props: ISliderProps) => {
       onTouchStart={onTouchStartHandler}
       onTouchMove={onTouchMoveHandler}
       onTouchEnd={onTouchEndHandler}
-      style={CSSVariables as React.CSSProperties}
+      style={{
+        ...CSSVariables as React.CSSProperties,
+        ...props.style,
+        width: settings.width,
+        height: settings.height
+      }}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
       onMouseOutCapture={onMouseOutCaptureHandler}
       className={classes.Wrapper}>

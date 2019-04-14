@@ -1,0 +1,37 @@
+.Loader,
+.Loading,
+.Loaded {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Loader {
+  opacity: 0;
+  z-index: -1;
+}
+
+.Loading {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+.Loaded {
+  opacity: 0;
+  animation-name: fade-in;
+  animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  animation-fill-mode: forwards;
+  animation-duration: var(--background-fade-in-duration, 1500ms);
+  animation-delay: var(--background-fade-in-delay, 100ms);
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1;
+  }
+}

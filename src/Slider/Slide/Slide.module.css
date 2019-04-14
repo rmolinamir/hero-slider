@@ -23,9 +23,6 @@
 }
 
 .Slide {
-  background-size: cover;
-  background-position: center top;
-  background-size: 'cover';
   /* property name | duration | timing function | delay */
   transition: transform 0ms ease-in-out var(--sliding-delay, 0ms);
 }

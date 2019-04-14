@@ -7,7 +7,6 @@ import classes from './MenuNav.module.css'
 import { Nav } from '../Nav/Nav'
 
 const SliderNav = (props: IMenuNavProps) => {
-  console.log('MenuNav props', props)
   /**
    * Deconstructing MenuNavSettings to set it up.
    */
