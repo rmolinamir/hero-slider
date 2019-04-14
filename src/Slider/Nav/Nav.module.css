@@ -5,6 +5,17 @@
   list-style: none;
   position: absolute;
   z-index: 2;
+  opacity: 0;
+  animation: fade-in var(--nav-fade-in-duration, 500) ease-in var(--nav-fade-in-delay, 1000) forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .Button {
@@ -24,7 +35,7 @@
   border-color: var(--nav-active-color, rgba(200, 215, 235, 1))
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 744px) {
   .Button {
     display: block;
     cursor: pointer;

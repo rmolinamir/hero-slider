@@ -28,6 +28,9 @@ interface ISettingsProps {
   slidingDuration: number
   slidingDelay: number
   sliderColor: string
+  sliderFadeInDuration: number
+  navbarFadeInDuration: number
+  navbarFadeInDelay: number
   isSmartSliding: boolean
   shouldDisplayButtons: boolean
   shouldAutoplay: boolean
@@ -91,7 +94,9 @@ export interface ISideNavProps extends INavProps {
 }
 
 export interface IMenuNavProps extends INavProps {
-  menuDescriptions: string[]
+  menuDescriptions: string[],
+  sliderWidth: number,
+  mobileThreshold: number
 }
 
 export interface ISlideProps {
@@ -144,6 +149,9 @@ const heroSlider = React.memo((props: ISliderProps) => {
     slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
     sliderOrientation: props.orientation || EOrientation.HORIZONTAL,
     sliderColor: 'inherit',
+    sliderFadeInDuration: 500,
+    navbarFadeInDuration: 1000,
+    navbarFadeInDelay: 500,
     isSmartSliding: true,
     shouldDisplayButtons: true,
     shouldAutoplay: true,
@@ -496,16 +504,18 @@ const heroSlider = React.memo((props: ISliderProps) => {
       props.previousSlide.current = setPreviousSlide
     }
     /**
-     * Calculates the initial dimensions of the slider.
+     * Calculates the initial dimensions of the slider and adds event listener.
      */
     setSliderDimensionsHandler()
+    window.addEventListener('resize', setSliderDimensions as EventListenerOrEventListenerObject)
     /**
-     * Clearing any existing timeouts to avoid memory leaks.
+     * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
      */
     return () => {
       clearTimeout(slidingTimeout && +slidingTimeout)
       clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout)
       autoplayInstance.stop()
+      window.removeEventListener('resize', setSliderDimensions as EventListenerOrEventListenerObject)
     }
   }, [])
 
@@ -520,6 +530,9 @@ const heroSlider = React.memo((props: ISliderProps) => {
     '--slider-width': `${sliderDimensions.width}px`,
     '--slider-height': `${sliderDimensions.height}px`,
     '--slider-color': settings.sliderColor,
+    '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
+    '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
+    '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
     '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
     '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
     '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
@@ -601,29 +614,24 @@ const heroSlider = React.memo((props: ISliderProps) => {
     return React.Children.map(navbarsArray, child => {
       const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
       const isMenuNav = RFC_Child.displayName === 'react-fancy-slider/menu-nav'
+      const navProps = {
+        changeSlide: changeSlideHandler,
+        activeSlide: activeSlideWatcher.current,
+        totalSlides: slides.length
+      }
       if (isMenuNav) {
         return (
           React.cloneElement(
             child as React.ReactElement<IMenuNavProps>, 
             {
-              changeSlide: changeSlideHandler,
-              activeSlide: activeSlideWatcher.current,
-              totalSlides: slides.length,
-              menuDescriptions: children.menuDescriptions
+              ...navProps,
+              menuDescriptions: children.menuDescriptions,
+              sliderWidth: sliderDimensions.width
             }
           )
         )
       }
-      return (
-        React.cloneElement(
-          child as React.ReactElement<INavProps>, 
-          {
-            changeSlide: changeSlideHandler,
-            activeSlide: activeSlideWatcher.current,
-            totalSlides: slides.length
-          }
-        )
-      )
+      return React.cloneElement(child as React.ReactElement<INavProps>, navProps)
     })
   }
 
@@ -632,7 +640,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    */
   const navbars = React.useMemo(() => {
     return children.slidesArray && setNavbars()
-  }, [activeSlide, isDoneSliding])
+  }, [activeSlide, isDoneSliding, sliderDimensions])
 
   return (
     <div

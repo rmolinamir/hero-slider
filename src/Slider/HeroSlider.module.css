@@ -5,6 +5,16 @@
   overflow: hidden;
   /* Removes gray highlight when clicked on safari/mobile. */
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  animation: fade-in var(--slider-fade-in-duration, 500) ease-in;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .Container {

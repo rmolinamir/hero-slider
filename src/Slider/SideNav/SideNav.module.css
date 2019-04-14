@@ -5,14 +5,25 @@
   padding: 0;
   list-style: none;
   z-index: 2;
+  opacity: 0;
+  animation: fade-in var(--nav-fade-in-duration, 500) ease-in var(--nav-fade-in-delay, 1000) forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .Button {
   display: flex;
   align-items: center;
   position: relative;
-  color: currentColor;
-  margin: 0.5rem auto;
+  margin: 0 auto;
+  padding: 0.5rem 0;
   text-align: right;
   color: var(--nav-color, #C8D7EB);
   cursor: pointer;

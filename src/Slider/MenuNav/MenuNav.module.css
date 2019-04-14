@@ -2,21 +2,99 @@
   position: absolute;
   z-index: 2;
   width: 90%; /* May be placeholder. */
-  min-height: 30px; /* Placeholder. */
   margin: 0 auto;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0;
+  animation: fade-in var(--nav-fade-in-duration, 500) ease-in var(--nav-fade-in-delay, 1000) forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .Container {
   display: flex;
   position: relative;
-  border-top: 1px solid rgba(215, 225, 235, 0.6);
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));
 }
 
 .Bar {
   position: absolute;
   top: 0px;
   height: 4px;
-  background-color: #FFF;
+  background-color: var(--nav-active-color, #FFF);
   opacity: 0.75;
   transition: transform 400ms ease;
+}
+
+.Button {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--nav-active-color, #FFF);
+  min-height: 15%;
+  height: auto;
+  margin: 1rem 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.Button:not(:last-child) {
+  border-left: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));
+}
+
+.Description {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.Number {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  backface-visibility: hidden;
+  color: var(--nav-active-color, #FFF);
+  font-size: 12px;
+}
+
+.Number .Square {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.18);
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(45deg) translate(-50%, -50%);
+  transform-origin: 0px 0px;
+  width: 24px;
+  height: 24px;
+  z-index: -1;
+  border: 1px solid #fff;
+  opacity: 0.5;
+}
+
+.Text {
+  width: 80%;
+  padding-left: 1.4rem;
+  font-weight: 700;
+  font-size: 12px;
 }

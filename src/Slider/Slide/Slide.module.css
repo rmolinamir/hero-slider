@@ -23,7 +23,6 @@
 }
 
 .Slide {
-  background-blend-mode: luminosity;
   background-size: cover;
   background-position: center top;
   background-size: 'cover';
