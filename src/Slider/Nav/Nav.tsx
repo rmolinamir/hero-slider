@@ -1,6 +1,6 @@
 import * as React from 'react'
 // Types
-import { INavProps } from '../HeroSlider'
+import { INavProps } from '../typings'
 // CSS
 import classes from './Nav.module.css'
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 // Types
-import { ISlideProps } from '../HeroSlider'
+import { ISlideProps } from '../typings'
 // CSS
 import classes from './Slide.module.css'
 // JSX

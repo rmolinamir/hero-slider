@@ -1,6 +1,6 @@
 import * as React from 'react'
 // Types
-import { ISideNavProps } from '../HeroSlider'
+import { ISideNavProps } from '../typings'
 // CSS
 import classes from './SideNav.module.css'
 

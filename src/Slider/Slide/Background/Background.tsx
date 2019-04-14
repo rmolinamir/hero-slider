@@ -3,7 +3,7 @@ import * as React from 'react'
 import {
   EBackgroundAnimations,
   IBackgroundProps
-} from '../../HeroSlider'
+} from '../../typings'
 // CSS
 import classes from './Background.module.css'
 // JSX

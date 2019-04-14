@@ -1,6 +1,6 @@
 import * as React from 'react'
 // Types
-import { IMenuNavProps } from '../HeroSlider'
+import { IMenuNavProps } from '../typings'
 // CSS
 import classes from './MenuNav.module.css'
 // JSX

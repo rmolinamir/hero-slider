@@ -1,63 +1,23 @@
 import * as React from 'react'
 import IntervalTimer from '../IntervalTimer'
 // Types
-import { 
-  BackdropFilterProperty,
-  BackfaceVisibilityProperty,
-  BackgroundProperty,
-  BackgroundAttachmentProperty,
-  BackgroundBlendModeProperty,
-  BackgroundClipProperty,
-  BackgroundColorProperty,
-  BackgroundImageProperty,
-  BackgroundOriginProperty,
-  BackgroundPositionProperty,
-  BackgroundPositionXProperty,
-  BackgroundPositionYProperty,
-  BackgroundRepeatProperty,
-  BackgroundSizeProperty,
-  WidthProperty,
-  HeightProperty
-} from 'csstype'
+import {
+  EAnimations,
+  ISettings,
+  ISliderProps,
+  EOrientation,
+  ISliderDimensions,
+  ITouchState,
+  IChildren,
+  ISlideProps,
+  IMenuNavProps,
+  INavProps
+
+} from './typings'
 // CSS
 import classes from './HeroSlider.module.css'
 // JSX
 import Buttons from './Buttons/Buttons'
-
-enum EAnimations {
-  TOP_TO_BOTTOM = 'top_to_bottom',
-  BOTTOM_TO_TOP = 'bottom_to_top',
-  LEFT_TO_RIGHT = 'left_to_right',
-  RIGHT_TO_LEFT = 'right_to_left',
-  FADE = 'fade'
-}
-
-enum EOrientation {
-  VERTICAL = 'vertical',
-  HORIZONTAL = 'horizontal'
-}
-
-interface ISettings extends ISettingsProps {
-  initialSlidingAnimation: EAnimations
-  slidingAnimation: string
-  sliderOrientation: EOrientation
-}
-
-interface ISettingsProps {
-  slidingDuration: number
-  slidingDelay: number
-  sliderColor: string
-  sliderFadeInDuration: number
-  navbarFadeInDuration: number
-  navbarFadeInDelay: number
-  isSmartSliding: boolean
-  shouldDisplayButtons: boolean
-  shouldAutoplay: boolean
-  autoplayDuration: number
-  autoplayHandlerTimeout: number,
-  width: WidthProperty<string | number>,
-  height: HeightProperty<string | number>
-}
 
 const setInitialSlidingAnimation = (animation?: EAnimations): string => {
   switch (animation) {
@@ -77,124 +37,6 @@ const setInitialSlidingAnimation = (animation?: EAnimations): string => {
     default:
       return classes.Sliding_Right_To_Left
   }
-}
-
-interface ITouchState {
-  initialX?: number
-  initialY?: number
-  currentX?: number
-  currentY?: number
-  finalX?: number
-  finalY?: number
-}
-
-interface INavPosition {
-  top: string
-  left: string
-  bottom: string
-  right: string
-  transform: string
-}
-
-interface INavSettings {
-  position: INavPosition
-  color: string
-  activeColor: string
-}
-
-export interface INavProps extends INavSettings {
-  totalSlides: number
-  activeSlide: number
-  changeSlide: TAnyFunction
-}
-
-export interface ISideNavProps extends INavProps {
-  right: string
-  left: string
-  isPositionedRight: boolean
-}
-
-export interface IMenuNavProps extends INavProps {
-  menuDescriptions: string[]
-  sliderWidth: number
-  mobileThreshold: number
-  extraButton: React.ReactElement | React.Component
-  isExtraButtonRight: boolean
-}
-
-export interface ISlideProps {
-  isActive: boolean
-  isDoneSliding: boolean
-  slidingAnimation: string
-  shouldRenderMask: boolean
-  background: IBackgroundProps
-  menuNavDescription: string
-  style: React.CSSProperties
-  onBackgroundLoad: TAnyFunction
-  children: React.ReactChildren
-}
-
-interface IChildren {
-  slidesArray: React.ReactElement[]
-  navbarsArray: React.ReactElement[]
-  othersArray: React.ReactElement[]
-  menuDescriptions: string[]
-}
-
-interface INavbarSettings {
-  color: string
-  activeColor: string
-}
-
-export enum EBackgroundAnimations {
-  FADE = 'fade',
-  ZOOM = 'zoom'
-}
-
-export interface IBackgroundProps {
-  backdropFilter?: BackdropFilterProperty
-  backfaceVisibility?: BackfaceVisibilityProperty
-  background?: BackgroundProperty<string | number>
-  backgroundAttachment?: BackgroundAttachmentProperty
-  backgroundBlendMode?: BackgroundBlendModeProperty
-  backgroundClip?: BackgroundClipProperty
-  backgroundColor?: BackgroundColorProperty
-  backgroundImage?: BackgroundImageProperty
-  backgroundOrigin?: BackgroundOriginProperty
-  backgroundPosition?: BackgroundPositionProperty<string | number>
-  backgroundPositionX?: BackgroundPositionXProperty<string | number>
-  backgroundPositionY?: BackgroundPositionYProperty<string | number>
-  backgroundRepeat?: BackgroundRepeatProperty
-  backgroundSize?: BackgroundSizeProperty<string | number>
-  backgroundAnimationDuration?: number
-  backgroundAnimationDelay?: number
-  backgroundAnimation?: EBackgroundAnimations
-  width?: WidthProperty<string | number>
-  height?: HeightProperty<string | number>
-  alt?: string
-  src: string | undefined
-  onLoad: TAnyFunction
-}
-
-interface ISliderProps {
-  settings?: ISettingsProps
-  orientation?: EOrientation
-  slidingAnimation?: EAnimations
-  isSmartSliding?: boolean
-  initialSlide?: number
-  nextSlide?: React.MutableRefObject<any>
-  previousSlide?: React.MutableRefObject<any>
-  navbarSettings?: INavbarSettings
-  style?: React.CSSProperties
-  onBeforeChange?: TAnyFunction
-  onChange?: TAnyFunction
-  onAfterChange?: TAnyFunction
-  children: React.ReactElement[] | React.ReactElement
-}
-
-interface ISliderDimensions {
-  width?: number
-  height?: number
 }
 
 const heroSlider = React.memo((props: ISliderProps) => {

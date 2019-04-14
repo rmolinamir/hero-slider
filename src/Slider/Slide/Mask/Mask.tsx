@@ -1,6 +1,6 @@
 import * as React from 'react'
 // Types
-import { IBackgroundProps } from '../../HeroSlider'
+import { IBackgroundProps } from '../../typings'
 // CSS
 import classes from './Mask.module.css'
 
