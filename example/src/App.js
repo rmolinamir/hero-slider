@@ -40,7 +40,8 @@ const app = () => {
           background={{
             backgroundColor: '#6D9B98',
             backgroundBlendMode: 'luminosity',
-            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg'
+            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg',
+            backgroundAnimation: 'fade'
           }}>
           <h1>Black Widow</h1>
           <p>Hello world.</p>
@@ -51,7 +52,8 @@ const app = () => {
           background={{
             backgroundColor: '#8A8A8A',
             backgroundBlendMode: 'luminosity',
-            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg'
+            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg',
+            backgroundAnimation: 'fade'
           }}>
           <h1>Captain America</h1>
         </Slide>
@@ -61,7 +63,8 @@ const app = () => {
           background={{
             backgroundColor: '#EA2329',
             backgroundBlendMode: 'luminosity',
-            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg'
+            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg',
+            backgroundAnimation: 'fade'
           }}>
           <h1>Iron Man</h1>
         </Slide>
@@ -71,7 +74,8 @@ const app = () => {
           background={{
             backgroundColor: '#2D7791',
             backgroundBlendMode: 'luminosity',
-            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/thor.jpg'
+            backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/thor.jpg',
+            backgroundAnimation: 'fade'
           }}>
           <h1>Thor</h1>
         </Slide>

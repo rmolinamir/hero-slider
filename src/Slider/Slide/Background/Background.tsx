@@ -1,6 +1,9 @@
 import * as React from 'react'
 // Types
-import { IBackgroundProps } from '../../HeroSlider'
+import {
+  EBackgroundAnimations,
+  IBackgroundProps
+} from '../../HeroSlider'
 // CSS
 import classes from './Background.module.css'
 // JSX
@@ -11,6 +14,7 @@ const background = (props: IBackgroundProps) => {
     width,
     height,
     onLoad,
+    alt,
     ...background
   } = props
 
@@ -20,11 +24,18 @@ const background = (props: IBackgroundProps) => {
     if (onLoad) {
       onLoad(event)
     }
-    // setClassName([
-    //   classes.Loaded,
-    //   classes.ZoomOut
-    // ].join(' '))
-    setClassName(classes.ZoomOut)
+    const { backgroundAnimation } = background
+    const className = [classes.Loaded]
+    switch (backgroundAnimation) {
+      case EBackgroundAnimations.ZOOM:
+        className.push(classes.ZoomOut)
+        break
+      case EBackgroundAnimations.FADE:
+      default:
+        className.push(classes.FadeIn)
+        break
+    }
+    setClassName(className.join(' '))
   }
 
   const style: React.CSSProperties = React.useMemo(() => {
@@ -45,6 +56,7 @@ const background = (props: IBackgroundProps) => {
       <img
         className={classes.Loader}
         onLoad={onLoadHandler}
+        alt={alt}
         src={background.backgroundImage}/>
       <div
         style={style}

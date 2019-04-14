@@ -24,10 +24,10 @@ const HeroSlide = (props: ISlideProps) => {
    */
   const CSSVariables = React.useMemo(() => {
     return {
-      '--background-fade-in-duration': background.backgroundFadeInDuration ? `${background.backgroundFadeInDuration}ms` : null,
-      '--background-fade-in-delay': background.backgroundFadeInDelay ? `${background.backgroundFadeInDelay}ms` : null,
+      '--background-animation-duration': background.backgroundAnimationDuration ? `${background.backgroundAnimationDuration}ms` : null,
+      '--background-animation-delay': background.backgroundAnimationDelay ? `${background.backgroundAnimationDelay}ms` : null,
     }
-  }, [background.backgroundFadeInDelay, background.backgroundFadeInDuration])
+  }, [background.backgroundAnimationDelay, background.backgroundAnimationDuration])
 
   return (
     <div

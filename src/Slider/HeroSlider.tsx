@@ -48,8 +48,6 @@ interface ISettingsProps {
   slidingDelay: number
   sliderColor: string
   sliderFadeInDuration: number
-  backgroundFadeInDuration: number
-  backgroundFadeInDelay: number
   navbarFadeInDuration: number
   navbarFadeInDelay: number
   isSmartSliding: boolean
@@ -148,6 +146,11 @@ interface INavbarSettings {
   activeColor: string
 }
 
+export enum EBackgroundAnimations {
+  FADE = 'fade',
+  ZOOM = 'zoom'
+}
+
 export interface IBackgroundProps {
   backdropFilter?: BackdropFilterProperty
   backfaceVisibility?: BackfaceVisibilityProperty
@@ -163,10 +166,12 @@ export interface IBackgroundProps {
   backgroundPositionY?: BackgroundPositionYProperty<string | number>
   backgroundRepeat?: BackgroundRepeatProperty
   backgroundSize?: BackgroundSizeProperty<string | number>
-  backgroundFadeInDuration?: number
-  backgroundFadeInDelay?: number
+  backgroundAnimationDuration?: number
+  backgroundAnimationDelay?: number
+  backgroundAnimation?: EBackgroundAnimations
   width?: WidthProperty<string | number>
   height?: HeightProperty<string | number>
+  alt?: string
   src: string | undefined
   onLoad: TAnyFunction
 }
@@ -206,8 +211,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
     slidingDelay: 200,
     sliderColor: 'inherit',
     sliderFadeInDuration: 500,
-    backgroundFadeInDuration: 1500,
-    backgroundFadeInDelay: 100,
     navbarFadeInDuration: 1000,
     navbarFadeInDelay: 500,
     isSmartSliding: true,
@@ -611,8 +614,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
       '--slider-height': `${sliderDimensions.height}px`,
       '--slider-color': settings.sliderColor,
       '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
-      '--background-fade-in-duration': `${settings.backgroundFadeInDuration}ms`,
-      '--background-fade-in-delay': `${settings.backgroundFadeInDelay}ms`,
       '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
       '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
       '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
