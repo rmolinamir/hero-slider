@@ -1,8 +1,8 @@
 /**
  * Based on **`[Pause and resume setInterval](https://stackoverflow.com/a/42240115/10246377)`**.
-* `IntervalTimer` is a class that handles logic for intervals, e.g. start
-* stop, reset, resume, pause & maximum amount of fires.
-*/
+ * `IntervalTimer` is a class that handles logic for intervals, e.g. start
+ * stop, reset, resume, pause & maximum amount of fires.
+ */
 
 enum EState {
   IDLE,

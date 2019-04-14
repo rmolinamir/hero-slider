@@ -31,7 +31,7 @@ const app = () => {
           slidingDuration: 250,
           slidingDelay: 100,
           shouldAutoplay: true,
-          shouldDisplayButtons: false,
+          shouldDisplayButtons: true,
           autoplayDuration: 8000,
           height: '100vh'
         }}>

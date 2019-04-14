@@ -22,7 +22,7 @@ const SliderNav = (props: INavProps) => {
    */
   const CSSVariables = {
     '--nav-color': color,
-    '--nav-active-color': activeColor,
+    '--nav-active-color': activeColor
   }
 
   const changeSlideHandler = (navButtonIndex: number) => {

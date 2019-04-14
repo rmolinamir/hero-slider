@@ -24,7 +24,7 @@ import {
   HeightProperty
 } from 'csstype'
 
-export * from './typings'
+export type TAnyFunction = (...anyArg: any[]) => any
 
 export as namespace HeroSlider;
 

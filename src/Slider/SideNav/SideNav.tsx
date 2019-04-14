@@ -25,7 +25,7 @@ const SliderNav = (props: ISideNavProps) => {
    */
   const CSSVariables = {
     '--nav-color': color,
-    '--nav-active-color': activeColor,
+    '--nav-active-color': activeColor
   }
 
   const changeSlideHandler = (navButtonIndex: number) => {

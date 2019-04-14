@@ -15,5 +15,3 @@ declare module '*.svg' {
   export default svgUrl;
   export { svgComponent as ReactComponent }
 }
-
-type TAnyFunction = (...any: any[]) => any

@@ -5,7 +5,7 @@
 // TypeScript Version: 3.3.3333
 
 // CSS Types
-import { 
+import {
   BackdropFilterProperty,
   BackfaceVisibilityProperty,
   BackgroundProperty,
@@ -23,6 +23,8 @@ import {
   WidthProperty,
   HeightProperty
 } from 'csstype'
+
+export type TAnyFunction = (...anyArg: any[]) => any
 
 /**
  * `INavPosition` define a position object used to position the nav components

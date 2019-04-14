@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { isMobile as setIsMobile } from '../isMobile'
+// Types
+import { TAnyFunction } from '../typings'
 // CSS
 import classes from './Buttons.module.css'
 

@@ -52,7 +52,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     slidingDuration: 500,
     slidingDelay: 200,
     sliderColor: 'inherit',
-    sliderFadeInDuration: 500,
+    sliderFadeInDuration: 100,
     navbarFadeInDuration: 1000,
     navbarFadeInDelay: 500,
     isSmartSliding: true,
@@ -131,7 +131,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    */
   const getNextSlide = (currentSlide: number = activeSlide) => {
     const totalSlides = slidesArray.length
-    let nextSlide: number;
+    let nextSlide: number
     /**
      * If **not** at the last slide, then add one. Otherwise set the next slide back to 1.
      */
@@ -160,7 +160,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    */
   const getPreviousSlide = (currentSlide: number = activeSlide) => {
     const totalSlides = slidesArray.length
-    let nextSlide: number;
+    let nextSlide: number
     /**
      * If **not** at the first slide, then add one. Otherwise set the next slide to the
      * last one.
@@ -223,7 +223,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     }
     // Sliding timeout ID's for the transitions.
     const slidingTimeoutId = setTimeout(() => {
-    setIsDoneSliding(true)
+      setIsDoneSliding(true)
       if (props.onAfterChange) {
         props.onAfterChange(nextSlide)
       }
@@ -305,7 +305,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    * Slider reference object to calculate its dimensions.
    */
   const sliderRef = React.useRef<HTMLDivElement>(null)
-  const [sliderDimensions, setSliderDimensions] = React.useState<ISliderDimensions>({})  
+  const [sliderDimensions, setSliderDimensions] = React.useState<ISliderDimensions>({})
 
   const setSliderDimensionsHandler = (): void => {
     const sliderDimensions: ISliderDimensions = {
@@ -460,7 +460,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
       '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
       '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
       '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
-      '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`, // Default: 800ms
+      '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms` // Default: 800ms
     }
   }, [settings, props.navbarSettings])
 
@@ -476,13 +476,14 @@ const heroSlider = React.memo((props: ISliderProps) => {
     }
     React.Children.toArray(props.children).forEach(child => {
       if (typeof child.type === 'function' && React.isValidElement(child)) {
+        // tslint:disable-next-line:variable-name
         const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
         const displayName = RFC_Child.displayName
         switch (displayName) {
           case 'react-fancy-slider/slide':
-          const props = child.props as ISlideProps
-          children.menuDescriptions.push(props.menuNavDescription)
-          return children.slidesArray.push(child)
+            const props = child.props as ISlideProps
+            children.menuDescriptions.push(props.menuNavDescription)
+            return children.slidesArray.push(child)
           case 'react-fancy-slider/nav':
           case 'react-fancy-slider/menu-nav':
             return children.navbarsArray.push(child)
@@ -503,7 +504,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     return getChildren()
   }, [])
 
-  const { slidesArray, navbarsArray, othersArray} = children
+  const { slidesArray, navbarsArray, othersArray } = children
 
   /**
    * `setSlides` clones the necessary properties for each slide to work.
@@ -513,7 +514,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
       const currentSlide = index + 1
       return (
         React.cloneElement(
-          child as React.ReactElement<ISlideProps>, 
+          child as React.ReactElement<ISlideProps>,
           {
             isActive: activeSlide === currentSlide,
             isDoneSliding: isDoneSliding,
@@ -538,6 +539,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    */
   const setNavbars = () => {
     return React.Children.map(navbarsArray, child => {
+      // tslint:disable-next-line:variable-name
       const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
       const isMenuNav = RFC_Child.displayName === 'react-fancy-slider/menu-nav'
       const navProps = {
@@ -548,7 +550,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
       if (isMenuNav) {
         return (
           React.cloneElement(
-            child as React.ReactElement<IMenuNavProps>, 
+            child as React.ReactElement<IMenuNavProps>,
             {
               ...navProps,
               menuDescriptions: children.menuDescriptions,

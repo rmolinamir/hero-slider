@@ -35,7 +35,7 @@ const SliderNav = (props: IMenuNavProps) => {
    */
   const CSSVariables = {
     '--nav-color': color,
-    '--nav-active-color': activeColor,
+    '--nav-active-color': activeColor
   }
 
   const changeSlideHandler = (MenuNavButtonIndex: number) => {
@@ -85,7 +85,7 @@ const SliderNav = (props: IMenuNavProps) => {
       {extraButton && (
         <div
           style={{
-            order: isExtraButtonRight ? 1 : 0,
+            order: isExtraButtonRight ? 1 : 0
           }}
           className={classes.Extra}>
           <span
@@ -102,7 +102,7 @@ const SliderNav = (props: IMenuNavProps) => {
         {MenuNavButtons}
         <span
           style={{
-            width: `${100/totalSlides}%`,
+            width: `${100 / totalSlides}%`,
             transform: `translate3d(${activeSlide - 1}00%, 0, 0)`
           }}
           className={classes.Bar} />
