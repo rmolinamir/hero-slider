@@ -4,6 +4,8 @@
  * stop, reset, resume, pause & maximum amount of fires.
  */
 
+import { TAnyFunction } from './Slider/typings'
+
 enum EState {
   IDLE,
   RUNNING,
@@ -27,19 +29,19 @@ interface IIntervalTimer {
 
 class IntervalTimer implements IIntervalTimer {
   // Init
-  callback: TAnyFunction = () => {};
-  interval: number;
-  maxFires?: number;
-  state: EState;
-  remaining: number;
-  fires: number;
-  pausedTime: number | Date;
-  lastTimeFired: Date;
-  timerId: NodeJS.Timeout;
-  resumeId: NodeJS.Timeout;
-  lastPauseTime: Date;
+  callback: TAnyFunction = () => null
+  interval: number
+  maxFires?: number
+  state: EState
+  remaining: number
+  fires: number
+  pausedTime: number | Date
+  lastTimeFired: Date
+  timerId: NodeJS.Timeout
+  resumeId: NodeJS.Timeout
+  lastPauseTime: Date
 
-  constructor(callback: TAnyFunction, interval: number, maxFires: number | undefined = undefined) {
+  constructor (callback: TAnyFunction, interval: number, maxFires: number | undefined = undefined) {
     /**
      * Remaining time before the next interval.
      */

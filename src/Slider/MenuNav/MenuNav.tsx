@@ -17,7 +17,8 @@ const SliderNav = (props: IMenuNavProps) => {
     totalSlides,
     activeSlide,
     changeSlide,
-    menuDescriptions,
+    justifyContent,
+    navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     extraButton,
@@ -48,7 +49,7 @@ const SliderNav = (props: IMenuNavProps) => {
   const MenuNavButtons = React.useMemo(() => {
     const emptyArray = Array.from(new Array(totalSlides))
     return emptyArray.map((_, index) => {
-      const description = menuDescriptions[index]
+      const description = navDescriptions[index]
       const respectiveSlide = index + 1
       return (
         <li
@@ -79,7 +80,8 @@ const SliderNav = (props: IMenuNavProps) => {
         left: !position ? '50%' : undefined,
         transform: !position ? 'translateX(-50%)' : undefined,
         ...position,
-        ...CSSVariables
+        ...CSSVariables,
+        justifyContent: justifyContent || 'center'
       }}
       className={classes.Wrapper}>
       {extraButton && (

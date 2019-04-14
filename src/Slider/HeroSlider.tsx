@@ -472,7 +472,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
       slidesArray: [],
       navbarsArray: [],
       othersArray: [],
-      menuDescriptions: []
+      navDescriptions: []
     }
     React.Children.toArray(props.children).forEach(child => {
       if (typeof child.type === 'function' && React.isValidElement(child)) {
@@ -482,7 +482,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
         switch (displayName) {
           case 'react-fancy-slider/slide':
             const props = child.props as ISlideProps
-            children.menuDescriptions.push(props.menuNavDescription)
+            children.navDescriptions.push(props.navDescription)
             return children.slidesArray.push(child)
           case 'react-fancy-slider/nav':
           case 'react-fancy-slider/menu-nav':
@@ -535,7 +535,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
 
   /**
    * `setNavbars`, similar to `setSlides`.
-   * If it's a `menu-nav`, then the `menuDescriptions` of each slide are also passed as props.
+   * If it's a `menu-nav`, then the `navDescriptions` of each slide are also passed as props.
    */
   const setNavbars = () => {
     return React.Children.map(navbarsArray, child => {
@@ -553,7 +553,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
             child as React.ReactElement<IMenuNavProps>,
             {
               ...navProps,
-              menuDescriptions: children.menuDescriptions,
+              navDescriptions: children.navDescriptions,
               sliderWidth: sliderDimensions.width
             }
           )

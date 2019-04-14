@@ -71,7 +71,7 @@ export interface ISideNavProps extends INavProps {
  * `MenuNav` component props.
  */
 export interface IMenuNavProps extends INavProps {
-  menuDescriptions: string[]
+  navDescriptions: string[]
   sliderWidth: number
   mobileThreshold: number
   extraButton: React.ReactElement | React.Component
@@ -87,7 +87,7 @@ export interface ISlideProps {
   slidingAnimation: string
   shouldRenderMask: boolean
   background: IBackgroundProps
-  menuNavDescription: string
+  navDescription: string
   style: React.CSSProperties
   onBackgroundLoad: TAnyFunction
   children: React.ReactChildren
@@ -223,7 +223,7 @@ export interface IChildren {
   slidesArray: React.ReactElement[]
   navbarsArray: React.ReactElement[]
   othersArray: React.ReactElement[]
-  menuDescriptions: string[]
+  navDescriptions: string[]
 }
 
 /**

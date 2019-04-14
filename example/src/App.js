@@ -36,7 +36,7 @@ const app = () => {
           height: '100vh'
         }}>
         <Slide
-          menuNavDescription='Black Widow, lorem ipsum lorem ipsum.'
+          navDescription='Black Widow, lorem ipsum lorem ipsum.'
           background={{
             backgroundColor: '#6D9B98',
             backgroundBlendMode: 'luminosity',
@@ -48,7 +48,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          menuNavDescription='Captain America, lorem ipsum lorem ipsum.'
+          navDescription='Captain America, lorem ipsum lorem ipsum.'
           background={{
             backgroundColor: '#8A8A8A',
             backgroundBlendMode: 'luminosity',
@@ -59,7 +59,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          menuNavDescription='Iron Man, lorem ipsum lorem ipsum.'
+          navDescription='Iron Man, lorem ipsum lorem ipsum.'
           background={{
             backgroundColor: '#EA2329',
             backgroundBlendMode: 'luminosity',
@@ -70,7 +70,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          menuNavDescription='Thor, lorem ipsum lorem ipsum.'
+          navDescription='Thor, lorem ipsum lorem ipsum.'
           background={{
             backgroundColor: '#2D7791',
             backgroundBlendMode: 'luminosity',
