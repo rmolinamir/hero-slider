@@ -20,11 +20,7 @@
 
 .Loaded {
   opacity: 0;
-  animation-name: fade-in;
-  animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  animation-fill-mode: forwards;
-  animation-duration: var(--background-fade-in-duration, 1500ms);
-  animation-delay: var(--background-fade-in-delay, 100ms);
+  animation: fade-in var(--background-fade-in-duration, 1500ms) ease-in-out var(--background-fade-in-delay, 100ms);
 }
 
 @keyframes fade-in {
@@ -33,5 +29,29 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+/* Animations */
+
+.ZoomOut {
+  opacity: 0;
+  transform: scale(1.5);
+  animation: 
+    fade-in var(--background-fade-in-duration, 1500ms) ease-in-out var(--background-fade-in-delay, 100ms) forwards, 
+    zoom-out var(--background-zoom-out-duration, 30000ms) ease-in-out var(--background-zoom-out-delay, 100ms) forwards;
+}
+
+@keyframes zoom-out {
+  0% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }

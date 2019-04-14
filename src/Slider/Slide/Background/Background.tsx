@@ -16,7 +16,11 @@ const background = (props: IBackgroundProps) => {
   const [className, setClassName] = React.useState(classes.Loading)
 
   const onLoadHandler = () => {
-    setClassName(classes.Loaded)
+    // setClassName([
+    //   classes.Loaded,
+    //   classes.ZoomOut
+    // ].join(' '))
+    setClassName(classes.ZoomOut)
   }
 
   const style: React.CSSProperties = React.useMemo(() => {
