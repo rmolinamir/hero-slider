@@ -117,9 +117,11 @@ export interface ISideNavProps extends INavProps {
 }
 
 export interface IMenuNavProps extends INavProps {
-  menuDescriptions: string[],
-  sliderWidth: number,
+  menuDescriptions: string[]
+  sliderWidth: number
   mobileThreshold: number
+  extraButton: React.ReactElement | React.Component
+  isExtraButtonRight: boolean
 }
 
 export interface ISlideProps {
@@ -130,6 +132,7 @@ export interface ISlideProps {
   background: IBackgroundProps
   menuNavDescription: string
   style: React.CSSProperties
+  onBackgroundLoad: TAnyFunction
   children: React.ReactChildren
 }
 
@@ -165,6 +168,7 @@ export interface IBackgroundProps {
   width?: WidthProperty<string | number>
   height?: HeightProperty<string | number>
   src: string | undefined
+  onLoad: TAnyFunction
 }
 
 interface ISliderProps {
@@ -176,7 +180,10 @@ interface ISliderProps {
   nextSlide?: React.MutableRefObject<any>
   previousSlide?: React.MutableRefObject<any>
   navbarSettings?: INavbarSettings
-  style: React.CSSProperties
+  style?: React.CSSProperties
+  onBeforeChange?: TAnyFunction
+  onChange?: TAnyFunction
+  onAfterChange?: TAnyFunction
   children: React.ReactElement[] | React.ReactElement
 }
 
@@ -236,11 +243,15 @@ const heroSlider = React.memo((props: ISliderProps) => {
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle the smooth transition and
    * set `isDoneSlidingWatcher.current` (like a pointer) as true. While `isDoneSliding` is true, no the
    * slides won't change.
+   * The `onBeforeChange` event is executed here.
    */
   const changeSlide = (nextSlide: number): void => {
     if (isDoneSlidingWatcher.current) {
+      if (props.onBeforeChange) {
+        props.onBeforeChange(activeSlideWatcher.current, nextSlide)
+      }
       setActiveSlide(nextSlide)
-      onSlidingHandler()
+      onSlidingHandler(nextSlide)
     }
   }
 
@@ -354,13 +365,26 @@ const heroSlider = React.memo((props: ISliderProps) => {
    * `onSlidingHandler` sets `isDoneSliding` as false when executed and triggers a `setTimeout` that will set
    * `isDoneSliding` as true after the time it takes for the slide to change passes.
    * Saves the timeout ID to `slidingTimeout`.
+   * The `onChange` and `onAfterChange` events are executed here.
    */
-  const onSlidingHandler = (): void => {
+  const onSlidingHandler = (nextSlide: number): void => {
     setIsDoneSliding(false)
-    const timeoutId = setTimeout(() => {
-      setIsDoneSliding(true)
+    // Only save the delay timeout if `onChange` exists.
+    if (props.onChange) {
+      const delayTimeoutId = setTimeout(() => {
+        props.onChange && props.onChange(nextSlide)
+      }, settings.slidingDelay)
+      setDelayTimeout(delayTimeoutId)
+    }
+    // Sliding timeout ID's for the transitions.
+    const slidingTimeoutId = setTimeout(() => {
+    setIsDoneSliding(true)
+      if (props.onAfterChange) {
+        props.onAfterChange(nextSlide)
+      }
     }, slidingTimeoutDuration)
-    setSlidingTimeout(timeoutId)
+    // Saving the timeout ID's in case clearing them is needed.
+    setSlidingTimeout(slidingTimeoutId)
   }
 
   /**
@@ -424,6 +448,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
   const isDoneSlidingWatcher = React.useRef<boolean>(true)
   const activeSlideWatcher = React.useRef(activeSlide)
 
+  const [delayTimeout, setDelayTimeout] = React.useState<NodeJS.Timeout>()
   const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>()
 
   const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = React.useState<NodeJS.Timeout>()
@@ -565,6 +590,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
      * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
      */
     return () => {
+      clearTimeout(delayTimeout && +delayTimeout)
       clearTimeout(slidingTimeout && +slidingTimeout)
       clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout)
       autoplayInstance.stop()

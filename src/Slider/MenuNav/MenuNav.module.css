@@ -1,5 +1,6 @@
 .Wrapper {
   position: absolute;
+  display: flex;
   z-index: 2;
   width: 90%; /* May be placeholder. */
   margin: 0 auto;
@@ -27,6 +28,17 @@
   border-top: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));
 }
 
+.Extra {
+  display: flex;  
+  flex-grow: 1;
+  min-width: 50px;
+  margin: 0;
+  padding: 0;
+  color: var(--nav-active-color, #FFF);
+  border-top: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));
+  /* border-left: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));s */
+}
+
 .Bar {
   position: absolute;
   top: 0px;
@@ -44,11 +56,20 @@
   color: var(--nav-active-color, #FFF);
   min-height: 15%;
   height: auto;
-  margin: 1rem 0.75rem;
-  padding: 0.5rem 0;
+  margin: 1rem 0;
+  padding: 0.5rem 0.75rem;
 }
 
-.Button:not(:last-child) {
+.ExtraButton {
+  flex: 1;
+  color: var(--nav-active-color, #FFF);
+  min-height: 15%;
+  height: auto;
+  margin: 1rem 0;
+  padding: 0;
+}
+
+.Button:not(:first-child):not(:last-child) {
   border-left: 1px solid var(--nav-color, rgba(215, 225, 235, 0.6));
 }
 

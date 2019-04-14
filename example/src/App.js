@@ -21,15 +21,18 @@ const app = () => {
         slidingAnimation='left_to_right'
         orientation='horizontal'
         initialSlide={1}
+        onBeforeChange={(previousSlide, nextSlide) => console.log('onBeforeChange', previousSlide, nextSlide)}
+        onChange={(nextSlide) => console.log('onChange', nextSlide)}
+        onAfterChange={(nextSlide) => console.log('onAfterChange', nextSlide)}
         style={{
           backgroundColor: '#000'
         }}
         settings={{
           slidingDuration: 250,
           slidingDelay: 100,
-          shouldAutoplay: false,
+          shouldAutoplay: true,
           shouldDisplayButtons: false,
-          autoplayDuration: 1000,
+          autoplayDuration: 8000,
           height: '100vh'
         }}>
         <Slide

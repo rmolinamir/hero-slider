@@ -10,12 +10,16 @@ const background = (props: IBackgroundProps) => {
   const {
     width,
     height,
+    onLoad,
     ...background
   } = props
 
   const [className, setClassName] = React.useState(classes.Loading)
 
-  const onLoadHandler = () => {
+  const onLoadHandler = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
+    if (onLoad) {
+      onLoad(event)
+    }
     // setClassName([
     //   classes.Loaded,
     //   classes.ZoomOut

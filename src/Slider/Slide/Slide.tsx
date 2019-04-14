@@ -15,6 +15,7 @@ const HeroSlide = (props: ISlideProps) => {
     shouldRenderMask,
     style,
     background,
+    onBackgroundLoad,
     children
   } = props
 
@@ -40,7 +41,9 @@ const HeroSlide = (props: ISlideProps) => {
         (isActive && isDoneSliding) && classes.Sliding,
         (isActive && !isDoneSliding) && slidingAnimation
       ].join(' ')}>
-      <Background {...background} />
+      <Background
+        onLoad={onBackgroundLoad}
+        {...background} />
       <div className={classes.Wrapper}>
         {/* Inner Mask */}
         {shouldRenderMask ? (

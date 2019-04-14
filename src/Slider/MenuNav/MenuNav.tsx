@@ -19,7 +19,9 @@ const SliderNav = (props: IMenuNavProps) => {
     changeSlide,
     menuDescriptions,
     sliderWidth = window.innerWidth,
-    mobileThreshold = 1024
+    mobileThreshold = 1024,
+    extraButton,
+    isExtraButtonRight
   } = props
 
   if (sliderWidth <= mobileThreshold) {
@@ -80,6 +82,22 @@ const SliderNav = (props: IMenuNavProps) => {
         ...CSSVariables
       }}
       className={classes.Wrapper}>
+      {extraButton && (
+        <div
+          style={{
+            order: isExtraButtonRight ? 1 : 0,
+          }}
+          className={classes.Extra}>
+          <span
+            style={{
+              borderLeft: isExtraButtonRight ? '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))' : undefined,
+              borderRight: !isExtraButtonRight ? '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))' : undefined
+            }}
+            className={classes.ExtraButton}>
+            {extraButton}
+          </span>
+        </div>
+      )}
       <ul className={classes.Container}>
         {MenuNavButtons}
         <span
