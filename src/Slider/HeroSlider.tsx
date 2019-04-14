@@ -102,6 +102,7 @@ export interface IMenuNavProps extends INavProps {
 export interface ISlideProps {
   isActive: boolean
   isDoneSliding: boolean
+  shouldRenderMask: boolean
   menuNavDescription: string
   slidingAnimation: string
   style: React.CSSProperties

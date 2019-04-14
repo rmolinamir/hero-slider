@@ -7,28 +7,39 @@ import classes from './Slide.module.css'
 import Mask from '../Mask/Mask'
 
 const HeroSlide = (props: ISlideProps) => {
+  const {
+    shouldRenderMask = false,
+    isActive,
+    isDoneSliding,
+    slidingAnimation,
+    style,
+    children
+  } = props
+
   return (
       <div
-        style={props.style}
+        style={style}
         className={[
           classes.Slide,
-          props.isActive && classes.Active,
-          (props.isActive && props.isDoneSliding) && classes.Sliding,
-          (props.isActive && !props.isDoneSliding) && props.slidingAnimation
+          isActive && classes.Active,
+          (isActive && isDoneSliding) && classes.Sliding,
+          (isActive && !isDoneSliding) && slidingAnimation
         ].join(' ')}>
         <div className={classes.Wrapper}>
           {/* Inner Mask */}
-          <Mask
-            style={props.style}
-            isActive={props.isActive}
-            isDoneSliding={props.isDoneSliding} />
+          {shouldRenderMask ? (
+            <Mask
+              style={style}
+              isActive={isActive}
+              isDoneSliding={isDoneSliding} />
+          ) : null}
           {/* Container */}
           <div
             className={[
               classes.Container,
-              (props.isActive && props.isDoneSliding) && classes.Active
+              (isActive && isDoneSliding) && classes.Active
             ].join(' ')}>
-            {props.children}
+            {children}
           </div>
         </div>
       </div>
