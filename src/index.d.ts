@@ -79,6 +79,13 @@ export interface IMenuNavProps extends INavProps {
 }
 
 /**
+ * `ButtonsNav` component props.
+ */
+export interface IButtonsNavProps extends IMenuNavProps {
+  alignItems: string
+}
+
+/**
  * `Slide` component props.
  */
 export interface ISlideProps {
@@ -246,6 +253,7 @@ export function Slide(props: ISlideProps): JSX.Element
 export function Nav(props: INavProps): JSX.Element
 export function SideNav(props: ISideNavProps): JSX.Element
 export function MenuNav(props: IMenuNavProps): JSX.Element
+export function ButtonsNav(props: IButtonsNavProps): JSX.Element
 
 /**
  * Default component.

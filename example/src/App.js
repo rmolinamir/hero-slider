@@ -4,7 +4,8 @@ import HeroSlider, {
   Slide,
   // Nav,
   SideNav,
-  MenuNav
+  MenuNav,
+  ButtonsNav
 } from 'hero-slider'
 
 const app = () => {
@@ -30,13 +31,13 @@ const app = () => {
         settings={{
           slidingDuration: 250,
           slidingDelay: 100,
-          shouldAutoplay: true,
+          shouldAutoplay: false,
           shouldDisplayButtons: true,
           autoplayDuration: 8000,
           height: '100vh'
         }}>
         <Slide
-          navDescription='Black Widow, lorem ipsum lorem ipsum.'
+          navDescription='Black Widow'
           background={{
             backgroundColor: '#6D9B98',
             backgroundBlendMode: 'luminosity',
@@ -48,7 +49,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          navDescription='Captain America, lorem ipsum lorem ipsum.'
+          navDescription='Captain America'
           background={{
             backgroundColor: '#8A8A8A',
             backgroundBlendMode: 'luminosity',
@@ -59,7 +60,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          navDescription='Iron Man, lorem ipsum lorem ipsum.'
+          navDescription='Iron Man'
           background={{
             backgroundColor: '#EA2329',
             backgroundBlendMode: 'luminosity',
@@ -70,7 +71,7 @@ const app = () => {
         </Slide>
 
         <Slide
-          navDescription='Thor, lorem ipsum lorem ipsum.'
+          navDescription='Thor'
           background={{
             backgroundColor: '#2D7791',
             backgroundBlendMode: 'luminosity',
@@ -79,7 +80,8 @@ const app = () => {
           }}>
           <h1>Thor</h1>
         </Slide>
-        <MenuNav />
+        {/* <MenuNav /> */}
+        <ButtonsNav alignItems='center' />
         <SideNav
           position={{
             top: '0',

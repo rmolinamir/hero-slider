@@ -49,6 +49,7 @@
 }
 
 .Button {
+  list-style: none;
   flex: 1;
   position: relative;
   display: flex;

@@ -78,6 +78,13 @@ export interface IMenuNavProps extends INavProps {
 }
 
 /**
+ * `ButtonsNav` component props.
+ */
+export interface IButtonsNavProps extends IMenuNavProps {
+  alignItems: string
+}
+
+/**
  * `Slide` component props.
  */
 export interface ISlideProps {
