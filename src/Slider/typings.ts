@@ -81,6 +81,7 @@ export interface IMenuNavProps extends INavProps {
  * `ButtonsNav` component props.
  */
 export interface IButtonsNavProps extends IMenuNavProps {
+  backgroundColor: string
   alignItems: string
 }
 

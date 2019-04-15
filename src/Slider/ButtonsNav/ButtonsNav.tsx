@@ -13,6 +13,7 @@ const SliderNav = (props: IButtonsNavProps) => {
   const {
     color,
     activeColor,
+    backgroundColor,
     position,
     totalSlides,
     activeSlide,
@@ -37,6 +38,7 @@ const SliderNav = (props: IButtonsNavProps) => {
    */
   const CSSVariables = {
     '--nav-color': color,
+    '--nav-background-color': backgroundColor,
     '--nav-active-color': activeColor
   }
 

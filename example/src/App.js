@@ -4,7 +4,7 @@ import HeroSlider, {
   Slide,
   // Nav,
   SideNav,
-  MenuNav,
+  // MenuNav,
   ButtonsNav
 } from 'hero-slider'
 
@@ -43,11 +43,8 @@ const app = () => {
             backgroundBlendMode: 'luminosity',
             backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg',
             backgroundAnimation: 'fade'
-          }}>
-          <h1>Black Widow</h1>
-          <p>Hello world.</p>
-        </Slide>
-
+          }} />
+        
         <Slide
           navDescription='Captain America'
           background={{
@@ -55,9 +52,7 @@ const app = () => {
             backgroundBlendMode: 'luminosity',
             backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg',
             backgroundAnimation: 'fade'
-          }}>
-          <h1>Captain America</h1>
-        </Slide>
+          }} />
 
         <Slide
           navDescription='Iron Man'
@@ -66,9 +61,7 @@ const app = () => {
             backgroundBlendMode: 'luminosity',
             backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg',
             backgroundAnimation: 'fade'
-          }}>
-          <h1>Iron Man</h1>
-        </Slide>
+          }} />
 
         <Slide
           navDescription='Thor'
@@ -77,11 +70,10 @@ const app = () => {
             backgroundBlendMode: 'luminosity',
             backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/thor.jpg',
             backgroundAnimation: 'fade'
-          }}>
-          <h1>Thor</h1>
-        </Slide>
+          }} />
+
         {/* <MenuNav /> */}
-        <ButtonsNav alignItems='center' />
+        <ButtonsNav />
         <SideNav
           position={{
             top: '0',
