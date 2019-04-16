@@ -8,8 +8,8 @@
     "prop-types": "^15.6.2",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-scripts": "^2.1.5",
-    "react-png-button": "file:.."
+    "react-png-button": "file:..",
+    "react-scripts": "^2.1.5"
   },
   "scripts": {
     "start": "react-scripts start",

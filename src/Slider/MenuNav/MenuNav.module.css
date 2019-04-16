@@ -1,7 +1,7 @@
 .Wrapper {
   position: absolute;
   display: flex;
-  z-index: 2;
+  z-index: 3;
   width: 90%; /* May be placeholder. */
   margin: 0 auto;
   padding: 0;

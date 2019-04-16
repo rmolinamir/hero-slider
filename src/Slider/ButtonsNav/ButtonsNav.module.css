@@ -1,7 +1,7 @@
 .Wrapper {
   position: absolute;
   display: inline-flex;
-  z-index: 2;
+  z-index: 3;
   margin: 0 auto;
   padding: 0;
   cursor: pointer;
@@ -64,6 +64,7 @@
   opacity: 0.5;
   background-color: var(--nav-background-color, rgba(255, 255, 255, 0.8));
   z-index: -1;
+  transition: all 200ms ease-in-out;
 }
 
 .Button:hover:not(.Active),
@@ -120,6 +121,7 @@
   box-shadow: -1px 0px 0px 0px var(--nav-active-color, rgb(59, 62, 69));
   background-color: var(--nav-active-color, rgb(59, 62, 69));
   z-index: -1;
+  transition: all 200ms ease-in-out;
 }
 
 .Active + .Button,

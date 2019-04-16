@@ -1,8 +1,8 @@
 # hero-slider
 
-> A hero slider component inline with how you would expect most React components to work. Includes autoplay, lazy loaded backgrounds, detecs touch swiping and direction to change slides, multiple navs, settings, memoization, event callbacks, among other features.
+> A hero slider component inline with how you would expect most React components to work. Includes autoplay, lazy loaded backgrounds, support for touch swiping and direction to change slides, multiple navs, settings, memoization, event callbacks, among other features.
 
-[![NPM](https://img.shields.io/npm/v/react-formalized.svg)](https://www.npmjs.com/package/react-formalized) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-14.0kB-brightgreen.svg)](https://unpkg.com/react-formalized@latest/dist/index.es.js)
+[![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-14.0kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
 
 ---
 
@@ -22,11 +22,14 @@ npm install --save hero-slider
 
 ## [Showcase](https://www.robertmolina.dev/codelab/hero-slider)
 
-[![Edit React Formalized](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6l4w83xqpk?fontsize=14)
+[![Edit Hero Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6l4w83xqpk?fontsize=14)
 
 ### Hero Slider
 
-![Input Elements](https://i.imgur.com/Pnw7QEo.gif)
+![Navbar Slider](https://media.giphy.com/media/KeW8omQCSShZdNQMuy/giphy.gif)
+![Basic Slider](https://media.giphy.com/media/WpNrWjYJxCrl4O8btw/giphy.gif)
+![Zoom Slider](https://media.giphy.com/media/dXG2hB3AtPg976vCE5/giphy.gif)
+![Vertical Slider](https://media.giphy.com/media/kyXfZuna1AUWGrUlog/giphy.gif)
 
 ---
 

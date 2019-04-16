@@ -10,6 +10,9 @@ import HeroSlider, {
   ButtonsNav,
   Nav
 } from 'hero-slider'
+import Wrapper from '../UI/Wrapper/Wrapper'
+import Title from '../UI/Title/Title'
+import Subtitle from '../UI/Subtitle/Subtitle'
 
 const app = () => {
   const nextSlideHandler = React.useRef()
@@ -35,6 +38,15 @@ const app = () => {
         autoplayDuration: 5000,
         height: '100vh'
       }}>
+      <Wrapper>
+        <Title>
+          Zoom Slider
+        </Title>
+        <Subtitle>
+          Slides' backgroundAnimation prop set to 'zoom' (you may reload the page if it's already over)
+        </Subtitle>
+      </Wrapper>
+
       <Slide
         navDescription='Hallstatt - Austria'
         background={{

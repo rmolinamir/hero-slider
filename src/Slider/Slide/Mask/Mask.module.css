@@ -5,12 +5,12 @@
   top: 50%;
   width: calc(var(--slider-widht, 100vw) * 0.66);
   height: calc(var(--slider-height, 100vh) * 0.66);
-  max-width: 25%;
+  max-width: 33%;
   max-height: 50%;
   -webkit-clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   transform: translate3d(-33.33%, -50%, 0);
-  transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
+  transition: all calc(var(--mask-duration, 200ms) * 1.5) ease 0s;
 }
 
 .Mask:not(.Active) {
@@ -18,7 +18,7 @@
   z-index: 1;
   transform: translate3d(33.33%, -50%, 0);
   /* property name | duration | timing function | delay */
-  transition: all var(--mask-duration, 200ms) ease-in-out 0s;
+  transition: all var(--mask-duration, 200ms) ease 0s;
 }
 
 .Inner {
@@ -33,28 +33,21 @@
   background-position: center center;
   -webkit-transform-origin: 50% 16.5vh;
   transform-origin: 50% 16.5vh;
-  transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;
+  transition: all calc(var(--mask-duration, 200ms) * 1.66) ease 0s;
 }
 
 .Inner.Sliding {
-  transition: all var(--mask-duration, 200ms) ease-in-out 0s;
+  transition: all var(--mask-duration, 200ms) ease 0s;
   transform: translate3d(-85%, -50%, 0);
 }
 
 @media (max-width: 1024px) {
   .Mask {
-    max-width: 70%;
-    max-height: 50%;
-    -webkit-clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
-    clip-path: polygon(10% 0, 10% 100%, 30% 100%, 30% 25%, 70% 25%, 70% 75%, 30% 75%, 30% 100%, 90% 100%, 90% 0);
+    max-width: 50% !important;
   }
   .Inner {
-    transform: translate3d(-50%, -50%, 0);
-    width: calc(var(--slider-height, 100vw) * 0.5);
-    height: calc(var(--slider-height, 100vh) * 0.5);
-  }
-  .Inner:not(.Active) {
-    transform: translate3d(-50%, -50%, 0);
+    width: calc(var(--slider-height, 100vw) * 0.66);
+    height: calc(var(--slider-height, 100vh) * 0.66);
   }
 }
 
