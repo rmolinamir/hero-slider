@@ -52,19 +52,33 @@ HeroSlider accepts the following props:
 
 | Prop | Type | Default | Definition |
 |:----------------:|:--------------------------------------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| settings | object | (Shown below) | The slider settings, features like autoplay, sliding duration and delay, color, animation durations, navbar animations, and others, can be configured. More detailed information below this table. |
-| orientation | string | `'horizontal'` | The slider orientation. It can either set to be `horizontal` or `vertical`. The orientation sets the slide buttons respective to the orientation (e.g. if vertical, the buttons will be at the top and at the bottom). Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides). |
-| slidingAnimation | string | Horizontal clip-path animations. | The sliding animations during changes. There are multiple possible types of animations, they can be hard-set through settings if `isSmartSliding` is `false`. Otherwise, depending on the initial animation, the rest of the animations will be the same except the origin will change respective to which slide is being selected (meaning after of previous to current slide). |
-| isSmartSliding | boolean | `true` | With smart sliding, the hero slider will know which animation should be set next, meaning if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide. The animations will essentially be the same, but with different origins (e.g. translate left or right). |
+| settings | `object` | (Shown below) | The slider settings, features like autoplay, sliding duration and delay, color, animation durations, navbar animations, and others, can be configured. More detailed information below this table. |
+| orientation | `string` | `'horizontal'` | The slider orientation. It can either set to be `horizontal` or `vertical`. The orientation sets the slide buttons respective to the orientation (e.g. if vertical, the buttons will be at the top and at the bottom). Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides). |
+| slidingAnimation | `string` | Horizontal clip-path animations. | The sliding animations during changes. There are multiple possible types of animations, they can be hard-set through settings if `isSmartSliding` is `false`. Otherwise, depending on the initial animation, the rest of the animations will be the same except the origin will change respective to which slide is being selected (meaning after of previous to current slide). |
+| isSmartSliding | `boolean` | `true` | With smart sliding, the hero slider will know which animation should be set next, meaning if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide. The animations will essentially be the same, but with different origins (e.g. translate left or right). |
 | initialSlide | number | `1` | The initial slide can also be set, but the slider starts at the first slide by default, being 1 and **not 0**. |
-| nextSlide | React.MutableRefObject | `null` | Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an object and pass it as a reference, then the `current` property of the React reference object will be set to be equal to the nextSlide handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component. |
-| previousSlide | React.MutableRefObject | `null` | Similar to `nextSlide`, this sets the object to be equal to the previousSlide handler within the HeroSlider component. |
-| navbarSettings | object | (Shown below) | Aesthetics settings. You can configure the base color and the active color of all nav components within the HeroSlider. They can be set individually as well. |
+| nextSlide | React.MutableRefObject | `null` | Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the nextSlide handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component. |
+| previousSlide | React.MutableRefObject | `null` | Similar to `nextSlide`, this sets the `object` to be equal to the previousSlide handler within the HeroSlider component. |
+| navbarSettings | `object` | (Shown below) | Aesthetics settings. You can configure the base color and the active color of all nav components within the HeroSlider. They can be set individually as well. |
 | style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
 | onBeforeChange | (previousSlide: number, nextSlide: number) => void | `null` | Callback executed before sliding begins. The previous and next slide numbers are received as arguments, since the sliding event can be delayed, this is useful to handle state changes from the outside (e.g. fire custom animations inside the active slide). |
 | onChange | (nextSlide: number) => void | `null` | Callback executed when the sliding begins similar to `onBeforeChange`. |
 | onAfterChange | (currentSlide: number) => void | `null` | Callback executed after the sliding ends similar to `onBeforeChange`. |
 | children | `any` | `null` | React children. If the children are not Nav or Slide components, they will be rendered inside the HeroSlider overlapping all of the other components. Think of them like having a higher `z-index` property. |
+
+### HeroSlider animations
+
+Here are the possible `slidingAnimation` options:
+
+| Sliding animation | Prop |
+|:-----------------:|:-------------:|
+| Top to bottom | `'top_to_bottom'` |
+| Bottom to top | `'bottom_to_top'` |
+| Left to right | `'left_to_right'` |
+| Right to left | `'right_to_left'` |
+| Fade | `'fade'` |
+
+Make sure that the passed prop matches the ones in the table above, for them to be set properly. The default animation are any of the horizontally oriented ones, since `smartSliding` is `true`.
 
 ### HeroSlider settings
 
@@ -138,7 +152,7 @@ The background of the Slide components can be configured just as you would confi
 | backgroundBlendMode | `string` | Background blend mode CSS property. |
 | backgroundClip | `string` | Background clip CSS property. |
 | backgroundColor | `string` | Background color CSS property. |
-| backgroundImage | `string` | Background image. **Not the same as the CSS property**, just pass the string uri, not the typical `url([link])`. |
+| backgroundImage | `string` | Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`. |
 | backgroundOrigin | `string` | Background origin CSS property. |
 | backgroundPosition | `string` | Background position CSS property. |
 | backgroundPositionX | `string` | Background position X CSS property. |
@@ -176,8 +190,8 @@ Here is a more detailed table of the props:
 | Prop | Type | Default | Definition |
 |:-----------:|:--------:|-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | position | `object` | (Shown below) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'rgba (200 , 215 , 235 , 0.6 )'` | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
-| activeColor | `string` | `'rgba (200 , 215 , 235 , 1 )'` | If the developer is using a MenuNav or ButtonsNav component, a description for each slide may be passed. These descriptions will be shown in the nav components. |
+| color | `string` | `'rgba (200 , 215 , 235 , 0.6 )'` | CSS color property for the nav items. |
+| activeColor | `string` | `'rgba (200 , 215 , 235 , 1 )'` | CSS color property for the active nav item (respective to the current slide). |
 
 ### Nav position settings
 
@@ -200,8 +214,8 @@ The SideNav component. When it comes to props it's almost entirely equal to the 
 | Prop | Type | Default | Definition |
 |:-----------------:|:---------:|:---------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'rgba (200 , 215 , 235 , 0.6 )'` | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
-| activeColor | `string` | `'rgba (200 , 215 , 235 , 1 )'` | If the developer is using a MenuNav or ButtonsNav component, a description for each slide may be passed. These descriptions will be shown in the nav components. |
+| color | `string` | `'#C8D7EB'` | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
+| activeColor | `string` | `'#FFF'` | CSS color property for the active nav item (respective to the current slide). |
 | right | `string` | `null` | Inline `right` CSS property for absolutely positioned elements. |
 | left | `string` | '`1rem`' | Inline `left` CSS property for absolutely positioned elements. |
 | isPositionedRight | `boolean` | `true` | Extra property to help the component sort out things. If you set it to the left, set this to false to disable any existing `right` CSS properties and avoid any conflicts. |
@@ -209,6 +223,36 @@ The SideNav component. When it comes to props it's almost entirely equal to the 
 ---
 
 ## MenuNav
+
+Very similar to the Nav component when it comes to setup ,with the addition of three more props. The following table contains their definitions:
+
+| Prop | Type | Default | Definition |
+|:------------------:|:---------:|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
+| color | `string` | `'rgba(215, 225, 235, 0.6)'` | CSS color property for the menu nav multiple borders and animated bar. |
+| activeColor | `string` | `'#FFF'` | CSS color for the menu nav list items' text. |
+| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component. |
+| extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
+| isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
+
+---
+
+## ButtonsNav
+
+Very similar to the previous MenuNav component when it comes to setup. **This component accepts the same props as the MenuNav component and works exactly the same**, with the addition of an two extra props defined as `alignItems` and `backgroundColor`. 
+The `alignItems` prop will align the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works, accepting `flex-start` (top), `center`, and `flex-end` (bottom) as possible values, the default setting is `flex-end`, set at the bottom. 
+The `backgroundColor` sets the background of the buttons, while the `color` prop is used for the color of the text, and the `activeColor` prop is used for the background of the active nav item. Here is a more detailed table:
+
+| Prop | Type | Default | Definition |
+|:------------------:|:---------:|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
+| color | `string` | `'#FFF'` | CSS color property for the nav buttons' text. |
+| backgroundColor | `string` | `'rgba(255, 255, 255, 0.8)'` | CSS background color property for the nav buttons. |
+| activeColor | `string` | `'rgb(59, 62, 69)'` | CSS background color property for the active nav button. |
+| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component. |
+| extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
+| isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
+| alignItems | `string` | `flex-end` | Aligns the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works. |
 
 ---
 

@@ -44,7 +44,7 @@ const app = () => {
             backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg',
             backgroundAnimation: 'fade'
           }} />
-        
+
         <Slide
           navDescription='Captain America'
           background={{
