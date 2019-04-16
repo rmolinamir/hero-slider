@@ -66,27 +66,91 @@ HeroSlider accepts the following props:
 | onAfterChange | (currentSlide: number) => void | `null` | Callback executed after the sliding ends similar to `onBeforeChange`. |
 | children | `any` | `null` | React children. If the children are not Nav or Slide components, they will be rendered inside the HeroSlider overlapping all of the other components. Think of them like having a higher `z-index` property. |
 
----
+### HeroSlider settings
 
-## Range
+Through the settings props, you can configure multiple features of the slider. These settings/features are:
 
-Heavily based on the HTML `<input>` element of type range. To quote the MDN, this component lets the user specify a numeric value which must be no less than a given value, and no more than another given value. It supports the step, minimum and maximum values, and of course initial value.
+| Setting | Type | Definition |
+|:----------------------:|:---------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| slidingDuration | `number` | Sliding duration, in milliseconds. |
+| slidingDelay | `number` | Sliding delay, in milliseconds. |
+| sliderColor | `string` | Sliding color, the CSS color property. |
+| sliderFadeInDuration | `number` | Fade in duration of the slider during mount, in milliseconds. |
+| navbarFadeInDuration | `number` | Navbars fade in duration, in milliseconds. |
+| navbarFadeInDelay | `number` | Navbars fade in delay, in milliseconds. |
+| isSmartSliding | `boolean` | Smart sliding. |
+| shouldDisplayButtons | `boolean` | Next and previous buttons rendering. |
+| shouldAutoplay | `boolean` | Autoplay. |
+| autoplayDuration | `number` | Autoplay duration, interval or duration betweens executions to change slides, in milliseconds. |
+| autoplayHandlerTimeout | `number` | Time (in milliseconds) in which the autoplay will be disabled if the user interacts with the slider. The autoplay resumes if the user stops interacting. Set as 0 to disable this feature. |
+| width | `string` | CSS inline width of the div element wrapper. |
+| height | `string` | CSS inline height of the div element wrapper. |
 
-This component accepts the following props. Note that the Range component `onChange` prop is a function defined as:
+**The following are the default settings:**
 
-```ts
-type onChange = (value: rangeValue) => void;
+```tsx
+  slidingDuration: 500,
+  slidingDelay: 200,
+  sliderColor: 'inherit',
+  sliderFadeInDuration: 100,
+  navbarFadeInDuration: 1000,
+  navbarFadeInDelay: 500,
+  isSmartSliding: true,
+  shouldDisplayButtons: true,
+  shouldAutoplay: true,
+  autoplayDuration: 8000,
+  autoplayHandlerTimeout: 1000,
+  width: '100%',
+  height: '100%',
 ```
 
-| Props | Type | Default | Definition |
-|:------------------:|:------------------------:|:------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|
-| indicator | `boolean` | `false` | A small indicator component will be rendered next to the range slider that indicates the current value if `true`. |
-| indicatorClassName | `string` | Default CSS (dark background, white color, arrow pointing to the range input). | The indicator component `className`. |
-| step | `string` | `'1'` | The stepping interval, used both for user interface and validation purposes. |
-| value | ` string`   or ` number` | Average of minValue and maxValue. | The HTML input value attribute. |
-| minValue | ` string`   or ` number` | `0` | The minimum permitted value. |
-| maxValue | `string`  or `number` | `100` | The maximum permitted value. |
-| onChange | *onChange `function` | Undefined. | Callback that executes after the input change event is fired. |
+### Nav components settings
+
+The nav components colors can be set from within the HeroSlider settings. These will affect **all** of the Navs. However, you may individually set a nav component different by passing these very same settings as props to said component.
+
+---
+
+## Slide
+
+The Slide component holds whatever children you want to be part of each slide, you can also modify the background and its initial mount animation. Bear in mind that background images are lazy loaded.
+
+The Slide component accepts the following props:
+
+| Prop | Type | Default | Definition |
+|:----------------:|:------------------------------------:|---------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| shouldRenderMask | `boolean` | `false` | Each slidas has a "Mask" that serves as an adornment. They mimic the background, then offsets it a bit, and animate during slide transitions. |
+| background | `object` | (Shown below) | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
+| navDescription | `string` | `null` | If the developer is using a MenuNav or ButtonsNav component, a description for each slide may be passed. These descriptions will be shown in the nav components. |
+| style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
+| onBackgroundLoad | (event: React.SyntheticEvent) => any | `null` | Callback that executes when the background image loads. |
+| children | `any` | `null` | React children. |
+
+### Slide background settings
+
+The background of the Slide components can be configured just as you would configure the background of any element, with the added bonus of lazy loading and being able to pass data to the `alt` image attribute. Here are the allowed settings
+
+| Setting | Type | Definition |
+|:---------------------------:|:--------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| backdropFilter | `string` | Backdrop filter CSS property. |
+| backfaceVisibility | `string` | Backface visibility CSS property. |
+| background | `string` | Background CSS property. |
+| backgroundAttachment | `string` | Background attachment CSS property. |
+| backgroundBlendMode | `string` | Background blend mode CSS property. |
+| backgroundClip | `string` | Background clip CSS property. |
+| backgroundColor | `string` | Background color CSS property. |
+| backgroundImage | `string` | Background image. **Not the same as the CSS property**, just pass the string uri, not the typical `url([link])`. |
+| backgroundOrigin | `string` | Background origin CSS property. |
+| backgroundPosition | `string` | Background position CSS property. |
+| backgroundPositionX | `string` | Background position X CSS property. |
+| backgroundPositionY | `string` | Background position Y CSS property. |
+| backgroundRepeat | `string` | Background repeat CSS property. |
+| backgroundSize | `string` | Background size CSS property. |
+| backgroundAnimationDuration | `string` | Background animation duration after the image loads. |
+| backgroundAnimationDelay | `string` | Background animation delay after the image loads. |
+| backgroundAnimation | `string` | Background animation after the image loads. There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size. **To select the fade-in animation this prop must be equal to `'fade'`, to select the zoom animation, this prop must be equal to `'zoom'`**. |
+| width | `string` | Width CSS property. |
+| height | `string` | Height CSS property. |
+| alt | `string` | HTML `img` element alt attribute. |
 
 ---
 
