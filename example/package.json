@@ -5,10 +5,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "hero-slider": "file:..",
     "prop-types": "^15.6.2",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-png-button": "file:..",
+    "react-png-button": "^1.0.4",
     "react-scripts": "^2.1.5"
   },
   "scripts": {

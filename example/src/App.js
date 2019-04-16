@@ -1,10 +1,12 @@
 import React from 'react'
 // JSX
-import BlendModeSlider from './components/BlendModeSlider/BlendModeSlider'
 import BasicSlider from './components/BasicSlider/BasicSlider'
-import ZoomSlider from './components/ZoomSlider/ZoomSlider'
 import VerticalSlider from './components/VerticalSlider/VerticalSlider'
+import ZoomSlider from './components/ZoomSlider/ZoomSlider'
+import SlidesChildrenSlider from './components/SlidesChildrenSlider/SlidesChildrenSlider'
+import BlendModeSlider from './components/BlendModeSlider/BlendModeSlider'
 import NavbarSlider from './components/NavbarSlider/NavbarSlider'
+import ButtonsSlider from './components/ButtonsSlider/ButtonsSlider'
 
 const app = () => {
   return (
@@ -14,8 +16,10 @@ const app = () => {
       <BasicSlider />
       <VerticalSlider />
       <ZoomSlider />
+      <SlidesChildrenSlider />
       <BlendModeSlider />
       <NavbarSlider />
+      <ButtonsSlider />
     </div>
   )
 }

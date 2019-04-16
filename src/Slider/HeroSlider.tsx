@@ -588,11 +588,11 @@ const heroSlider = React.memo((props: ISliderProps) => {
       className={classes.Wrapper}>
       {slides}
       {navbars}
-      {othersArray.length && (
+      {othersArray.length ? (
         <div className={classes.Container}>
           {othersArray}
         </div>
-      )}
+      ) : null}
       {settings.shouldDisplayButtons && (
         <Buttons
           isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
