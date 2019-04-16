@@ -45,12 +45,13 @@ const background = (props: IBackgroundProps) => {
       width: width || '100%',
       height: height || '100%',
       ...background,
-      backgroundImage: `url(${background.backgroundImage})`
+      backgroundImage: `url('${background.backgroundImage}')`
     }
   }, [])
 
   return (
     <LazyLoad
+      offset={window.innerHeight}
       debounce={false}
       height={height || '100%'}>
       <img

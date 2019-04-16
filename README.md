@@ -224,14 +224,15 @@ The SideNav component. When it comes to props it's almost entirely equal to the 
 
 ## MenuNav
 
-Very similar to the Nav component when it comes to setup ,with the addition of three more props. The following table contains their definitions:
+Very similar to the Nav component when it comes to setup, with the addition of four more props. The following table contains their definitions:
 
 | Prop | Type | Default | Definition |
 |:------------------:|:---------:|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
 | color | `string` | `'rgba(215, 225, 235, 0.6)'` | CSS color property for the menu nav multiple borders and animated bar. |
 | activeColor | `string` | `'#FFF'` | CSS color for the menu nav list items' text. |
-| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component. |
+| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component or null. |
+| isNullAfterThreshold | `boolean` | `false` | Boolean setting that dictates if the nav should render null or a basic Nav component after the threshold is reached. |
 | extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
 | isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
 
@@ -250,6 +251,7 @@ The `backgroundColor` sets the background of the buttons, while the `color` prop
 | backgroundColor | `string` | `'rgba(255, 255, 255, 0.8)'` | CSS background color property for the nav buttons. |
 | activeColor | `string` | `'rgb(59, 62, 69)'` | CSS background color property for the active nav button. |
 | mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component. |
+| isNullAfterThreshold | `boolean` | `false` | Boolean setting that dictates if the nav should render null or a basic Nav component after the threshold is reached. |
 | extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
 | isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
 | alignItems | `string` | `flex-end` | Aligns the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works. |

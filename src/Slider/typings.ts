@@ -73,6 +73,7 @@ export interface IMenuNavProps extends INavProps {
   justifyContent: string
   sliderWidth: number
   mobileThreshold: number
+  isNullAfterThreshold: boolean
   extraButton: React.ReactElement | React.Component
   isExtraButtonRight: boolean
 }

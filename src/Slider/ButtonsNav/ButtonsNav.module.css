@@ -34,7 +34,7 @@
   display: inline-flex;
   align-items: center;
   position: relative;
-  width: 180px;
+  width: 240px;
   height: 48px;
   list-style: none;
   cursor: pointer;
@@ -89,7 +89,10 @@
 }
 
 .Text {
-  width: 100%;
+  width: 95%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   text-align: center;
   text-transform: uppercase;
   color: inherit;

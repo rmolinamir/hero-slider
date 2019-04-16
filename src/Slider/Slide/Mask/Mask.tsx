@@ -3,6 +3,8 @@ import * as React from 'react'
 import { IBackgroundProps } from '../../typings'
 // CSS
 import classes from './Mask.module.css'
+// JSX
+import LazyLoad from 'react-lazyload'
 
 interface IMaskProps {
   isActive: boolean
@@ -22,8 +24,8 @@ const mask = (props: IMaskProps) => {
   const style: React.CSSProperties = React.useMemo(() => {
     return {
       backgroundColor: background.backgroundColor,
-      backgroundBlendMode: background.backgroundBlendMode,
-      backgroundImage: `url(${background.backgroundImage})`
+      // backgroundBlendMode: background.backgroundBlendMode,
+      backgroundImage: `url('${background.backgroundImage}')`
     } as React.CSSProperties
   }, [])
 
@@ -35,19 +37,24 @@ const mask = (props: IMaskProps) => {
         classes.Mask,
         (props.isActive && props.isDoneSliding) ? classes.Active : classes.Inactive
       ].join(' ')}>
-      <img
-        className={classes.Loader}
-        onLoad={onLoadHandler}
-        src={background.backgroundImage}/>
-      {isLoaded && (
-        <div
-        style={style}
-        className={[
-          className,
-          isLoaded && classes.Inner,
-          isLoaded && !props.isDoneSliding && classes.Sliding
-        ].join(' ')} />
-      )}
+      <LazyLoad
+        offset={window.innerHeight}
+        debounce={false}
+        height='100%'>
+        <img
+          className={classes.Loader}
+          onLoad={onLoadHandler}
+          src={background.backgroundImage}/>
+        {isLoaded && (
+          <div
+          style={style}
+          className={[
+            className,
+            isLoaded && classes.Inner,
+            isLoaded && !props.isDoneSliding && classes.Sliding
+          ].join(' ')} />
+        )}
+    </LazyLoad>
     </div>
   )
 }

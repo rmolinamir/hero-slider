@@ -31,7 +31,6 @@
   transform: translate3d(-50%, -50%, 0);
   background-size: cover;
   background-position: center center;
-  background-blend-mode: luminosity;
   -webkit-transform-origin: 50% 16.5vh;
   transform-origin: 50% 16.5vh;
   transition: all calc(var(--mask-duration, 200ms) * 1.5) ease-in-out 0s;

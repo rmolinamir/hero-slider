@@ -21,11 +21,13 @@ const SliderNav = (props: IMenuNavProps) => {
     navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
+    isNullAfterThreshold,
     extraButton,
     isExtraButtonRight = true
   } = props
 
   if (sliderWidth <= mobileThreshold) {
+    if (isNullAfterThreshold) return null
     return (
       <Nav {...props} />
     )
