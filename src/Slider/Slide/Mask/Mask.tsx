@@ -24,7 +24,7 @@ const mask = (props: IMaskProps) => {
   const style: React.CSSProperties = React.useMemo(() => {
     return {
       backgroundColor: background.backgroundColor,
-      // backgroundBlendMode: background.backgroundBlendMode,
+      backgroundBlendMode: background.maskBackgroundBlendMode,
       backgroundImage: `url('${background.backgroundImage}')`
     } as React.CSSProperties
   }, [])

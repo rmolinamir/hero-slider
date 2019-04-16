@@ -131,6 +131,7 @@ export interface IBackgroundProps {
   backgroundAnimationDuration?: number
   backgroundAnimationDelay?: number
   backgroundAnimation?: EBackgroundAnimations
+  maskBackgroundBlendMode?: BackgroundBlendModeProperty
   width?: WidthProperty<string | number>
   height?: HeightProperty<string | number>
   alt?: string

@@ -36,7 +36,7 @@ const app = () => {
         navDescription='Black Widow'
         background={{
           backgroundColor: '#6D9B98',
-          backgroundBlendMode: 'luminosity',
+          maskBackgroundBlendMode: 'luminosity',
           backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/blackwidow.jpg'
         }} />
 
@@ -45,7 +45,7 @@ const app = () => {
         navDescription='Captain America'
         background={{
           backgroundColor: '#8A8A8A',
-          backgroundBlendMode: 'luminosity',
+          maskBackgroundBlendMode: 'luminosity',
           backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/captainamerica.jpg'
         }} />
 
@@ -54,7 +54,7 @@ const app = () => {
         navDescription='Iron Man'
         background={{
           backgroundColor: '#EA2329',
-          backgroundBlendMode: 'luminosity',
+          maskBackgroundBlendMode: 'luminosity',
           backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/ironman-alt.jpg'
         }} />
 
@@ -63,7 +63,7 @@ const app = () => {
         navDescription='Thor'
         background={{
           backgroundColor: '#2D7791',
-          backgroundBlendMode: 'luminosity',
+          maskBackgroundBlendMode: 'luminosity',
           backgroundImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/thor.jpg'
         }} />
 

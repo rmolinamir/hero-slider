@@ -24,7 +24,7 @@ npm install --save hero-slider
 
 [![Edit React Formalized](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6l4w83xqpk?fontsize=14)
 
-#### Hero Slider
+### Hero Slider
 
 ![Input Elements](https://i.imgur.com/Pnw7QEo.gif)
 
@@ -46,7 +46,7 @@ import HeroSlider, {
 
 ## HeroSlider
 
-The main component of the package. Also the default export. With this component, none of the other components will work as intended, so be sure to wrap them all inside, you can think of this component as the operations center. 
+The main component of the package. Also the default export. With this component, none of the other components will work as intended, so be sure to wrap them all inside, you can think of this component as the operations center.
 
 HeroSlider accepts the following props:
 
@@ -162,6 +162,7 @@ The background of the Slide components can be configured just as you would confi
 | backgroundAnimationDuration | `string` | Background animation duration after the image loads. |
 | backgroundAnimationDelay | `string` | Background animation delay after the image loads. |
 | backgroundAnimation | `string` | Background animation after the image loads. There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size. **To select the fade-in animation this prop must be equal to `'fade'`, to select the zoom animation, this prop must be equal to `'zoom'`**. |
+| maskBackgroundBlendMode | `string` | Background blend mode CSS property **for the optional mask that could render in each of the Slide components**. |
 | width | `string` | Width CSS property. |
 | height | `string` | Height CSS property. |
 | alt | `string` | HTML `img` element alt attribute. |
@@ -241,7 +242,7 @@ Very similar to the Nav component when it comes to setup, with the addition of f
 ## ButtonsNav
 
 Very similar to the previous MenuNav component when it comes to setup. **This component accepts the same props as the MenuNav component and works exactly the same**, with the addition of an two extra props defined as `alignItems` and `backgroundColor`. 
-The `alignItems` prop will align the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works, accepting `flex-start` (top), `center`, and `flex-end` (bottom) as possible values, the default setting is `flex-end`, set at the bottom. 
+The `alignItems` prop will align the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works, accepting `flex-start` (top), `center`, and `flex-end` (bottom) as possible values, the default setting is `flex-end`, set at the bottom.
 The `backgroundColor` sets the background of the buttons, while the `color` prop is used for the color of the text, and the `activeColor` prop is used for the background of the active nav item. Here is a more detailed table:
 
 | Prop | Type | Default | Definition |
