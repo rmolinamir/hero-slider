@@ -2,7 +2,7 @@
 
 > A hero slider component inline with how you would expect most React components to work. Includes autoplay, lazy loaded backgrounds, support for touch swiping and direction to change slides, multiple navs, settings, memoization, event callbacks, among other features.
 
-[![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-14.0kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
+[![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-11.6kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
 
 ---
 
@@ -22,7 +22,7 @@ npm install --save hero-slider
 
 ## [Showcase](https://www.robertmolina.dev/codelab/hero-slider)
 
-[![Edit Hero Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6l4w83xqpk?fontsize=14)
+[![Edit Hero Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/z6kky9oy63?fontsize=14)
 
 ### Hero Slider
 
