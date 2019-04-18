@@ -111,4 +111,4 @@ const SliderNav = (props: IButtonsNavProps) => {
 }
 
 export const ButtonsNav = (props: IButtonsNavProps): JSX.Element => <SliderNav {...props} />
-(ButtonsNav as React.FunctionComponent).displayName = 'react-fancy-slider/menu-nav'
+(ButtonsNav as React.FunctionComponent).displayName = 'hero-slider/menu-nav'

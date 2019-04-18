@@ -24,6 +24,8 @@ import {
   HeightProperty
 } from 'csstype'
 
+import IntervalTimer from '../IntervalTimer'
+
 export type TAnyFunction = (...anyArg: any[]) => any
 
 /**
@@ -84,6 +86,24 @@ export interface IMenuNavProps extends INavProps {
 export interface IButtonsNavProps extends IMenuNavProps {
   backgroundColor: string
   alignItems: string
+}
+
+export enum EAutoplayButtons {
+  PLAY = 'play',
+  PAUSE = 'pause'
+}
+
+/**
+ * `AutoplayButton` component props.
+ */
+export interface IAutoplayButtonProps {
+  className?: string
+  position?: INavPosition
+  style?: React.CSSProperties
+  shouldDisplayChange: boolean
+  autoplay: React.MutableRefObject<IntervalTimer>
+  setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>
+  autoplayHandlerTimeout: NodeJS.Timeout
 }
 
 /**
@@ -231,6 +251,7 @@ export interface ISliderProps {
 export interface IChildren {
   slidesArray: React.ReactElement[]
   navbarsArray: React.ReactElement[]
+  autoplayButtonsArray: React.ReactElement[]
   othersArray: React.ReactElement[]
   navDescriptions: string[]
 }

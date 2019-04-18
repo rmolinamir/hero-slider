@@ -6,14 +6,14 @@
 
 import { TAnyFunction } from './Slider/typings'
 
-enum EState {
+export enum EState {
   IDLE,
   RUNNING,
   PAUSED,
   RESUME
 }
 
-interface IIntervalTimer {
+export interface IIntervalTimer {
   callback: TAnyFunction
   state: EState
   remaining: number

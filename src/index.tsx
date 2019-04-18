@@ -4,5 +4,6 @@ export { Nav } from './Slider/Nav/Nav'
 export { SideNav } from './Slider/SideNav/SideNav'
 export { MenuNav } from './Slider/MenuNav/MenuNav'
 export { ButtonsNav } from './Slider/ButtonsNav/ButtonsNav'
+export { AutoplayButton } from './Slider/AutoplayButtons/AutoplayButtons'
 
 export default HeroSlider

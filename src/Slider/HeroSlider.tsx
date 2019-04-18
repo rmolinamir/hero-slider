@@ -1,6 +1,6 @@
 import * as React from 'react'
-import IntervalTimer from '../IntervalTimer'
-// Types
+// Autoplay & Types
+import IntervalTimer, { EState } from '../IntervalTimer'
 import {
   EAnimations,
   ISettings,
@@ -11,7 +11,8 @@ import {
   IChildren,
   ISlideProps,
   IMenuNavProps,
-  INavProps
+  INavProps,
+  IAutoplayButtonProps
 
 } from './typings'
 // CSS
@@ -188,10 +189,12 @@ const heroSlider = React.memo((props: ISliderProps) => {
   /**
    * Handles slide changes. If the user interacts with the slide, the timer of the
    * autoplay instance is reset and the next animation is algo decided depending on
-   * the parameter (which is a slide number).
+   * the parameter (which is a slide number) **so long as it has not been manually paused**.
    */
   const changeSlideHandler = (nextSlide: number, animationParam: number): void => {
-    if (settings.shouldAutoplay) {
+    clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout)
+    const isAutoplayPaused = autoplayInstance.state === EState.PAUSED || isManuallyPaused
+    if (settings.shouldAutoplay && !isAutoplayPaused) {
       autoplayInstance.reset()
     }
     if (settings.isSmartSliding) {
@@ -233,6 +236,11 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }
 
   /**
+   * Autoplay manually paused state handled by the autoplay buttons.
+   */
+  const [isManuallyPaused, setIsManuallyPaused] = React.useState(false)
+
+  /**
    * `onMouseMoveCaptureHandler` executes `autoplayHandler` whenever the user moves the mouse
    * over the slider.
    */
@@ -243,22 +251,14 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }
 
   /**
-   * `onMouseOutCaptureHandler` resets the autoplay instance whenever the user moves the mouse
-   * out of the slider.
-   */
-  const onMouseOutCaptureHandler = (): void => {
-    if (settings.shouldAutoplay) {
-      autoplayInstance.reset()
-    }
-  }
-
-  /**
    * `autoplayHandler` will pause the autoplay timer whenever the mouse moves over the
    * slider. If the mouse stops moving the autoplay will resume. If not, `onMouseMoveCaptureHandler`
    * will also clear the `autoplayInstance`resume `setTimeout` callbacks if any exist, so that the slides
    * won't move if the user is interacting with the slider component.
    */
   const autoplayHandler = (): void => {
+    const isAutoplayPaused = autoplayInstance.state === EState.PAUSED || isManuallyPaused
+    if (isAutoplayPaused) { return } // If the slider has been paused, do nothing.
     autoplayInstance.pause()
     if (autoplayHandlerTimeout) {
       clearTimeout(autoplayHandlerTimeout)
@@ -297,9 +297,13 @@ const heroSlider = React.memo((props: ISliderProps) => {
   const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>()
 
   const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = React.useState<NodeJS.Timeout>()
-  const [autoplayInstance] = React.useState(React.useMemo(() => {
+  // const [autoplayInstance] = React.useState(React.useMemo(() => {
+  //   return new IntervalTimer(autoplay, settings.autoplayDuration + slidingTimeoutDuration)
+  // }, []))
+  const autoplayInstanceRef = React.useRef((React.useMemo(() => {
     return new IntervalTimer(autoplay, settings.autoplayDuration + slidingTimeoutDuration)
-  }, []))
+  }, [])))
+  const autoplayInstance = autoplayInstanceRef.current
 
   /**
    * Slider reference object to calculate its dimensions.
@@ -471,6 +475,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     const children: IChildren = {
       slidesArray: [],
       navbarsArray: [],
+      autoplayButtonsArray: [],
       othersArray: [],
       navDescriptions: []
     }
@@ -480,13 +485,15 @@ const heroSlider = React.memo((props: ISliderProps) => {
         const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
         const displayName = RFC_Child.displayName
         switch (displayName) {
-          case 'react-fancy-slider/slide':
+          case 'hero-slider/slide':
             const props = child.props as ISlideProps
             children.navDescriptions.push(props.navDescription)
             return children.slidesArray.push(child)
-          case 'react-fancy-slider/nav':
-          case 'react-fancy-slider/menu-nav':
+          case 'hero-slider/nav':
+          case 'hero-slider/menu-nav':
             return children.navbarsArray.push(child)
+          case 'hero-slider/autoplay-button':
+            return children.autoplayButtonsArray.push(child)
           default:
             return children.othersArray.push(child)
         }
@@ -504,7 +511,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     return getChildren()
   }, [])
 
-  const { slidesArray, navbarsArray, othersArray } = children
+  const { slidesArray, navbarsArray, autoplayButtonsArray, othersArray } = children
 
   /**
    * `setSlides` clones the necessary properties for each slide to work.
@@ -534,6 +541,29 @@ const heroSlider = React.memo((props: ISliderProps) => {
   }, [activeSlide, isDoneSliding])
 
   /**
+   * `setSlides` clones the necessary properties for each slide to work.
+   */
+  const setAutoplayButtons = () => {
+    return React.Children.map(autoplayButtonsArray, child => {
+      return (
+        React.cloneElement(child as React.ReactElement<IAutoplayButtonProps>,
+          {
+            autoplay: autoplayInstanceRef,
+            setIsManuallyPaused: setIsManuallyPaused,
+            autoplayHandlerTimeout: autoplayHandlerTimeout
+          }
+        )
+      )
+    })
+  }
+
+  /**
+   * Performance optimization to avoid re-rendering after mouse over captures.
+   * Only updates if `activeSlide` or `isDoneSliding` change.
+   */
+  const autoplayButtons = children.autoplayButtonsArray && setAutoplayButtons()
+
+  /**
    * `setNavbars`, similar to `setSlides`.
    * If it's a `menu-nav`, then the `navDescriptions` of each slide are also passed as props.
    */
@@ -541,7 +571,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
     return React.Children.map(navbarsArray, child => {
       // tslint:disable-next-line:variable-name
       const RFC_Child: React.FunctionComponent = child.type as React.FunctionComponent
-      const isMenuNav = RFC_Child.displayName === 'react-fancy-slider/menu-nav'
+      const isMenuNav = RFC_Child.displayName === 'hero-slider/menu-nav'
       const navProps = {
         changeSlide: changeSlideHandler,
         activeSlide: activeSlideWatcher.current,
@@ -573,7 +603,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
   return (
     <div
       ref={sliderRef}
-      onClick={autoplayHandler}
+      // onClick={autoplayHandler}
       onTouchStart={onTouchStartHandler}
       onTouchMove={onTouchMoveHandler}
       onTouchEnd={onTouchEndHandler}
@@ -584,10 +614,10 @@ const heroSlider = React.memo((props: ISliderProps) => {
         height: settings.height
       }}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
-      onMouseOutCapture={onMouseOutCaptureHandler}
       className={classes.Wrapper}>
-      {slides}
-      {navbars}
+      {slides.length ? slides : null}
+      {navbars.length ? navbars : null}
+      {settings.shouldAutoplay && autoplayButtons.length ? autoplayButtons : null}
       {othersArray.length ? (
         <div className={classes.Container}>
           {othersArray}

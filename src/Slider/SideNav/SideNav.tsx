@@ -74,4 +74,4 @@ const SliderNav = (props: ISideNavProps) => {
 }
 
 export const SideNav = (props: ISideNavProps): JSX.Element => <SliderNav {...props} />
-(SideNav as React.FunctionComponent).displayName = 'react-fancy-slider/nav'
+(SideNav as React.FunctionComponent).displayName = 'hero-slider/nav'

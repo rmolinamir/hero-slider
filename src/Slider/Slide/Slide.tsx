@@ -66,4 +66,4 @@ const HeroSlide = (props: ISlideProps) => {
 }
 
 export const Slide = (props: ISlideProps): JSX.Element => <HeroSlide {...props} />
-(Slide as React.FunctionComponent).displayName = 'react-fancy-slider/slide'
+(Slide as React.FunctionComponent).displayName = 'hero-slider/slide'
