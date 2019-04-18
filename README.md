@@ -43,7 +43,8 @@ import HeroSlider, {
   Nav,
   SideNav,
   MenuNav,
-  ButtonsNav
+  ButtonsNav,
+  AutoplayButton
 } from 'hero-slider'
 ```
 
@@ -259,6 +260,20 @@ The `backgroundColor` sets the background of the buttons, while the `color` prop
 | extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
 | isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
 | alignItems | `string` | `flex-end` | Aligns the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works. |
+
+---
+
+## AutoplayButton
+
+The AutoplayButton component comes in handy whenever the hero slider is set up to autoplay. This button will play or pause the autoplay instance respectively upon clicking it. It's really easy to setup. The button is an SVG image, which means it will scale well to any width. **The button has to be in the first level of the HeroSlider children just like a Slide component would be, if you want to place it somewhere else, you may use a React portal**.
+
+You can position it just like you would position a nav component by using passing the `position` prop, but you may also pass a CSS class or inline styling as props. Here is a more detailed table explaining the props:
+
+| Prop | Type | Default | Definition |
+|:---------:|:-------------------:|:---------------------------:|:---------------------------------------------------------------------------------------------:|
+| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
+| style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
+| className | `string` | `null` | CSS class name. |
 
 ---
 

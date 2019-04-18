@@ -99,7 +99,6 @@ export interface IAutoplayButtonProps {
   className?: string
   position?: INavPosition
   style?: React.CSSProperties
-  shouldDisplayChange: boolean
   autoplay: React.MutableRefObject<IntervalTimer>
   setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>
   autoplayHandlerTimeout: NodeJS.Timeout
