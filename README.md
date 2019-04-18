@@ -265,7 +265,7 @@ The `backgroundColor` sets the background of the buttons, while the `color` prop
 
 ## AutoplayButton
 
-The AutoplayButton component comes in handy whenever the hero slider is set up to autoplay. This button will play or pause the autoplay instance respectively upon clicking it. It's really easy to setup. The button is an SVG image, which means it will scale well to any width. **The button has to be in the first level of the HeroSlider children just like a Slide component would be, if you want to place it somewhere else, you may use a React portal**.
+The AutoplayButton component comes in handy whenever the hero slider is set up to autoplay. This button will play or pause the autoplay instance respectively upon clicking it. It's really easy to setup. The button is an SVG image, which means it will scale well to any width or height. **The button has to be in the first level of the HeroSlider childrens, just like a Slide component would be. If you want to place it somewhere else, you may use a React portal**.
 
 You can position it just like you would position a nav component by using passing the `position` prop, but you may also pass a CSS class or inline styling as props. Here is a more detailed table explaining the props:
 
