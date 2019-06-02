@@ -22,12 +22,12 @@ const HeroSlide = (props: ISlideProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = React.useMemo(() => {
+  const CSSVariables = background ? React.useMemo(() => {
     return {
       '--background-animation-duration': background.backgroundAnimationDuration ? `${background.backgroundAnimationDuration}ms` : null,
       '--background-animation-delay': background.backgroundAnimationDelay ? `${background.backgroundAnimationDelay}ms` : null
     }
-  }, [background.backgroundAnimationDelay, background.backgroundAnimationDuration])
+  }, [background.backgroundAnimationDelay, background.backgroundAnimationDuration]) : {}
 
   return (
     <div
