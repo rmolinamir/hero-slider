@@ -132,6 +132,8 @@ export enum EBackgroundAnimations {
  * The `Slide` components `background` prop is also defined by `IBackgroundProps`.
  */
 export interface IBackgroundProps {
+  shouldLazyLoad?: boolean,
+  lazyLoadingOffset?: number,
   backdropFilter?: BackdropFilterProperty
   backfaceVisibility?: BackfaceVisibilityProperty
   background?: BackgroundProperty<string | number>

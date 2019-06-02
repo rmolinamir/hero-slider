@@ -149,6 +149,8 @@ The background of the Slide components can be configured just as you would confi
 
 | Setting | Type | Definition |
 |:---------------------------:|:--------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| shouldLazyLoad | `boolean` | Boolean variable to allow or disable lazy loading, `true` by default. |
+| lazyLoadingOffset | `number` | Height offset to begin lazy loading, defaults to `window.innerHeight`. |
 | backdropFilter | `string` | Backdrop filter CSS property. |
 | backfaceVisibility | `string` | Backface visibility CSS property. |
 | background | `string` | Background CSS property. |

@@ -11,6 +11,8 @@ import LazyLoad from 'react-lazyload'
 
 const background = (props: IBackgroundProps) => {
   const {
+    shouldLazyLoad = true,
+    lazyLoadingOffset = window.innerHeight,
     width,
     height,
     onLoad,
@@ -18,18 +20,19 @@ const background = (props: IBackgroundProps) => {
     ...background
   } = props
 
+  const { backgroundImage, backgroundAnimation } = background
+
   /**
-   * If there are no `background.backgroundImage`, then there is no need to:
+   * If there are no `backgroundImage`, then there is no need to:
    * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
    * - `img` tag element will not render.
    */
-  const [className, setClassName] = React.useState(background.backgroundImage ? classes.Loading : classes.Loaded)
+  const [className, setClassName] = React.useState(backgroundImage ? classes.Loading : classes.Loaded)
 
   const onLoadHandler = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
     if (onLoad) {
       onLoad(event)
     }
-    const { backgroundAnimation } = background
     const className = [classes.Loaded]
     switch (backgroundAnimation) {
       case EBackgroundAnimations.ZOOM:
@@ -50,26 +53,34 @@ const background = (props: IBackgroundProps) => {
       width: width || '100%',
       height: height || '100%',
       ...background,
-      backgroundImage: background.backgroundImage ? `url('${background.backgroundImage}')` : undefined
+      backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined
     }
   }, [])
 
-  return (
-    <LazyLoad
-      offset={window.innerHeight}
-      debounce={false}
-      height={height || '100%'}>
-      {background.backgroundImage && (
+  const content = (
+    <React.Fragment>
+      {backgroundImage && (
         <img
           className={classes.Loader}
           onLoad={onLoadHandler}
           alt={alt}
-          src={background.backgroundImage}/>
+          src={backgroundImage}/>
       )}
       <div
         style={style}
         className={className} />
-    </LazyLoad>
+    </React.Fragment>
+  )
+
+  return (
+    shouldLazyLoad ? (
+      <LazyLoad
+        offset={lazyLoadingOffset}
+        debounce={false}
+        height={height || '100%'}>
+        {content}
+      </LazyLoad>
+    ) : content
   )
 }
 
