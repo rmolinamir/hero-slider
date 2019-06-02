@@ -18,7 +18,12 @@ const background = (props: IBackgroundProps) => {
     ...background
   } = props
 
-  const [className, setClassName] = React.useState(classes.Loading)
+  /**
+   * If there are no `background.backgroundImage`, then there is no need to:
+   * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
+   * - `img` tag element will not render.
+   */
+  const [className, setClassName] = React.useState(background.backgroundImage ? classes.Loading : classes.Loaded)
 
   const onLoadHandler = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
     if (onLoad) {
@@ -45,7 +50,7 @@ const background = (props: IBackgroundProps) => {
       width: width || '100%',
       height: height || '100%',
       ...background,
-      backgroundImage: `url('${background.backgroundImage}')`
+      backgroundImage: background.backgroundImage ? `url('${background.backgroundImage}')` : undefined
     }
   }, [])
 
@@ -54,11 +59,13 @@ const background = (props: IBackgroundProps) => {
       offset={window.innerHeight}
       debounce={false}
       height={height || '100%'}>
-      <img
-        className={classes.Loader}
-        onLoad={onLoadHandler}
-        alt={alt}
-        src={background.backgroundImage}/>
+      {background.backgroundImage && (
+        <img
+          className={classes.Loader}
+          onLoad={onLoadHandler}
+          alt={alt}
+          src={background.backgroundImage}/>
+      )}
       <div
         style={style}
         className={className} />
