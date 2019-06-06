@@ -219,6 +219,7 @@ export interface ISettingsProps {
   isSmartSliding: boolean
   shouldDisplayButtons: boolean
   shouldAutoplay: boolean
+  shouldSlideOnArrowKeypress: boolean,
   autoplayDuration: number
   autoplayHandlerTimeout: number,
   width: WidthProperty<string | number>,
