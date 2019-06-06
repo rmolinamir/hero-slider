@@ -13,7 +13,6 @@ import {
   IMenuNavProps,
   INavProps,
   IAutoplayButtonProps
-
 } from './typings'
 // CSS
 import classes from './HeroSlider.module.css'
@@ -44,7 +43,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
   /**
    * Initial settings for the carousel.
    */
-  const initialSettings: ISettings = {
+  const initialSettings: ISettings = React.useMemo(() => ({
     // Dependants
     initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
     slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
@@ -59,12 +58,13 @@ const heroSlider = React.memo((props: ISliderProps) => {
     isSmartSliding: true,
     shouldDisplayButtons: true,
     shouldAutoplay: true,
+    shouldSlideOnArrowKeypress: false,
     autoplayDuration: 8000,
     autoplayHandlerTimeout: 1000,
     width: '100%',
     height: '100%',
     ...props.settings
-  }
+  }), [props.settings])
 
   const [settings, setSettings] = React.useState<ISettings>(initialSettings)
 
@@ -400,6 +400,29 @@ const heroSlider = React.memo((props: ISliderProps) => {
 
   const [touchState, setTouchState] = React.useState<ITouchState>(initialTouchState)
 
+  const onArrowKeypressHandler = (e: KeyboardEvent): void => {
+    const isHorizontal = settings.sliderOrientation === EOrientation.HORIZONTAL
+    switch (true) {
+      // Left keypress.
+      case isHorizontal && e.keyCode === 37:
+        setPreviousSlide()
+        break
+      // Right keypress.
+      case isHorizontal && e.keyCode === 39:
+        setNextSlide()
+        break
+      // Up keypress.
+      case !isHorizontal && e.keyCode === 38:
+        setPreviousSlide()
+        break
+      // Down keypress.
+      case !isHorizontal && e.keyCode === 40:
+        setNextSlide()
+        break
+      default: // Do nothing.
+    }
+  }
+
   /**
    * Update the respective watchers' current values.
    */
@@ -435,6 +458,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
      */
     setSliderDimensionsHandler()
     window.addEventListener('resize', setSliderDimensions as EventListenerOrEventListenerObject)
+    if (settings.shouldSlideOnArrowKeypress) window.addEventListener('keydown', onArrowKeypressHandler)
     /**
      * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
      */
@@ -444,6 +468,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
       clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout)
       autoplayInstance.stop()
       window.removeEventListener('resize', setSliderDimensions as EventListenerOrEventListenerObject)
+      if (settings.shouldSlideOnArrowKeypress) window.removeEventListener('keydown', onArrowKeypressHandler)
     }
   }, [])
 

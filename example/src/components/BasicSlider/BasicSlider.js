@@ -35,6 +35,7 @@ const app = () => {
         slidingDelay: 100,
         shouldAutoplay: true,
         shouldDisplayButtons: true,
+        shouldSlideOnArrowKeypress: true,
         autoplayDuration: 5000,
         height: '100vh'
       }}>

@@ -99,6 +99,7 @@ Through the settings props, you can configure multiple features of the slider. T
 | isSmartSliding | `boolean` | Smart sliding. |
 | shouldDisplayButtons | `boolean` | Next and previous buttons rendering. |
 | shouldAutoplay | `boolean` | Autoplay. |
+| shouldSlideOnArrowKeypress | `boolean` | When an arrow key is pressed, the active slide will change respectively to the pressed arrow. The left and down arrows will set the previous slide, and the right and up arrows will set the next slide. The left and right will only work if the slider is horizontal, and the up and down arrows will only work if the slider is vertical. |
 | autoplayDuration | `number` | Autoplay duration, interval or duration betweens executions to change slides, in milliseconds. |
 | autoplayHandlerTimeout | `number` | Time (in milliseconds) in which the autoplay will be disabled if the user interacts with the slider. The autoplay resumes if the user stops interacting. Set as 0 to disable this feature. |
 | width | `string` | CSS inline width of the div element wrapper. |
@@ -116,6 +117,7 @@ Through the settings props, you can configure multiple features of the slider. T
   isSmartSliding: true,
   shouldDisplayButtons: true,
   shouldAutoplay: true,
+  shouldSlideOnArrowKeypress: false,
   autoplayDuration: 8000,
   autoplayHandlerTimeout: 1000,
   width: '100%',
