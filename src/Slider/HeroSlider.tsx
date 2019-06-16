@@ -534,7 +534,7 @@ const heroSlider = React.memo((props: ISliderProps) => {
    */
   const children: IChildren = React.useMemo(() => {
     return getChildren()
-  }, [])
+  }, [props.children])
 
   const { slidesArray, navbarsArray, autoplayButtonsArray, othersArray } = children
 
