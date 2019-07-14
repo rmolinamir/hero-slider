@@ -689,8 +689,6 @@ const WithProvider = (props: IWithProviderProps) => {
     threshold: 0
   })
 
-  console.log('inView', inView)
-
   return (
     <SliderContextProvider
       isMobile={isMobile}
