@@ -4,9 +4,9 @@ import { IMenuNavProps } from '../typings'
 // CSS
 import classes from './MenuNav.module.css'
 // JSX
-import { Nav } from '../Nav/Nav'
+import { Nav } from '../Nav'
 
-const SliderNav = (props: IMenuNavProps) => {
+const SliderNav = React.memo((props: IMenuNavProps) => {
   /**
    * Deconstructing MenuNavSettings to set it up.
    */
@@ -113,7 +113,7 @@ const SliderNav = (props: IMenuNavProps) => {
       </ul>
     </div>
   )
-}
+})
 
 export const MenuNav = (props: IMenuNavProps): JSX.Element => <SliderNav {...props} />
 (MenuNav as React.FunctionComponent).displayName = 'hero-slider/menu-nav'

@@ -12,12 +12,15 @@ import {
   ISlideProps,
   IMenuNavProps,
   INavProps,
-  IAutoplayButtonProps
+  IAutoplayButtonProps,
+  IWithProviderProps
 } from './typings'
 // CSS
 import classes from './HeroSlider.module.css'
 // JSX
-import Buttons from './Buttons/Buttons'
+import SliderContextProvider from './Context'
+import Buttons from './Buttons'
+import { useInView } from 'react-intersection-observer'
 
 const setInitialSlidingAnimation = (animation?: EAnimations): string => {
   switch (animation) {
@@ -39,7 +42,7 @@ const setInitialSlidingAnimation = (animation?: EAnimations): string => {
   }
 }
 
-const heroSlider = React.memo((props: ISliderProps) => {
+const HeroSlider = React.memo((props: ISliderProps) => {
   /**
    * Initial settings for the carousel.
    */
@@ -239,6 +242,25 @@ const heroSlider = React.memo((props: ISliderProps) => {
    * Autoplay manually paused state handled by the autoplay buttons.
    */
   const [isManuallyPaused, setIsManuallyPaused] = React.useState(false)
+
+  /**
+   * Subscribe to changes in `inView`.
+   * If the slider goes out of the viewport, then pause the slider autoplay
+   * instance if it's running. If it comes back into viewport, resume the
+   * autoplay instance.
+   */
+  React.useEffect(() => {
+    switch (true) {
+      case isManuallyPaused:
+        break
+      case autoplayInstance.state === EState.PAUSED && settings.shouldAutoplay && props.inView:
+        autoplayInstance.resume()
+        break
+      case autoplayInstance.state === EState.RUNNING && !props.inView:
+        autoplayInstance.pause()
+        break
+    }
+  }, [props.inView, settings.shouldAutoplay])
 
   /**
    * `onMouseMoveCaptureHandler` executes `autoplayHandler` whenever the user moves the mouse
@@ -628,7 +650,6 @@ const heroSlider = React.memo((props: ISliderProps) => {
   return (
     <div
       ref={sliderRef}
-      // onClick={autoplayHandler}
       onTouchStart={onTouchStartHandler}
       onTouchMove={onTouchMoveHandler}
       onTouchEnd={onTouchEndHandler}
@@ -658,4 +679,33 @@ const heroSlider = React.memo((props: ISliderProps) => {
   )
 })
 
-export default heroSlider
+const WithProvider = (props: IWithProviderProps) => {
+  const {
+    isMobile,
+    ...rest
+  } = props
+  const [ref, inView] = useInView({
+    /* Optional options */
+    threshold: 0
+  })
+
+  console.log('inView', inView)
+
+  return (
+    <SliderContextProvider
+      isMobile={isMobile}
+    >
+      <div
+        className='rm-hero-slider'
+        ref={ref}
+      >
+        <HeroSlider
+          inView={inView}
+          {...rest}
+        />
+      </div>
+    </SliderContextProvider>
+  )
+}
+
+export default React.memo(WithProvider)

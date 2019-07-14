@@ -1,26 +1,25 @@
 import * as React from 'react'
-import { isMobile as setIsMobile } from '../isMobile'
 // Types
 import { TAnyFunction } from '../typings'
+// Dependencies
+import { SliderContext } from '../Context'
 // CSS
 import classes from './Buttons.module.css'
 
-const isMobile = setIsMobile()
+const { useContext } = React
 
-const ButtonSVG = () => {
-  return (
-    <svg
-      width='60px'
-      height='60px'
-      strokeWidth='5'
-      version='1.1'
-      viewBox='0 0 129 129'>
-      <g fill='currentColor'>
-        <path d='m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z' />
-      </g>
-    </svg>
-  )
-}
+const ButtonSVG = () => (
+  <svg
+    width='60px'
+    height='60px'
+    strokeWidth='5'
+    version='1.1'
+    viewBox='0 0 129 129'>
+    <g fill='currentColor'>
+      <path d='m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z' />
+    </g>
+  </svg>
+)
 
 interface IButtonProps {
   isHorizontal: boolean
@@ -28,7 +27,9 @@ interface IButtonProps {
   nextSlide: TAnyFunction
 }
 
-const buttons = (props: IButtonProps) => {
+const Buttons = (props: IButtonProps) => {
+  const { isMobile } = useContext(SliderContext)
+
   if (isMobile) {
     return null
   }
@@ -65,4 +66,4 @@ const buttons = (props: IButtonProps) => {
   )
 }
 
-export default buttons
+export default React.memo(Buttons)

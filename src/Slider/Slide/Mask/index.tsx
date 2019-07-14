@@ -12,7 +12,7 @@ interface IMaskProps {
   background: IBackgroundProps
 }
 
-const mask = (props: IMaskProps) => {
+const Mask = (props: IMaskProps) => {
   const { background } = props
 
   const [className, setClassName] = React.useState(classes.Loading)
@@ -59,4 +59,4 @@ const mask = (props: IMaskProps) => {
   )
 }
 
-export default mask
+export default React.memo(Mask)

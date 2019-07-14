@@ -9,7 +9,7 @@ import classes from './Background.module.css'
 // JSX
 import LazyLoad from 'react-lazyload'
 
-const background = (props: IBackgroundProps) => {
+const Background = (props: IBackgroundProps) => {
   const {
     shouldLazyLoad = true,
     lazyLoadingOffset,
@@ -84,4 +84,4 @@ const background = (props: IBackgroundProps) => {
   )
 }
 
-export default background
+export default React.memo(Background)

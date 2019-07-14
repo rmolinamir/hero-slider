@@ -4,7 +4,7 @@ import { ISideNavProps } from '../typings'
 // CSS
 import classes from './SideNav.module.css'
 
-const SliderNav = (props: ISideNavProps) => {
+const SliderNav = React.memo((props: ISideNavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */
@@ -71,7 +71,7 @@ const SliderNav = (props: ISideNavProps) => {
       {navButtons}
     </ul>
   )
-}
+})
 
 export const SideNav = (props: ISideNavProps): JSX.Element => <SliderNav {...props} />
 (SideNav as React.FunctionComponent).displayName = 'hero-slider/nav'

@@ -7,7 +7,7 @@ import {
   IAutoplayButtonProps
 } from '../typings'
 
-const AutoplayButtons = (props: IAutoplayButtonProps) => {
+const AutoplayButtons = React.memo((props: IAutoplayButtonProps) => {
   const {
     className,
     style,
@@ -84,7 +84,7 @@ const AutoplayButtons = (props: IAutoplayButtonProps) => {
     </svg>
   </button>
   )
-}
+})
 
 export const AutoplayButton = (props: IAutoplayButtonProps): JSX.Element => <AutoplayButtons {...props} />
 (AutoplayButton as React.FunctionComponent).displayName = 'hero-slider/autoplay-button'

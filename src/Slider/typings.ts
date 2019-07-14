@@ -29,6 +29,26 @@ import IntervalTimer from '../IntervalTimer'
 export type TAnyFunction = (...anyArg: any[]) => any
 
 /**
+ * `ISliderContext` is the React Context interface definition.
+ */
+export interface ISliderContext {
+  isMobile: boolean | undefined
+}
+
+/**
+ * `ISliderProps` is the Slider Context's Provider props interface definition.
+ */
+export interface ISliderProviderProps {
+  isMobile: boolean
+  children: React.ReactElement[] | React.ReactElement
+}
+
+/**
+ * `IWithProviderProps` is the HOC Slider component.
+ */
+export interface IWithProviderProps extends ISliderProps, ISliderProviderProps {}
+
+/**
  * `INavPosition` define a position object used to position the nav components
  * through inline CSS styles.
  */
@@ -244,6 +264,7 @@ export interface ISliderProps {
   onBeforeChange?: TAnyFunction
   onChange?: TAnyFunction
   onAfterChange?: TAnyFunction
+  inView: boolean
   children: React.ReactElement[] | React.ReactElement
 }
 

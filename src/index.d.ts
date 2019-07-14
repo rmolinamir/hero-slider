@@ -5,7 +5,7 @@
 // TypeScript Version: 3.3.3333
 
 // CSS Types
-import { 
+import {
   BackdropFilterProperty,
   BackfaceVisibilityProperty,
   BackgroundProperty,
@@ -29,6 +29,13 @@ import IntervalTimer from './IntervalTimer'
 export type TAnyFunction = (...anyArg: any[]) => any
 
 export as namespace HeroSlider;
+
+/**
+ * `ISliderContext` is the React Context interface definition.
+ */
+export interface ISliderContext {
+  isMobile: boolean | undefined
+}
 
 /**
  * `INavPosition` define a position object used to position the nav components

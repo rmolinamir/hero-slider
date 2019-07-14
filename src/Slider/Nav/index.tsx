@@ -4,7 +4,7 @@ import { INavProps } from '../typings'
 // CSS
 import classes from './Nav.module.css'
 
-const SliderNav = (props: INavProps) => {
+const SliderNav = React.memo((props: INavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */
@@ -60,7 +60,7 @@ const SliderNav = (props: INavProps) => {
       {navButtons}
     </ul>
   )
-}
+})
 
 export const Nav = (props: INavProps): JSX.Element => <SliderNav {...props} />
 (Nav as React.FunctionComponent).displayName = 'hero-slider/nav'

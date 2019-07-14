@@ -1,9 +1,9 @@
-import HeroSlider from './Slider/HeroSlider'
-export { Slide } from './Slider/Slide/Slide'
-export { Nav } from './Slider/Nav/Nav'
-export { SideNav } from './Slider/SideNav/SideNav'
-export { MenuNav } from './Slider/MenuNav/MenuNav'
-export { ButtonsNav } from './Slider/ButtonsNav/ButtonsNav'
-export { AutoplayButton } from './Slider/AutoplayButtons/AutoplayButtons'
+import HeroSlider from './Slider'
+export { Slide } from './Slider/Slide'
+export { Nav } from './Slider/Nav'
+export { SideNav } from './Slider/SideNav'
+export { MenuNav } from './Slider/MenuNav'
+export { ButtonsNav } from './Slider/ButtonsNav'
+export { AutoplayButton } from './Slider/AutoplayButtons'
 
 export default HeroSlider

@@ -4,10 +4,10 @@ import { ISlideProps } from '../typings'
 // CSS
 import classes from './Slide.module.css'
 // JSX
-import Background from './Background/Background'
-import Mask from './Mask/Mask'
+import Background from './Background'
+import Mask from './Mask'
 
-const HeroSlide = (props: ISlideProps) => {
+const HeroSlide = React.memo((props: ISlideProps) => {
   const {
     isActive,
     isDoneSliding,
@@ -63,7 +63,7 @@ const HeroSlide = (props: ISlideProps) => {
       </div>
     </div>
   )
-}
+})
 
 export const Slide = (props: ISlideProps): JSX.Element => <HeroSlide {...props} />
 (Slide as React.FunctionComponent).displayName = 'hero-slider/slide'
