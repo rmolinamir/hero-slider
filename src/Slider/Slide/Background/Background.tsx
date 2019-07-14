@@ -12,7 +12,7 @@ import LazyLoad from 'react-lazyload'
 const background = (props: IBackgroundProps) => {
   const {
     shouldLazyLoad = true,
-    lazyLoadingOffset = window.innerHeight,
+    lazyLoadingOffset,
     width,
     height,
     onLoad,
@@ -75,7 +75,7 @@ const background = (props: IBackgroundProps) => {
   return (
     shouldLazyLoad ? (
       <LazyLoad
-        offset={lazyLoadingOffset}
+        offset={lazyLoadingOffset || window.innerHeight}
         debounce={false}
         height={height || '100%'}>
         {content}
