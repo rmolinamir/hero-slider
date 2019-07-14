@@ -1,6 +1,11 @@
 export const isMobile = (): boolean => {
-  if (navigator && /Mobi|Android/i.test(navigator.userAgent)) {
-    return true
+  // Detect if running on the browser:
+  const isBrowser = typeof window !== 'undefined'
+  if (isBrowser) {
+    if (navigator && /Mobi|Android/i.test(navigator.userAgent)) {
+      return true
+    }
+    return false
   }
   return false
 }
