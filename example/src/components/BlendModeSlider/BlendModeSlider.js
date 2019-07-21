@@ -4,7 +4,7 @@ import rockyWaterfall from './backgrounds/Rocky Waterfall.jpg'
 import palauPacificOcean from './backgrounds/Palau - Pacific Ocean.jpg'
 import queposCostaRica from './backgrounds/Quepos - Costa Rica.jpg'
 import mountainView from './backgrounds/MountainView.jpg'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   SideNav,

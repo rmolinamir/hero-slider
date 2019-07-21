@@ -1,7 +1,16 @@
 {
     "defaultSeverity": "error",
-    "extends": "tslint-config-standard",
+    "extends": [
+      "tslint-config-standard",
+      "tslint-config-airbnb",
+      "tslint-react-hooks"
+    ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+      "variable-name": false,
+      "import-name": false,
+      "react-hooks-nesting": "error",
+      "react-hooks/exhaustive-deps": "error"
+    },
     "rulesDirectory": []
 }

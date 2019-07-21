@@ -1,5 +1,5 @@
 import React from 'react'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   SideNav

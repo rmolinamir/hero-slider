@@ -4,7 +4,7 @@ import bogliasco from './backgrounds/Bogliasco - Italy.jpg'
 import countyClare from './backgrounds/County Clare - Ireland.jpg'
 import craterRock from './backgrounds/Crater Rock - United States.jpg'
 import giauPass from './backgrounds/Giau Pass - Italy.jpg'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   Nav
@@ -48,12 +48,17 @@ const app = () => {
         </Subtitle>
       </Wrapper>
 
-      <Slide
-        navDescription='Giau Pass - Italy'
-        background={{
-          backgroundImage: giauPass,
-          backgroundAttachment: 'fixed'
-        }} />
+      {(() => {
+        console.log('HOC slide')
+        return (
+          <Slide
+          navDescription='Giau Pass - Italy'
+          background={{
+            backgroundImage: giauPass,
+            backgroundAttachment: 'fixed'
+          }} />
+        )
+      })()}
 
       <Slide
         navDescription='Bogliasco - Italy'

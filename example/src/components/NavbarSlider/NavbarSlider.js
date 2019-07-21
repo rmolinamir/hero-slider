@@ -4,7 +4,7 @@ import kyoto from './backgrounds/Kyoto - Japan.jpg'
 import tenryuJiTemple from './backgrounds/Tenryu-ji Temple - Kyōto-shi - Japan.jpg'
 import hakone from './backgrounds/Hakone - Japan.jpg'
 import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United States.jpg'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   MenuNav

@@ -4,7 +4,7 @@ import hallstatt from './backgrounds/Hallstatt - Austria.jpg'
 import hvitserkur from './backgrounds/Hvitserkur - Iceland.jpg'
 import jacksonville from './backgrounds/Jacksonville - United States.jpg'
 import moraineLake from './backgrounds/Moraine Lake, AB - Canada.jpg'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   ButtonsNav,

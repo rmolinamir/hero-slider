@@ -4,7 +4,7 @@ import salta from './backgrounds/Salta - Argentina.jpg'
 import scharbeutz from './backgrounds/Scharbeutz - Germany.jpg'
 import selvaDiValGardena from './backgrounds/Selva Di Val Gardena - Italy.jpg'
 import seoraksanMountains from './backgrounds/Seoraksan Mountains - South Korea.jpg'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
   SideNav,
