@@ -4,8 +4,10 @@ import * as React from 'react';
 // Dependencies
 import {
   EBackgroundAnimations,
-  IBackgroundProps,
 } from '../../../typings/definitions';
+import {
+  IBackgroundProps,
+} from './typings';
 
 // CSS
 import BackgroundModuleCss from './Background.module.css';

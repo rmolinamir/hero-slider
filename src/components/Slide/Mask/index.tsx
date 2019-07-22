@@ -1,16 +1,16 @@
+// Libraries
 import * as React from 'react';
-// Types
-import { IBackgroundProps } from '../../../typings/definitions';
+
+// Dependencies
+import {
+  IMaskProps,
+} from './typings';
+
 // CSS
 import MaskModuleCss from './Mask.module.css';
+
 // Components
 import LazyLoad from 'react-lazyload';
-
-interface IMaskProps {
-  isActive: boolean;
-  isDoneSliding: boolean;
-  background: IBackgroundProps;
-}
 
 const { useState, memo } = React;
 

@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Dependencies
-import { IMenuNavProps } from '../../typings/definitions';
+import { IMenuNavProps } from './typings';
 import { SliderContext } from '../Context';
 
 // CSS

@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 // Dependencies
-import { TAnyFunction } from '../../typings/definitions';
+import { IButtonProps } from './typings';
 import { SliderContext } from '../Context';
 
 // CSS
@@ -24,18 +24,10 @@ const ButtonSVG = () => (
   </svg>
 );
 
-interface IButtonProps {
-  isHorizontal: boolean;
-  previousSlide: TAnyFunction;
-  nextSlide: TAnyFunction;
-}
-
 const Buttons = (props: IButtonProps) => {
   const { isMobile } = useContext(SliderContext);
 
-  if (isMobile) {
-    return null;
-  }
+  if (isMobile) return null;
 
   return (
     <>

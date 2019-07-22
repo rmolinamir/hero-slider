@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Dependencies
-import { IButtonsNavProps } from '../../typings/definitions';
+import { IButtonsNavProps } from './typings';
 
 // CSS
 import ButtonsNavModuleCss from './ButtonsNav.module.css';

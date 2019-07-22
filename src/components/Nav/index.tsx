@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Dependencies
-import { INavProps } from '../../typings/definitions';
+import { INavProps } from './typings';
 import { SliderContext } from '../Context';
 
 // CSS

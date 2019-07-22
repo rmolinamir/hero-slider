@@ -9,9 +9,7 @@ import {
   EActionTypes,
   IReducerState,
   IReducerAction,
-  // INavContext,
-  // IAutoplayButtonContext
-} from '../../typings/definitions';
+} from './typings';
 
 const initialContext: ISliderContext = {
   isMobile: undefined,

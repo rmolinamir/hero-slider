@@ -26,243 +26,12 @@ import {
 
 import IntervalTimer from '../dependencies/IntervalTimer';
 
-export type TAnyFunction = (...anyArg: any[]) => any;
-
-/**
- * `ISliderContext` is the React Context interface definition.
- */
-export interface ISliderContext extends IReducerState {
-  isMobile: boolean | undefined;
-  dispatchProps: React.Dispatch<IReducerAction> | undefined;
-}
-
-export enum EActionTypes {
-  SET_SLIDE_PROPS,
-  SET_NAVBAR_PROPS,
-  SET_AUTOPLAY_BUTTON_PROPS,
-  SET_SLIDE_DATA,
-}
-
-export interface IReducerState {
-  slidesArray: ISlideDataPayload[];
-  slideProps: ISlidePayload | undefined;
-  navProps: INavPayload | undefined;
-  autoplayButtonProps: IReducerAutoplayButtonPayload | undefined;
-}
-
-export type IReducerAction = (
-  IReducerSlideAction |
-  IReducerSetSlideNumbereAction |
-  IReducerNavAction |
-  IReducerAutoplayButtonAction
-);
-
-export interface IReducerSlideAction {
-  type: EActionTypes.SET_SLIDE_PROPS;
-  payload: ISlidePayload;
-}
-
-export interface ISlidePayload {
-  activeSlide: number;
-  isDoneSliding: boolean;
-  slidingAnimation: string;
-}
-
-export interface IReducerSetSlideNumbereAction {
-  type: EActionTypes.SET_SLIDE_DATA;
-  payload: ISlideDataPayload;
-}
-
-export interface ISlideDataPayload {
-  slideNumber: number;
-  navDescription: string;
-}
-
-export interface IReducerNavAction {
-  type: EActionTypes.SET_NAVBAR_PROPS;
-  payload: INavPayload;
-}
-
-export interface INavPayload {
-  changeSlide: TAnyFunction;
-  activeSlide: number;
-  totalSlides: number;
-  sliderWidth: number;
-}
-
-// IAutoplayButtonContext
-export interface IReducerAutoplayButtonAction {
-  type: EActionTypes.SET_AUTOPLAY_BUTTON_PROPS;
-  payload: IReducerAutoplayButtonPayload;
-}
-
-export interface IReducerAutoplayButtonPayload {
-  setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>;
-  autoplayHandlerTimeout: NodeJS.Timeout | undefined;
-  shouldAutoplay: boolean;
-  autoplay: React.MutableRefObject<IntervalTimer>;
-}
-
-/**
- * `ISliderProps` is the Slider Context's Provider props interface definition.
- */
-export interface ISliderProviderProps {
-  isMobile: boolean;
-  children: React.ReactElement[] | React.ReactElement;
-}
-
-/**
- * `IWithProviderProps` is the HOC Slider component.
- */
-export interface IWithProviderProps extends ISliderProps, ISliderProviderProps {}
-
-/**
- * `INavPosition` define a position object used to position the nav components
- * through inline CSS styles.
- */
-export interface INavPosition {
-  top: string;
-  left: string;
-  bottom: string;
-  right: string;
-  transform: string;
-}
-
-/**
- * `INavSettings` is the base definition of the nav components prop.
- */
-export interface INavSettings {
-  position: INavPosition;
-  color: string;
-  activeColor: string;
-}
-
-/**
- * `Nav` component props.
- */
-export interface INavProps extends INavSettings {
-  totalSlides: number;
-  activeSlide: number;
-  changeSlide: TAnyFunction;
-}
-
-/**
- * `SideNav` component props.
- */
-export interface ISideNavProps extends INavProps {
-  right: string;
-  left: string;
-  isPositionedRight: boolean;
-}
-
-/**
- * `MenuNav` component props.
- */
-export interface IMenuNavProps extends INavProps {
-  navDescriptions: string[];
-  justifyContent: string;
-  sliderWidth: number;
-  mobileThreshold: number;
-  isNullAfterThreshold: boolean;
-  extraButton: React.ReactElement | React.Component;
-  isExtraButtonRight: boolean;
-}
-
-/**
- * `ButtonsNav` component props.
- */
-export interface IButtonsNavProps extends IMenuNavProps {
-  backgroundColor: string;
-  alignItems: string;
-}
-
-export enum EAutoplayButtons {
-  PLAY = 'play',
-  PAUSE = 'pause',
-}
-
-/**
- * `AutoplayButton` component props.
- */
-export interface IAutoplayButtonProps {
-  className?: string;
-  position?: INavPosition;
-  style?: React.CSSProperties;
-  autoplay: React.MutableRefObject<IntervalTimer>;
-  setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>;
-  autoplayHandlerTimeout: NodeJS.Timeout;
-}
-
-/**
- * `Slide` component props.
- */
-export interface ISlideProps {
-  isActive: boolean;
-  isDoneSliding: boolean;
-  slidingAnimation: string;
-  shouldRenderMask: boolean;
-  background: IBackgroundProps;
-  navDescription: string;
-  style: React.CSSProperties;
-  onBackgroundLoad: TAnyFunction;
-  children: React.ReactChildren;
-}
-
-/**
- * Type definition for `IBackgroundProps.backgroundAnimation`.
- */
-export enum EBackgroundAnimations {
-  FADE = 'fade',
-  ZOOM = 'zoom',
-}
-
-/**
- * `IBackgroundProps` interface for the `Background` JSX
- * component's props used inside the `Slide` components.
- * The `Slide` components `background` prop is also defined
- * by `IBackgroundProps`.
- */
-export interface IBackgroundProps {
-  shouldLazyLoad?: boolean;
-  lazyLoadingOffset?: number;
-  backdropFilter?: BackdropFilterProperty;
-  backfaceVisibility?: BackfaceVisibilityProperty;
-  background?: BackgroundProperty<string | number>;
-  backgroundAttachment?: BackgroundAttachmentProperty;
-  backgroundBlendMode?: BackgroundBlendModeProperty;
-  backgroundClip?: BackgroundClipProperty;
-  backgroundColor?: BackgroundColorProperty;
-  backgroundImage?: BackgroundImageProperty;
-  backgroundOrigin?: BackgroundOriginProperty;
-  backgroundPosition?: BackgroundPositionProperty<string | number>;
-  backgroundPositionX?: BackgroundPositionXProperty<string | number>;
-  backgroundPositionY?: BackgroundPositionYProperty<string | number>;
-  backgroundRepeat?: BackgroundRepeatProperty;
-  backgroundSize?: BackgroundSizeProperty<string | number>;
-  backgroundAnimationDuration?: number;
-  backgroundAnimationDelay?: number;
-  backgroundAnimation?: EBackgroundAnimations;
-  maskBackgroundBlendMode?: BackgroundBlendModeProperty;
-  width?: WidthProperty<string | number>;
-  height?: HeightProperty<string | number>;
-  alt?: string;
-  src: string | undefined;
-  onLoad: TAnyFunction;
-}
-
-/**
- * `ISliderDimensions` defines an object that holds the dimensions of the slider.
- * They update everytime the `resize` window event is fired.
- */
-export interface ISliderDimensions {
-  width?: number;
-  height?: number;
-}
+type TAnyFunction = (...anyArg: any[]) => any;
 
 /**
  * `INavbarSettings` settings definition for all of the nav components.
  */
-export interface INavbarSettings {
+interface INavbarSettings {
   color: string;
   activeColor: string;
 }
@@ -270,7 +39,7 @@ export interface INavbarSettings {
 /**
  * `EAnimations` enum for the different sliding animations.
  */
-export enum EAnimations {
+enum EAnimations {
   TOP_TO_BOTTOM = 'top_to_bottom',
   BOTTOM_TO_TOP = 'bottom_to_top',
   LEFT_TO_RIGHT = 'left_to_right',
@@ -278,89 +47,138 @@ export enum EAnimations {
   FADE = 'fade',
 }
 
-/**
- * `EOrientation` definition used for the `ISliderProps.orientation` prop.
- * Used to define which swipes (depending on directions) will change the slides,
- * and where and how will the buttons render, if set to render.
- */
-export enum EOrientation {
-  VERTICAL = 'vertical',
-  HORIZONTAL = 'horizontal',
-}
+// AutoplayButtons
+import {
+  EAutoplayButtons,
+  IAutoplayButtonProps,
+} from '../components/AutoplayButtons/typings';
 
-/**
- * `ISettings` is used for a `settings` object variable
- * inside `HeroSlider`, this extends to `ISettingsProps`.
- * These properties are set inside the slider and are not
- * part of the received props.
- */
-export interface ISettings extends ISettingsProps {
-  initialSlidingAnimation: EAnimations;
-  slidingAnimation: string;
-  sliderOrientation: EOrientation;
-}
+// Buttons
+import {
+  IButtonProps,
+} from '../components/Buttons/typings';
 
-/**
- * Type definition for `ISliderProps.settings`.
- */
-export interface ISettingsProps {
-  slidingDuration: number;
-  slidingDelay: number;
-  sliderColor: string;
-  sliderFadeInDuration: number;
-  navbarFadeInDuration: number;
-  navbarFadeInDelay: number;
-  isSmartSliding: boolean;
-  shouldDisplayButtons: boolean;
-  shouldAutoplay: boolean;
-  shouldSlideOnArrowKeypress: boolean;
-  autoplayDuration: number;
-  autoplayHandlerTimeout: number;
-  width: WidthProperty<string | number>;
-  height: HeightProperty<string | number>;
-}
+// ButtonsNav
+import {
+  IButtonsNavProps,
+} from '../components/ButtonsNav/typings';
 
-/**
- * `HeroSlider` props.
- */
-export interface ISliderProps {
-  settings?: ISettingsProps;
-  orientation?: EOrientation;
-  slidingAnimation?: EAnimations;
-  isSmartSliding?: boolean;
-  initialSlide?: number;
-  nextSlide?: React.MutableRefObject<any>;
-  previousSlide?: React.MutableRefObject<any>;
-  navbarSettings?: INavbarSettings;
-  style?: React.CSSProperties;
-  onBeforeChange?: TAnyFunction;
-  onChange?: TAnyFunction;
-  onAfterChange?: TAnyFunction;
-  inView: boolean;
-  children: React.ReactElement[] | React.ReactElement;
-}
+// Context
+import {
+  ISliderContext,
+  EActionTypes,
+  IReducerState,
+  IReducerAction,
+  IReducerSlideAction,
+  ISlidePayload,
+  IReducerSetSlideNumbereAction,
+  ISlideDataPayload,
+  IReducerNavAction,
+  INavPayload,
+  IReducerAutoplayButtonAction,
+  IReducerAutoplayButtonPayload,
+  ISliderProviderProps,
+  IWithProviderProps,
+} from '../components/Context/typings';
 
-/**
- * The `React.Children` are filtered inside the `HeroSlider`.
- * This interface defined the object structure of said filtering.
- */
-export interface IChildren {
-  slidesArray: React.ReactElement[];
-  navbarsArray: React.ReactElement[];
-  autoplayButtonsArray: React.ReactElement[];
-  othersArray: React.ReactElement[];
-  navDescriptions: string[];
-}
+// MenuNav
+import {
+  IMenuNavProps,
+} from '../components/MenuNav/typings';
 
-/**
- * `ITouchState` defines the state object that handles touch evend on mobile devices.
- * Used to change slides after the user swipes respective to directions and senses.
- */
-export interface ITouchState {
-  initialX?: number;
-  initialY?: number;
-  currentX?: number;
-  currentY?: number;
-  finalX?: number;
-  finalY?: number;
-}
+// Nav
+import {
+  INavPosition,
+  INavSettings,
+  INavProps,
+} from '../components/Nav/typings';
+
+// SideNav
+import {
+  ISideNavProps,
+} from '../components/SideNav/typings';
+
+// Slide
+import {
+  ISlideProps,
+} from '../components/Slide/typings';
+
+// Background
+import {
+  EBackgroundAnimations,
+  IBackgroundProps,
+} from '../components/Slide/Background/typings';
+
+// Mask
+import {
+  IMaskProps,
+} from '../components/Slide/Mask/typings';
+
+// Slider
+import {
+  ISliderProps,
+} from '../components/Slider/typings';
+
+// Exports
+export {
+  IntervalTimer,
+  TAnyFunction,
+  BackdropFilterProperty,
+  BackfaceVisibilityProperty,
+  BackgroundProperty,
+  BackgroundAttachmentProperty,
+  BackgroundBlendModeProperty,
+  BackgroundClipProperty,
+  BackgroundColorProperty,
+  BackgroundImageProperty,
+  BackgroundOriginProperty,
+  BackgroundPositionProperty,
+  BackgroundPositionXProperty,
+  BackgroundPositionYProperty,
+  BackgroundRepeatProperty,
+  BackgroundSizeProperty,
+  WidthProperty,
+  HeightProperty,
+  // General
+  INavbarSettings,
+  EAnimations,
+  // AutoplayButtons
+  EAutoplayButtons,
+  IAutoplayButtonProps,
+  // Buttons
+  IButtonProps,
+  // ButtonsNav
+  IButtonsNavProps,
+  // Context
+  ISliderContext,
+  EActionTypes,
+  IReducerState,
+  IReducerAction,
+  IReducerSlideAction,
+  ISlidePayload,
+  IReducerSetSlideNumbereAction,
+  ISlideDataPayload,
+  IReducerNavAction,
+  INavPayload,
+  IReducerAutoplayButtonAction,
+  IReducerAutoplayButtonPayload,
+  ISliderProviderProps,
+  IWithProviderProps,
+  // MenuNav
+  IMenuNavProps,
+  // Nav
+  INavPosition,
+  INavSettings,
+  INavProps,
+  // SideNav
+  ISideNavProps,
+  // Slide
+  ISlideProps,
+  // Background
+  EBackgroundAnimations,
+  IBackgroundProps,
+  // Mask
+  IMaskProps,
+  // Slider
+  ISliderProps,
+};

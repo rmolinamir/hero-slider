@@ -28,8 +28,6 @@ import IntervalTimer from './IntervalTimer'
 
 export type TAnyFunction = (...anyArg: any[]) => any
 
-export as namespace HeroSlider;
-
 /**
  * `ISliderContext` is the React Context interface definition.
  */
@@ -288,4 +286,5 @@ export function ButtonsNav(props: IButtonsNavProps): JSX.Element
 /**
  * Default component.
  */
-export default function HeroSlider(props: ISlideProps): JSX.Element
+export default function HeroSlider(props: ISlideProps): JSX.Element;
+export as namespace HeroSlider;

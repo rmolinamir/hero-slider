@@ -4,8 +4,10 @@ import * as React from 'react';
 // Dependencies
 import {
   EActionTypes,
-  ISlideProps,
 } from '../../typings/definitions';
+import {
+  ISlideProps,
+} from './typings';
 import { SliderContext } from '../Context';
 
 // CSS
@@ -19,9 +21,6 @@ const { useContext, useEffect, useState, memo } = React;
 
 const HeroSlide = memo((props: ISlideProps) => {
   const {
-    // isActive,
-    // isDoneSliding,
-    // slidingAnimation,
     shouldRenderMask,
     style,
     background,

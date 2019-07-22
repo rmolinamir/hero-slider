@@ -5,12 +5,12 @@ import { useInView } from 'react-intersection-observer';
 // Dependencies
 import IntervalTimer, { EState } from '../../dependencies/IntervalTimer';
 import {
-  EAnimations,
-  ISettings,
-  ISliderProps,
-  EOrientation,
-  ISliderDimensions,
-  ITouchState,
+  // EAnimations,
+  // ISettings,
+  // ISliderProps,
+  // EOrientation,
+  // ISliderDimensions,
+  // ITouchState,
   // IChildren,
   // ISlideProps,
   // IMenuNavProps,
@@ -19,6 +19,14 @@ import {
   IWithProviderProps,
   EActionTypes,
 } from '../../typings/definitions';
+import {
+  EAnimations,
+  ISettings,
+  ISliderProps,
+  EOrientation,
+  ISliderDimensions,
+  ITouchState,
+} from './typings';
 import { setInitialSlidingAnimation } from '../../dependencies/setInitialSlidingAnimation';
 
 // CSS
