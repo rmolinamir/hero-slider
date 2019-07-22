@@ -99,6 +99,7 @@ export interface IReducerAutoplayButtonAction {
 export interface IReducerAutoplayButtonPayload {
   setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>;
   autoplayHandlerTimeout: NodeJS.Timeout | undefined;
+  shouldAutoplay: boolean;
   autoplay: React.MutableRefObject<IntervalTimer>;
 }
 

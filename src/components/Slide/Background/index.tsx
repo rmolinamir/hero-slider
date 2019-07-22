@@ -13,6 +13,8 @@ import BackgroundModuleCss from './Background.module.css';
 // Components
 import LazyLoad from 'react-lazyload';
 
+const { useState, memo } = React;
+
 const Background = (props: IBackgroundProps) => {
   const {
     shouldLazyLoad = true,
@@ -31,7 +33,7 @@ const Background = (props: IBackgroundProps) => {
    * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
    * - `img` tag element will not render.
    */
-  const [className, setClassName] = React.useState((
+  const [className, setClassName] = useState((
     backgroundImage ? BackgroundModuleCss.Loading : BackgroundModuleCss.Loaded
   ));
 
@@ -93,4 +95,4 @@ const Background = (props: IBackgroundProps) => {
   );
 };
 
-export default React.memo(Background);
+export default memo(Background);

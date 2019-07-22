@@ -80,11 +80,13 @@ const reducer = (state: IReducerState, action: IReducerAction): IReducerState =>
       const {
         setIsManuallyPaused,
         autoplayHandlerTimeout,
+        shouldAutoplay,
         autoplay,
       } = payload;
       newState.autoplayButtonProps = {
         setIsManuallyPaused,
         autoplayHandlerTimeout,
+        shouldAutoplay,
         autoplay,
       };
       return newState;
@@ -117,8 +119,6 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
     autoplayButtonProps,
   } = sliderContextProps;
 
-  console.log('slidesArray', slidesArray);
-
   const [isMobile, setIsMobile] = useState<boolean>(mobile);
 
   // When mounting, if `isMobile` is undefined, then set the default is mobile
@@ -131,8 +131,6 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
     },
     [isMobile],
   );
-
-  console.log('Provider children', children);
 
   return (
     <SliderContext.Provider

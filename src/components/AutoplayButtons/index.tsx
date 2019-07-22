@@ -5,39 +5,37 @@ import * as React from 'react';
 import {
   EAutoplayButtons,
   IAutoplayButtonProps,
-} from '../../typings/definitions';
+} from './typings';
 import { SliderContext } from '../Context';
 
 // CSS
 import AutoplayButtonsModuleCss from './AutoplayButtons.module.css';
 
-const { useContext } = React;
+const { useContext, useState, memo } = React;
 
-const AutoplayButtons = React.memo((props: IAutoplayButtonProps) => {
+const AutoplayButtons = memo((props: IAutoplayButtonProps) => {
   const {
     className,
     style,
     position,
-    // autoplayHandlerTimeout,
-    // setIsManuallyPaused,
-    // autoplay,
   } = props;
 
   const { autoplayButtonProps } = useContext(SliderContext);
 
-  const [buttonType, setButtonType] = React.useState<EAutoplayButtons>(EAutoplayButtons.PAUSE);
+  const [buttonType, setButtonType] = useState<EAutoplayButtons>(EAutoplayButtons.PAUSE);
 
   if (!autoplayButtonProps) return null;
 
   const {
     setIsManuallyPaused,
     autoplayHandlerTimeout,
+    shouldAutoplay,
     autoplay,
   } = autoplayButtonProps;
 
   const autoplayInstance = autoplay && autoplay.current;
 
-  if (!autoplayInstance) return null;
+  if (!autoplayInstance || !shouldAutoplay) return null;
 
   const playPath = 'M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z';
   const pausePath = 'M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z';

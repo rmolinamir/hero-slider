@@ -12,10 +12,12 @@ interface IMaskProps {
   background: IBackgroundProps;
 }
 
+const { useState, memo } = React;
+
 const Mask = (props: IMaskProps) => {
   const { background } = props;
 
-  const [className, setClassName] = React.useState(MaskModuleCss.Loading);
+  const [className, setClassName] = useState(MaskModuleCss.Loading);
 
   const onLoadHandler = () => {
     setClassName(MaskModuleCss.Loaded);
@@ -62,4 +64,4 @@ const Mask = (props: IMaskProps) => {
   );
 };
 
-export default React.memo(Mask);
+export default memo(Mask);

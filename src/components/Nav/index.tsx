@@ -8,9 +8,9 @@ import { SliderContext } from '../Context';
 // CSS
 import NavModuleCss from './Nav.module.css';
 
-const { useContext } = React;
+const { useContext, memo } = React;
 
-const SliderNav = React.memo((props: INavProps) => {
+const SliderNav = memo((props: INavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */

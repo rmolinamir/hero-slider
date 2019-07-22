@@ -9,7 +9,7 @@ import { SliderContext } from '../Context';
 // CSS
 import ButtonsModuleCss from './Buttons.module.css';
 
-const { useContext } = React;
+const { useContext, memo } = React;
 
 const ButtonSVG = () => (
   <svg
@@ -69,4 +69,4 @@ const Buttons = (props: IButtonProps) => {
   );
 };
 
-export default React.memo(Buttons);
+export default memo(Buttons);

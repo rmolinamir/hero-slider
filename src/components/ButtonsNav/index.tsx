@@ -10,7 +10,9 @@ import ButtonsNavModuleCss from './ButtonsNav.module.css';
 // Components
 import { Nav } from '../Nav';
 
-const SliderNav = React.memo((props: IButtonsNavProps) => {
+const { memo } = React;
+
+const SliderNav = memo((props: IButtonsNavProps) => {
   /**
    * Deconstructing ButtonNavSettings to set it up.
    */

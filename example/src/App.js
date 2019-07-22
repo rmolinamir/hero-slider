@@ -12,16 +12,17 @@ import AutoplayButtonSlider from './components/AutoplayButtonSlider/AutoplayButt
 const app = () => {
   return (
     <div style={{
-      color: '#FFF'
+      color: '#FFF',
+      height: '500vh'
     }}>
       <BasicSlider />
-      <VerticalSlider />
+      {/* <VerticalSlider /> */}
       {/* <ZoomSlider /> */}
       {/* <SlidesChildrenSlider /> */}
       {/* <BlendModeSlider /> */}
       {/* <NavbarSlider /> */}
       {/* <ButtonsSlider /> */}
-      <AutoplayButtonSlider />
+      {/* <AutoplayButtonSlider /> */}
     </div>
   )
 }

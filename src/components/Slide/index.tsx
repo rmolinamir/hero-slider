@@ -15,9 +15,9 @@ import SlideModuleCss from './Slide.module.css';
 import Background from './Background';
 import Mask from './Mask';
 
-const { useContext } = React;
+const { useContext, useEffect, useState, memo } = React;
 
-const HeroSlide = React.memo((props: ISlideProps) => {
+const HeroSlide = memo((props: ISlideProps) => {
   const {
     // isActive,
     // isDoneSliding,
@@ -32,11 +32,11 @@ const HeroSlide = React.memo((props: ISlideProps) => {
 
   const { dispatchProps, slidesArray, slideProps } = useContext(SliderContext);
 
-  const [slideNumber, setSlideNumber] = React.useState<number>(slidesArray.length);
+  const [slideNumber, setSlideNumber] = useState<number>(slidesArray.length);
 
   const currentSlideData = slidesArray.find(({ slideNumber: number }) => number === slideNumber);
 
-  React.useEffect(
+  useEffect(
     () => {
       if (
         dispatchProps &&

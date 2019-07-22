@@ -11,9 +11,9 @@ import MenuNavModuleCss from './MenuNav.module.css';
 // Components
 import { Nav } from '../Nav';
 
-const { useContext } = React;
+const { useContext, memo } = React;
 
-const SliderNav = React.memo((props: IMenuNavProps) => {
+const SliderNav = memo((props: IMenuNavProps) => {
   /**
    * Deconstructing MenuNavSettings to set it up.
    */
