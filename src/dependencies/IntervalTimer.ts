@@ -22,8 +22,8 @@ export interface IIntervalTimer {
   maxFires?: number;
   pausedTime: number | Date;
   lastTimeFired: Date;
-  timerId: NodeJS.Timeout;
-  resumeId: NodeJS.Timeout;
+  timerId: NodeJS.Timeout | number;
+  resumeId: NodeJS.Timeout | number;
   lastPauseTime: Date;
 }
 
@@ -37,8 +37,8 @@ class IntervalTimer implements IIntervalTimer {
   public fires: number;
   public pausedTime: number | Date;
   public lastTimeFired: Date;
-  public timerId: NodeJS.Timeout;
-  public resumeId: NodeJS.Timeout;
+  public timerId: NodeJS.Timeout | number;
+  public resumeId: NodeJS.Timeout | number;
   public lastPauseTime: Date;
 
   public constructor (
@@ -107,8 +107,8 @@ class IntervalTimer implements IIntervalTimer {
   public stop = () => {
     if (this.state === 0) return;
 
-    clearInterval(this.timerId);
-    clearTimeout(this.resumeId);
+    clearInterval(this.timerId as number);
+    clearTimeout(this.resumeId as number);
     this.state = EState.IDLE;
   }
 
@@ -130,8 +130,8 @@ class IntervalTimer implements IIntervalTimer {
 
     this.remaining = +this.interval - (+new Date() - +this.lastTimeFired) + +this.pausedTime;
     this.lastPauseTime = new Date();
-    clearInterval(this.timerId);
-    clearTimeout(this.resumeId);
+    clearInterval(this.timerId as number);
+    clearTimeout(this.resumeId as number);
     this.state = EState.PAUSED;
   }
 

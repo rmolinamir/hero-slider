@@ -117,6 +117,7 @@ import {
 // Slider
 import {
   ISliderProps,
+  AnimationType,
 } from '../components/Slider/typings';
 
 // Exports
@@ -181,4 +182,5 @@ export {
   IMaskProps,
   // Slider
   ISliderProps,
+  AnimationType,
 };

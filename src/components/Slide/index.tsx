@@ -11,9 +11,10 @@ import {
 import { SliderContext } from '../Context';
 
 // CSS
-import SlideModuleCss from './Slide.module.css';
+// import SlideModuleCss from './Slide.module.css';
 
 // Components
+import { StyledSlide } from './styled-components';
 import Background from './Background';
 import Mask from './Mask';
 
@@ -91,21 +92,25 @@ const HeroSlide = memo((props: ISlideProps) => {
   const isActive = activeSlide === currentSlide;
 
   return (
-    <div
+    <StyledSlide
       style={{
         ...style,
         ...CSSVariables,
       }}
-      className={[
-        SlideModuleCss.Slide,
-        isActive && SlideModuleCss.Active,
-        (isActive && isDoneSliding) && SlideModuleCss.Sliding,
-        (isActive && !isDoneSliding) && slidingAnimation,
-      ].join(' ')}>
+      // className={[
+      //   SlideModuleCss.Slide,
+      //   isActive && SlideModuleCss.Active,
+      //   // (isActive && isDoneSliding) && SlideModuleCss.Sliding,
+      //   (isActive && !isDoneSliding) && slidingAnimation,
+      // ].join(' ')}
+        isActive={isActive}
+        isDoneSliding={isDoneSliding}
+        slidingAnimation={slidingAnimation}
+      >
       <Background
         onLoad={onBackgroundLoad}
         {...background} />
-      <div className={SlideModuleCss.Wrapper}>
+      <div className="Wrapper">
         {/* Inner Mask */}
         {shouldRenderMask ? (
           <Mask
@@ -116,13 +121,13 @@ const HeroSlide = memo((props: ISlideProps) => {
         {/* Container */}
         <div
           className={[
-            SlideModuleCss.Container,
-            (isActive && isDoneSliding) && SlideModuleCss.Active,
+            'Container',
+            (isActive && isDoneSliding) && 'Active',
           ].join(' ')}>
           {children}
         </div>
       </div>
-    </div>
+    </StyledSlide>
   );
 });
 

@@ -2,6 +2,7 @@ import IntervalTimer from '../../dependencies/IntervalTimer';
 import {
   TAnyFunction,
   ISliderProps,
+  EAnimations ,
 } from '../../typings/definitions';
 
 /**
@@ -41,7 +42,7 @@ export interface IReducerSlideAction {
 export interface ISlidePayload {
   activeSlide: number;
   isDoneSliding: boolean;
-  slidingAnimation: string;
+  slidingAnimation: EAnimations;
 }
 
 export interface IReducerSetSlideNumbereAction {
@@ -73,7 +74,7 @@ export interface IReducerAutoplayButtonAction {
 
 export interface IReducerAutoplayButtonPayload {
   setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>;
-  autoplayHandlerTimeout: NodeJS.Timeout | undefined;
+  autoplayHandlerTimeout: NodeJS.Timeout | number | undefined;
   shouldAutoplay: boolean;
   autoplay: React.MutableRefObject<IntervalTimer>;
 }

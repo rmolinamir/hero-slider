@@ -30,9 +30,12 @@ import {
 import { setInitialSlidingAnimation } from '../../dependencies/setInitialSlidingAnimation';
 
 // CSS
-import HeroSliderModuleCss from './HeroSlider.module.css';
+// import HeroSliderModuleCss from './HeroSlider.module.css';
 
 // Components
+import { ThemeProvider } from 'styled-components';
+import { Wrapper } from './styled-components';
+// import { Wrapper } from './styled-components';
 import Context, { SliderContext } from '../Context';
 import Buttons from '../Buttons';
 
@@ -116,8 +119,8 @@ const HeroSlider = memo((props: ISliderProps) => {
   const isDoneSlidingWatcher = React.useRef<boolean>(true);
   const activeSlideWatcher = React.useRef(activeSlide);
 
-  const [delayTimeout, setDelayTimeout] = useState<NodeJS.Timeout>();
-  const [slidingTimeout, setSlidingTimeout] = useState<NodeJS.Timeout>();
+  const [delayTimeout, setDelayTimeout] = useState<NodeJS.Timeout | number>();
+  const [slidingTimeout, setSlidingTimeout] = useState<NodeJS.Timeout | number>();
 
   /**
    * `slidingTimeoutDuration` is the total time it takes for
@@ -129,7 +132,7 @@ const HeroSlider = memo((props: ISliderProps) => {
   ); // 110% safety factor.
 
   const setSlidingAnimation = React.useCallback(
-    (newAnimation: string) => {
+    (newAnimation: EAnimations) => {
       setSettings({
         ...settings,
         slidingAnimation: newAnimation,
@@ -204,24 +207,24 @@ const HeroSlider = memo((props: ISliderProps) => {
         case EAnimations.TOP_TO_BOTTOM:
         case EAnimations.BOTTOM_TO_TOP:
           if (nextSlide > activeSlideWatcher.current) {
-            setSlidingAnimation(HeroSliderModuleCss.Sliding_Bottom_To_Top);
+            setSlidingAnimation(EAnimations.BOTTOM_TO_TOP);
           } else {
-            setSlidingAnimation(HeroSliderModuleCss.Sliding_Top_To_Bottom);
+            setSlidingAnimation(EAnimations.TOP_TO_BOTTOM);
           }
           break;
         case EAnimations.RIGHT_TO_LEFT:
         case EAnimations.LEFT_TO_RIGHT:
           if (nextSlide > activeSlideWatcher.current) {
-            setSlidingAnimation(HeroSliderModuleCss.Sliding_Right_To_Left);
+            setSlidingAnimation(EAnimations.RIGHT_TO_LEFT);
           } else {
-            setSlidingAnimation(HeroSliderModuleCss.Sliding_Left_To_Right);
+            setSlidingAnimation(EAnimations.LEFT_TO_RIGHT);
           }
       }
     },
     [setSlidingAnimation, settings.initialSlidingAnimation],
   );
 
-  const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = useState<NodeJS.Timeout>();
+  const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = useState<NodeJS.Timeout | number>();
 
   /**
    * Autoplay manually paused state handled by the autoplay buttons.
@@ -349,7 +352,7 @@ const HeroSlider = memo((props: ISliderProps) => {
     const isPausedOrIdle = autoplayInstance.state === EState.IDLE || isManuallyPaused;
     if (isPausedOrIdle) return;  // If the slider has been paused, do nothing.
     autoplayInstance.pause();
-    if (autoplayHandlerTimeout) clearTimeout(autoplayHandlerTimeout);
+    if (autoplayHandlerTimeout) clearTimeout(autoplayHandlerTimeout as number);
     const autoplayHandlerTimeoutId = setTimeout(
       () => {
         autoplayInstance.resume();
@@ -564,8 +567,33 @@ const HeroSlider = memo((props: ISliderProps) => {
     },
     [settings, props.navbarSettings, sliderDimensions.height, sliderDimensions.width],
   );
+  const styledComponentsTheme = React.useMemo(
+    () => {
+      return {
+        // Default: 800ms
+        slidingDuration: `${settings.slidingDuration}ms`,
+        // Default: 0ms
+        slidingDelay: `${settings.slidingDelay}ms`,
+        // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
+        slidingAnimation: `${settings.slidingAnimation}`,
+        // Default: 800ms
+        slideTransitionDelay: `${settings.slidingDuration + settings.slidingDelay}ms`,
+        sliderWidth: sliderDimensions.width ? `${sliderDimensions.width}px` : undefined,
+        sliderHeight: sliderDimensions.height ? `${sliderDimensions.height}px` : undefined,
+        sliderColor: settings.sliderColor,
+        sliderFadeInDuration: `${settings.sliderFadeInDuration}ms`,
+        navFadeInDuration: `${settings.navbarFadeInDuration}ms`,
+        navFadeInDelay: `${settings.navbarFadeInDelay}ms`,
+        navBackgroundColor: props.navbarSettings ? props.navbarSettings.color : undefined,
+        navActiveColor: props.navbarSettings ? props.navbarSettings.activeColor : undefined,
+        // Default: 800ms
+        maskDuration: `${settings.slidingDuration + settings.slidingDelay}ms`,
+      };
+    },
+    [settings, props.navbarSettings, sliderDimensions.height, sliderDimensions.width],
+  );
 
-  const [inViewTimeoutHandler, setInViewTimeoutHandler] = useState<NodeJS.Timeout>();
+  const [inViewTimeoutHandler, setInViewTimeoutHandler] = useState<NodeJS.Timeout | number>();
 
   /**
    * Subscribe to changes in `inView`.
@@ -581,7 +609,7 @@ const HeroSlider = memo((props: ISliderProps) => {
         console.log('autoplayInstance.state', autoplayInstance.state);
         console.log('EState', EState[autoplayInstance.state]);
         console.log('props.inView', props.inView);
-        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
+        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler as number);
         switch (true) {
           case isManuallyPaused:
             break;
@@ -620,7 +648,7 @@ const HeroSlider = memo((props: ISliderProps) => {
         }
       }
       return () => {
-        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
+        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler as number);
       };
     },
     // react-hooks/exhaustive-deps is disabled because we wan't to keep
@@ -718,27 +746,32 @@ const HeroSlider = memo((props: ISliderProps) => {
   );
 
   return (
-    <div
-      ref={sliderRef}
-      onTouchStart={onTouchStartHandler}
-      onTouchMove={onTouchMoveHandler}
-      onTouchEnd={onTouchEndHandler}
-      style={{
-        ...CSSVariables as React.CSSProperties,
-        ...props.style,
-        width: settings.width,
-        height: settings.height,
-      }}
-      onMouseMoveCapture={onMouseMoveCaptureHandler}
-      className={HeroSliderModuleCss.Wrapper}>
-      {props.children}
-      {settings.shouldDisplayButtons && (
-        <Buttons
-          isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
-          previousSlide={setPreviousSlide}
-          nextSlide={setNextSlide} />
-      )}
-    </div>
+    <ThemeProvider
+      theme={styledComponentsTheme}
+    >
+      <Wrapper
+        ref={sliderRef}
+        onTouchStart={onTouchStartHandler}
+        onTouchMove={onTouchMoveHandler}
+        onTouchEnd={onTouchEndHandler}
+        style={{
+          ...CSSVariables as React.CSSProperties,
+          ...props.style,
+          width: settings.width,
+          height: settings.height,
+        }}
+        onMouseMoveCapture={onMouseMoveCaptureHandler}
+        // className={HeroSliderModuleCss.Wrapper}
+      >
+        {props.children}
+        {settings.shouldDisplayButtons && (
+          <Buttons
+            isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
+            previousSlide={setPreviousSlide}
+            nextSlide={setNextSlide} />
+        )}
+      </Wrapper>
+    </ThemeProvider>
   );
 });
 

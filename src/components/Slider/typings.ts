@@ -4,6 +4,9 @@ import {
   INavbarSettings,
   TAnyFunction,
 } from '../../typings/definitions';
+import { FlattenInterpolation, ThemeProps } from 'styled-components';
+
+export type AnimationType = FlattenInterpolation<ThemeProps<any>>;
 
 /**
  * `ISettings` is used for a `settings` object variable
@@ -13,7 +16,7 @@ import {
  */
 export interface ISettings extends ISettingsProps {
   initialSlidingAnimation: EAnimations;
-  slidingAnimation: string;
+  slidingAnimation: EAnimations;
   sliderOrientation: EOrientation;
 }
 
@@ -76,7 +79,7 @@ export enum EAnimations {
  */
 export interface ISettings extends ISettingsProps {
   initialSlidingAnimation: EAnimations;
-  slidingAnimation: string;
+  slidingAnimation: EAnimations;
   sliderOrientation: EOrientation;
 }
 
