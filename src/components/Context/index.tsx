@@ -18,8 +18,10 @@ const initialContext: ISliderContext = {
   navProps: undefined,
   autoplayButtonProps: undefined,
   dispatchProps: () => undefined,
+  generateNewSlideId: () => undefined,
+  removeSlideId: () => undefined,
 };
-const { useState, useEffect, useReducer } = React;
+const { useState, useEffect, useReducer, useRef } = React;
 
 export const SliderContext = React.createContext(initialContext);
 
@@ -100,6 +102,20 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
     children,
   } = props;
 
+  const slideUniqueIdsArrayRef = useRef<number[]>([]);
+  const slideUniqueIdsArray = slideUniqueIdsArrayRef.current;
+
+  const generateNewSlideId = (): number => {
+    const newSlideId = slideUniqueIdsArray.length + 1;
+    slideUniqueIdsArray.push(newSlideId);
+    return newSlideId;
+  };
+
+  const removeSlideId = (removedSlideId: number): void => {
+    slideUniqueIdsArrayRef.current = slideUniqueIdsArray.filter(slideId => removedSlideId !== slideId);
+  };
+
+
   const [sliderContextProps, dispatchProps]: [IReducerState, React.Dispatch<IReducerAction>] = (
     useReducer<React.Reducer<IReducerState, IReducerAction>>(reducer, {
       // Creating a new array to not affect other context values due to immutability.
@@ -139,6 +155,8 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
         slideProps,
         navProps,
         autoplayButtonProps,
+        generateNewSlideId,
+        removeSlideId,
       }}
     >
       {children}

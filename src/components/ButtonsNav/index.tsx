@@ -3,6 +3,7 @@ import * as React from 'react';
 
 // Dependencies
 import { IButtonsNavProps } from './typings';
+import { SliderContext } from '../Context';
 
 // CSS
 import ButtonsNavModuleCss from './ButtonsNav.module.css';
@@ -10,7 +11,7 @@ import ButtonsNavModuleCss from './ButtonsNav.module.css';
 // Components
 import { Nav } from '../Nav';
 
-const { memo } = React;
+const { useContext, memo } = React;
 
 const SliderNav = memo((props: IButtonsNavProps) => {
   /**
@@ -21,18 +22,20 @@ const SliderNav = memo((props: IButtonsNavProps) => {
     activeColor,
     backgroundColor,
     position,
-    totalSlides,
-    activeSlide,
-    changeSlide,
+    // totalSlides,
+    // activeSlide,
+    // changeSlide,
     justifyContent,
     alignItems,
-    navDescriptions,
+    // navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
     extraButton,
     isExtraButtonRight,
   } = props;
+
+  const { navProps, slidesArray } = useContext(SliderContext);
 
   /**
    * CSS variables for the transitions.
@@ -45,15 +48,22 @@ const SliderNav = memo((props: IButtonsNavProps) => {
 
   const ButtonNavButtons = React.useMemo(
     () => {
+      if (
+        !navProps ||
+        !slidesArray.length
+      ) return [];
+      const {
+        changeSlide,
+        activeSlide,
+      } = navProps;
       const changeSlideHandler = (ButtonNavButtonIndex: number) => {
         const nextSlide = ButtonNavButtonIndex + 1;
         if (nextSlide !== activeSlide) {
           changeSlide(nextSlide);
         }
       };
-      const emptyArray = Array.from(Array(totalSlides));
-      return emptyArray.map((_, index) => {
-        const description = navDescriptions[index];
+      return slidesArray.map(({ navDescription }, index) => {
+        const description = navDescription;
         const respectiveSlide = index + 1;
         return (
           <li
@@ -72,7 +82,7 @@ const SliderNav = memo((props: IButtonsNavProps) => {
         );
       });
     },
-    [activeSlide, navDescriptions, totalSlides, changeSlide],
+    [navProps, slidesArray],
   );
 
   if (sliderWidth <= mobileThreshold) {

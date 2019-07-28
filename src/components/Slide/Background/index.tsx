@@ -9,16 +9,13 @@ import {
   IBackgroundProps,
 } from './typings';
 
-// CSS
-import BackgroundModuleCss from './Background.module.css';
-
 // Components
 import LazyLoad from 'react-lazyload';
-import { Img } from './styled-components';
+import { Img, Background } from './styled-components';
 
 const { useState, memo } = React;
 
-const Background = (props: IBackgroundProps) => {
+const SlideBackground = (props: IBackgroundProps) => {
   const {
     shouldLazyLoad = true,
     lazyLoadingOffset,
@@ -37,21 +34,21 @@ const Background = (props: IBackgroundProps) => {
    * - `img` tag element will not render.
    */
   const [className, setClassName] = useState((
-    backgroundImage ? BackgroundModuleCss.Loading : BackgroundModuleCss.Loaded
+    backgroundImage ? 'slide-background-loading' : 'slide-background-loaded'
   ));
 
   const onLoadHandler = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
     if (onLoad) {
       onLoad(event);
     }
-    const className = [BackgroundModuleCss.Loaded];
+    const className = ['slide-background-loaded'];
     switch (backgroundAnimation) {
       case EBackgroundAnimations.ZOOM:
-        className.push(BackgroundModuleCss.ZoomOut);
+        className.push('slide-background-zoom-out');
         break;
       case EBackgroundAnimations.FADE:
       default:
-        className.push(BackgroundModuleCss.FadeIn);
+        className.push('slide-background-fade-in');
         break;
     }
     setClassName(className.join(' '));
@@ -75,13 +72,13 @@ const Background = (props: IBackgroundProps) => {
     <React.Fragment>
       {backgroundImage && (
         <Img
-          className={BackgroundModuleCss.Loader}
+          className="slide-background-loader"
           onLoad={onLoadHandler}
           alt={alt}
           src={backgroundImage}
         />
       )}
-      <div
+      <Background
         style={style}
         className={className}
       />
@@ -100,4 +97,4 @@ const Background = (props: IBackgroundProps) => {
   );
 };
 
-export default memo(Background);
+export default memo(SlideBackground);

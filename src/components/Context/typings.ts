@@ -11,6 +11,8 @@ import {
 export interface ISliderContext extends IReducerState {
   isMobile: boolean | undefined;
   dispatchProps: React.Dispatch<IReducerAction> | undefined;
+  generateNewSlideId: TAnyFunction;
+  removeSlideId: TAnyFunction;
 }
 
 export enum EActionTypes {

@@ -1,7 +1,3 @@
-import {
-  TAnyFunction,
-} from '../../typings/definitions';
-
 /**
  * `INavPosition` define a position object used to position the nav components
  * through inline CSS styles.
@@ -26,8 +22,4 @@ export interface INavSettings {
 /**
  * `Nav` component props.
  */
-export interface INavProps extends INavSettings {
-  totalSlides: number;
-  activeSlide: number;
-  changeSlide: TAnyFunction;
-}
+export type INavProps = INavSettings;

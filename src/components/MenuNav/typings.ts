@@ -6,7 +6,6 @@ import {
  * `MenuNav` component props.
  */
 export interface IMenuNavProps extends INavProps {
-  navDescriptions: string[];
   justifyContent: string;
   sliderWidth: number;
   mobileThreshold: number;

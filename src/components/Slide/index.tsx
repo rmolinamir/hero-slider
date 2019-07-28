@@ -16,18 +16,6 @@ import { StyledSlide } from './styled-components';
 import Background from './Background';
 import Mask from './Mask';
 
-let slideUniqueIdsArray: number[] = [];
-
-const generateNewSlideId = (): number => {
-  const newSlideId = slideUniqueIdsArray.length + 1;
-  slideUniqueIdsArray.push(newSlideId);
-  return newSlideId;
-};
-
-const removeSlideId = (removedSlideId: number): void => {
-  slideUniqueIdsArray = slideUniqueIdsArray.filter(slideId => removedSlideId !== slideId);
-};
-
 const { useContext, useEffect, useState, memo } = React;
 
 const HeroSlide = memo((props: ISlideProps) => {
@@ -40,7 +28,7 @@ const HeroSlide = memo((props: ISlideProps) => {
     navDescription,
   } = props;
 
-  const { dispatchProps, slidesArray, slideProps } = useContext(SliderContext);
+  const { dispatchProps, slidesArray, slideProps, generateNewSlideId, removeSlideId } = useContext(SliderContext);
 
   const [slideNumber, setSlideNumber] = useState<number>(slidesArray.length);
 
@@ -52,9 +40,7 @@ const HeroSlide = memo((props: ISlideProps) => {
         dispatchProps &&
         !currentSlideData
       ) {
-        // TODO Generate unique IDs.
         const newSlideNumber = generateNewSlideId();
-        console.log('slideUniqueIdsArray', slideUniqueIdsArray);
         dispatchProps({
           type: EActionTypes.SET_SLIDE_DATA,
           payload: {
@@ -65,7 +51,7 @@ const HeroSlide = memo((props: ISlideProps) => {
         setSlideNumber(newSlideNumber);
       }
     },
-    [dispatchProps, currentSlideData, slideNumber, slidesArray, navDescription],
+    [dispatchProps, currentSlideData, slideNumber, slidesArray, navDescription, generateNewSlideId],
   );
 
   // When unmounting, remove the slideNumber.
@@ -75,21 +61,22 @@ const HeroSlide = memo((props: ISlideProps) => {
         if (slideNumber) removeSlideId(slideNumber);
       };
     },
-    [slideNumber],
+    [slideNumber, removeSlideId],
   );
 
   /**
-   * CSS variables for the transitions.
+   * extendedTheme settings for the background
+   * animation transitions.
    */
-  const CSSVariables = React.useMemo(
+  const extendedTheme = React.useMemo(
     () => {
       return background ? {
-        '--background-animation-duration': (
+        backgroundAnimationDuration: (
           background.backgroundAnimationDuration ?
             `${background.backgroundAnimationDuration}ms` :
             undefined
         ),
-        '--background-animation-delay': (
+        backgroundAnimationDelay: (
           background.backgroundAnimationDelay ?
             `${background.backgroundAnimationDelay}ms` :
             undefined
@@ -115,12 +102,11 @@ const HeroSlide = memo((props: ISlideProps) => {
 
   return (
     <ExtendedThemeProvider
-      extendedTheme={CSSVariables}
+      extendedTheme={extendedTheme}
     >
       <StyledSlide
         style={{
           ...style,
-          ...CSSVariables,
         }}
           isActive={isActive}
           isDoneSliding={isDoneSliding}

@@ -10,7 +10,8 @@
       "variable-name": false,
       "import-name": false,
       "react-hooks-nesting": "error",
-      "react-hooks/exhaustive-deps": "error"
+      "react-hooks/exhaustive-deps": "error",
+      "max-line-length": [true, 150],
     },
     "rulesDirectory": []
 }
