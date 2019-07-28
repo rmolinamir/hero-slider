@@ -21,7 +21,7 @@ const initialContext: ISliderContext = {
   generateNewSlideId: () => undefined,
   removeSlideId: () => undefined,
 };
-const { useState, useEffect, useReducer, useRef } = React;
+const { useState, useEffect, useReducer, useRef, useCallback } = React;
 
 export const SliderContext = React.createContext(initialContext);
 
@@ -105,15 +105,15 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
   const slideUniqueIdsArrayRef = useRef<number[]>([]);
   const slideUniqueIdsArray = slideUniqueIdsArrayRef.current;
 
-  const generateNewSlideId = (): number => {
+  const generateNewSlideId = useCallback((): number => {
     const newSlideId = slideUniqueIdsArray.length + 1;
     slideUniqueIdsArray.push(newSlideId);
     return newSlideId;
-  };
+  }, [slideUniqueIdsArray]);
 
-  const removeSlideId = (removedSlideId: number): void => {
+  const removeSlideId = useCallback((removedSlideId: number): void => {
     slideUniqueIdsArrayRef.current = slideUniqueIdsArray.filter(slideId => removedSlideId !== slideId);
-  };
+  }, [slideUniqueIdsArray]);
 
 
   const [sliderContextProps, dispatchProps]: [IReducerState, React.Dispatch<IReducerAction>] = (
