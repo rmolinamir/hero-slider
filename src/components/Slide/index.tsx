@@ -10,13 +10,23 @@ import {
 } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-// import SlideModuleCss from './Slide.module.css';
-
 // Components
+import ExtendedThemeProvider from '../ExtendedThemeProvider';
 import { StyledSlide } from './styled-components';
 import Background from './Background';
 import Mask from './Mask';
+
+let slideUniqueIdsArray: number[] = [];
+
+const generateNewSlideId = (): number => {
+  const newSlideId = slideUniqueIdsArray.length + 1;
+  slideUniqueIdsArray.push(newSlideId);
+  return newSlideId;
+};
+
+const removeSlideId = (removedSlideId: number): void => {
+  slideUniqueIdsArray = slideUniqueIdsArray.filter(slideId => removedSlideId !== slideId);
+};
 
 const { useContext, useEffect, useState, memo } = React;
 
@@ -42,7 +52,9 @@ const HeroSlide = memo((props: ISlideProps) => {
         dispatchProps &&
         !currentSlideData
       ) {
-        const newSlideNumber = Math.random();
+        // TODO Generate unique IDs.
+        const newSlideNumber = generateNewSlideId();
+        console.log('slideUniqueIdsArray', slideUniqueIdsArray);
         dispatchProps({
           type: EActionTypes.SET_SLIDE_DATA,
           payload: {
@@ -56,6 +68,16 @@ const HeroSlide = memo((props: ISlideProps) => {
     [dispatchProps, currentSlideData, slideNumber, slidesArray, navDescription],
   );
 
+  // When unmounting, remove the slideNumber.
+  useEffect(
+    () => {
+      return () => {
+        if (slideNumber) removeSlideId(slideNumber);
+      };
+    },
+    [slideNumber],
+  );
+
   /**
    * CSS variables for the transitions.
    */
@@ -65,12 +87,12 @@ const HeroSlide = memo((props: ISlideProps) => {
         '--background-animation-duration': (
           background.backgroundAnimationDuration ?
             `${background.backgroundAnimationDuration}ms` :
-            null
+            undefined
         ),
         '--background-animation-delay': (
           background.backgroundAnimationDelay ?
             `${background.backgroundAnimationDelay}ms` :
-            null
+            undefined
         ),
       } : background;
     },
@@ -92,42 +114,42 @@ const HeroSlide = memo((props: ISlideProps) => {
   const isActive = activeSlide === currentSlide;
 
   return (
-    <StyledSlide
-      style={{
-        ...style,
-        ...CSSVariables,
-      }}
-      // className={[
-      //   SlideModuleCss.Slide,
-      //   isActive && SlideModuleCss.Active,
-      //   // (isActive && isDoneSliding) && SlideModuleCss.Sliding,
-      //   (isActive && !isDoneSliding) && slidingAnimation,
-      // ].join(' ')}
-        isActive={isActive}
-        isDoneSliding={isDoneSliding}
-        slidingAnimation={slidingAnimation}
-      >
-      <Background
-        onLoad={onBackgroundLoad}
-        {...background} />
-      <div className="Wrapper">
-        {/* Inner Mask */}
-        {shouldRenderMask ? (
-          <Mask
-            background={background}
-            isActive={isActive}
-            isDoneSliding={isDoneSliding} />
-        ) : null}
-        {/* Container */}
-        <div
-          className={[
-            'Container',
-            (isActive && isDoneSliding) && 'Active',
-          ].join(' ')}>
-          {children}
-        </div>
-      </div>
-    </StyledSlide>
+    <ExtendedThemeProvider
+      extendedTheme={CSSVariables}
+    >
+      <StyledSlide
+        style={{
+          ...style,
+          ...CSSVariables,
+        }}
+          isActive={isActive}
+          isDoneSliding={isDoneSliding}
+          slidingAnimation={slidingAnimation}
+        >
+          <Background
+            onLoad={onBackgroundLoad}
+            {...background} />
+          <div className="slide-wrapper">
+            {/* Inner Mask */}
+            {shouldRenderMask ? (
+              <Mask
+                background={background}
+                isActive={isActive}
+                isDoneSliding={isDoneSliding} />
+            ) : null}
+            {/* Container */}
+            {children && (
+              <div
+              className={[
+                'slide-container',
+                (isActive && isDoneSliding) ? 'slide-active' : null,
+              ].join(' ')}>
+              {children}
+              </div>
+            )}
+          </div>
+      </StyledSlide>
+    </ExtendedThemeProvider>
   );
 });
 

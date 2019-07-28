@@ -14,6 +14,7 @@ import BackgroundModuleCss from './Background.module.css';
 
 // Components
 import LazyLoad from 'react-lazyload';
+import { Img } from './styled-components';
 
 const { useState, memo } = React;
 
@@ -73,15 +74,17 @@ const Background = (props: IBackgroundProps) => {
   const content = (
     <React.Fragment>
       {backgroundImage && (
-        <img
+        <Img
           className={BackgroundModuleCss.Loader}
           onLoad={onLoadHandler}
           alt={alt}
-          src={backgroundImage}/>
+          src={backgroundImage}
+        />
       )}
       <div
         style={style}
-        className={className} />
+        className={className}
+      />
     </React.Fragment>
   );
 

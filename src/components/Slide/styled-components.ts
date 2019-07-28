@@ -66,28 +66,28 @@ export const StyledSlide = styled.div<StyledSlideProps>`
       ${isActive ? activeCss : inactiveCss};
       ${(isActive && !isDoneSliding) && setAnimation};
   `}
-  .Wrapper {
+  .slide-wrapper {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
   }
 
-  .Container  {
+  .slide-container  {
     ${slideCss};
   }
 
-  .Active {
+  .slide-active {
     ${activeCss};
   }
 
-  .Container {
+  .slide-container {
     backface-visibility: hidden;
     /* property name | duration | timing function | delay */
     transition: all 300ms ease-in-out ${slidingDelay()};
   }
 
-  .Container:not(.Active) {
+  .slide-container:not(.slide-active) {
     z-index: 1;
     opacity: 0;
     /* property name | duration | timing function | delay */

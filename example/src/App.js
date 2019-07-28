@@ -16,7 +16,7 @@ const app = () => {
       height: '500vh'
     }}>
       <BasicSlider />
-      {/* <VerticalSlider /> */}
+      <VerticalSlider />
       {/* <ZoomSlider /> */}
       {/* <SlidesChildrenSlider /> */}
       {/* <BlendModeSlider /> */}
