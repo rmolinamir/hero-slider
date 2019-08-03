@@ -8,7 +8,8 @@ import mountainView from './backgrounds/MountainView.jpg'
 import HeroSlider, {
   Slide,
   SideNav,
-  ButtonsNav
+  ButtonsNav,
+  OverlayContainer,
 } from 'hero-slider'
 import Wrapper from '../UI/Wrapper/Wrapper'
 import Title from '../UI/Title/Title'
@@ -39,17 +40,19 @@ const app = () => {
         autoplayDuration: 8000,
         height: '100vh'
       }}>
-      <Wrapper>
-        <Title>
-          Blend Mode Slider
-        </Title>
-        <Subtitle>
-          Slides' and masks' background blend mode set to luminosity
-        </Subtitle>
-        <Subtitle>
-          Slides' shouldRenderMask prop set to true
-        </Subtitle>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Blend Mode Slider
+          </Title>
+          <Subtitle>
+            Slides' and masks' background blend mode set to luminosity
+          </Subtitle>
+          <Subtitle>
+            Slides' shouldRenderMask prop set to true
+          </Subtitle>
+        </Wrapper>
+      </OverlayContainer>
 
       <Slide
         shouldRenderMask

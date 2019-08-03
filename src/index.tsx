@@ -5,5 +5,6 @@ export { SideNav } from './components/SideNav';
 export { MenuNav } from './components/MenuNav';
 export { ButtonsNav } from './components/ButtonsNav';
 export { AutoplayButton } from './components/AutoplayButtons';
+export { OverlayContainer } from './components/OverlayContainer';
 
 export default Slider;

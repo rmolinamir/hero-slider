@@ -3,7 +3,8 @@ import React from 'react'
 import HeroSlider, {
   Slide,
   Nav,
-  AutoplayButton
+  AutoplayButton,
+  OverlayContainer,
 } from 'hero-slider'
 import Wrapper from '../UI/Wrapper/Wrapper'
 import Title from '../UI/Title/Title'
@@ -32,11 +33,13 @@ const app = () => {
         autoplayDuration: 2000,
         height: '100vh'
       }}>
-      <Wrapper>
-        <Title>
-          Autoplay Button Slider
-        </Title>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Autoplay Button Slider
+          </Title>
+        </Wrapper>
+      </OverlayContainer>
       <AutoplayButton />
 
       <Slide

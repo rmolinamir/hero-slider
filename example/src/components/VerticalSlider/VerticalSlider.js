@@ -8,7 +8,8 @@ import seoraksanMountains from './backgrounds/Seoraksan Mountains - South Korea.
 import HeroSlider, {
   Slide,
   SideNav,
-  Nav
+  Nav,
+  OverlayContainer,
 } from 'hero-slider'
 import Wrapper from '../UI/Wrapper/Wrapper'
 import Title from '../UI/Title/Title'
@@ -39,14 +40,16 @@ const app = () => {
         autoplayDuration: 8000,
         height: '100vh'
       }}>
-      <Wrapper>
-        <Title>
-          Vertical Slider
-        </Title>
-        <Subtitle>
-          Try switching to a display that supports touch, then swipe vertically
-        </Subtitle>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Vertical Slider
+          </Title>
+          <Subtitle>
+            Try switching to a display that supports touch, then swipe vertically
+          </Subtitle>
+        </Wrapper>
+      </OverlayContainer>
 
       <Slide
         shouldRenderMask

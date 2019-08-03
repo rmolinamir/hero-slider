@@ -7,7 +7,8 @@ import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United Stat
 // Components
 import HeroSlider, {
   Slide,
-  MenuNav
+  MenuNav,
+  OverlayContainer,
 } from 'hero-slider'
 import Navbar from '../UI/Navbar/Navbar'
 import Wrapper from '../UI/Wrapper/Wrapper'
@@ -40,14 +41,16 @@ const app = () => {
         height: '100vh'
       }}>
       <Navbar />
-      <Wrapper>
-        <Title>
-          Navbar Slider
-        </Title>
-        <Subtitle>
-          Cool stuff.
-        </Subtitle>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Navbar Slider
+          </Title>
+          <Subtitle>
+            Cool stuff.
+          </Subtitle>
+        </Wrapper>
+      </OverlayContainer>
 
       <Slide
         shouldRenderMask

@@ -7,7 +7,8 @@ import giauPass from './backgrounds/Giau Pass - Italy.jpg'
 // Components
 import HeroSlider, {
   Slide,
-  Nav
+  Nav,
+  OverlayContainer,
 } from 'hero-slider'
 import Wrapper from '../UI/Wrapper/Wrapper'
 import Title from '../UI/Title/Title'
@@ -39,14 +40,16 @@ const app = () => {
         autoplayDuration: 5000,
         height: '100vh'
       }}>
-      <Wrapper>
-        <Title>
-          Basic Slider
-        </Title>
-        <Subtitle>
-          Slides' background attachment set to fixed
-        </Subtitle>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Basic Slider
+          </Title>
+          <Subtitle>
+            Slides' background attachment set to fixed
+          </Subtitle>
+        </Wrapper>
+      </OverlayContainer>
 
       {(() => {
         console.log('HOC slide')

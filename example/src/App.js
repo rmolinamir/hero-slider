@@ -15,14 +15,14 @@ const app = () => {
       color: '#FFF',
       height: '500vh'
     }}>
-      {/* <BasicSlider /> */}
-      {/* <VerticalSlider /> */}
+      <BasicSlider />
+      <VerticalSlider />
       <ZoomSlider />
-      {/* <SlidesChildrenSlider /> */}
+      <SlidesChildrenSlider />
       <BlendModeSlider />
       <NavbarSlider />
-      {/* <ButtonsSlider /> */}
-      {/* <AutoplayButtonSlider /> */}
+      <ButtonsSlider />
+      <AutoplayButtonSlider />
     </div>
   )
 }
