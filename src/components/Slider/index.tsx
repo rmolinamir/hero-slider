@@ -5,17 +5,6 @@ import { useInView } from 'react-intersection-observer';
 // Dependencies
 import IntervalTimer, { EState } from '../../dependencies/IntervalTimer';
 import {
-  // EAnimations,
-  // ISettings,
-  // ISliderProps,
-  // EOrientation,
-  // ISliderDimensions,
-  // ITouchState,
-  // IChildren,
-  // ISlideProps,
-  // IMenuNavProps,
-  // INavProps,
-  // IAutoplayButtonProps,
   IWithProviderProps,
   EActionTypes,
 } from '../../typings/definitions';
@@ -29,13 +18,9 @@ import {
 } from './typings';
 import { setInitialSlidingAnimation } from '../../dependencies/setInitialSlidingAnimation';
 
-// CSS
-// import HeroSliderModuleCss from './HeroSlider.module.css';
-
 // Components
 import { ThemeProvider } from 'styled-components';
 import { Wrapper } from './styled-components';
-// import { Wrapper } from './styled-components';
 import Context, { SliderContext } from '../Context';
 import Buttons from '../Buttons';
 
@@ -539,34 +524,6 @@ const HeroSlider = memo((props: ISliderProps) => {
     [],
   );
 
-  /**
-   * CSS variables for the transitions.
-   */
-  const CSSVariables = React.useMemo(
-    () => {
-      return {
-        // Default: 800ms
-        '--sliding-duration': `${settings.slidingDuration}ms`,
-        // Default: 0ms
-        '--sliding-delay': `${settings.slidingDelay}ms`,
-        // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
-        '--sliding-animation': settings.slidingAnimation,
-        // Default: 800ms
-        '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`,
-        '--slider-width': `${sliderDimensions.width}px`,
-        '--slider-height': `${sliderDimensions.height}px`,
-        '--slider-color': settings.sliderColor,
-        '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
-        '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
-        '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
-        '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
-        '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
-        // Default: 800ms
-        '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`,
-      };
-    },
-    [settings, props.navbarSettings, sliderDimensions.height, sliderDimensions.width],
-  );
   const styledComponentsTheme = React.useMemo(
     () => {
       return {
@@ -755,13 +712,11 @@ const HeroSlider = memo((props: ISliderProps) => {
         onTouchMove={onTouchMoveHandler}
         onTouchEnd={onTouchEndHandler}
         style={{
-          ...CSSVariables as React.CSSProperties,
           ...props.style,
           width: settings.width,
           height: settings.height,
         }}
         onMouseMoveCapture={onMouseMoveCaptureHandler}
-        // className={HeroSliderModuleCss.Wrapper}
       >
         {props.children}
         {settings.shouldDisplayButtons && (
