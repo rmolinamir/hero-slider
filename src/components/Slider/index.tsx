@@ -481,12 +481,6 @@ const HeroSlider = memo((props: ISliderProps) => {
     () => {
       activeSlideWatcher.current = activeSlide;
       /**
-       * Turn on autoplay if `props.shouldAutoplay` is true.
-       */
-      // if (settings.shouldAutoplay) {
-      //   autoplayInstance.start();
-      // }
-      /**
        * Sets up the `nextSlide` and `previousSlide` reference object if they exist.
        */
       if (props.nextSlide) {
