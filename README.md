@@ -44,7 +44,8 @@ import HeroSlider, {
   SideNav,
   MenuNav,
   ButtonsNav,
-  AutoplayButton
+  AutoplayButton,
+  OverlayContent,
 } from 'hero-slider'
 ```
 
@@ -249,7 +250,7 @@ Very similar to the Nav component when it comes to setup, with the addition of f
 
 ## ButtonsNav
 
-Very similar to the previous MenuNav component when it comes to setup. **This component accepts the same props as the MenuNav component and works exactly the same**, with the addition of an two extra props defined as `alignItems` and `backgroundColor`. 
+Very similar to the previous MenuNav component when it comes to setup. **This component accepts the same props as the MenuNav component and works exactly the same**, with the addition of an two extra props defined as `alignItems` and `backgroundColor`.
 The `alignItems` prop will align the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works, accepting `flex-start` (top), `center`, and `flex-end` (bottom) as possible values, the default setting is `flex-end`, set at the bottom.
 The `backgroundColor` sets the background of the buttons, while the `color` prop is used for the color of the text, and the `activeColor` prop is used for the background of the active nav item. Here is a more detailed table:
 
@@ -278,6 +279,12 @@ You can position it just like you would position a nav component by using passin
 | position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
 | style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
 | className | `string` | `null` | CSS class name. |
+
+---
+
+## OverlayContainer
+
+The OverlayContainer component is a simple pre-styled `styled.div` component that you can use to place whatever content that you want to overlay over the `hero-slider`, e.g. headers, without any of the slides overlapping it.
 
 ---
 

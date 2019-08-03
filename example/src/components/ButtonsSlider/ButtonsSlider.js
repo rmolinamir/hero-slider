@@ -1,8 +1,9 @@
 import React from 'react'
-// JSX
+// Components
 import HeroSlider, {
   Slide,
-  Nav
+  Nav,
+  OverlayContainer,
 } from 'hero-slider'
 import Button from 'react-png-button'
 import Wrapper from '../UI/Wrapper/Wrapper'
@@ -41,30 +42,32 @@ const app = () => {
         autoplayDuration: 8000,
         height: '100vh'
       }}>
-      <Wrapper>
-        <Title>
-          Custom Buttons Slider
-        </Title>
-        <Subtitle>
-          Custom Navigation Buttons set up by passing React mutable ref objects as props
-        </Subtitle>
-        <div>
-          <Button
-            style={{
-              width: 100,
-              margin: '12px 8px'
-            }}
-            button='danger'
-            onClick={() => previousSlideHandler.current()}>Previous</Button>
-          <Button
-            style={{
-              width: 100,
-              margin: '12px 8px'
-            }}
-            button='success'
-            onClick={() => nextSlideHandler.current()}>Next</Button>
-        </div>
-      </Wrapper>
+      <OverlayContainer>
+        <Wrapper>
+          <Title>
+            Custom Buttons Slider
+          </Title>
+          <Subtitle>
+            Custom Navigation Buttons set up by passing React mutable ref objects as props
+          </Subtitle>
+          <div>
+            <Button
+              style={{
+                width: 100,
+                margin: '12px 8px'
+              }}
+              button='danger'
+              onClick={() => previousSlideHandler.current()}>Previous</Button>
+            <Button
+              style={{
+                width: 100,
+                margin: '12px 8px'
+              }}
+              button='success'
+              onClick={() => nextSlideHandler.current()}>Next</Button>
+          </div>
+        </Wrapper>
+      </OverlayContainer>
 
       <Slide
         shouldRenderMask
