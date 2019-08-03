@@ -20,7 +20,7 @@ const app = () => {
       <ZoomSlider />
       {/* <SlidesChildrenSlider /> */}
       <BlendModeSlider />
-      {/* <NavbarSlider /> */}
+      <NavbarSlider />
       {/* <ButtonsSlider /> */}
       {/* <AutoplayButtonSlider /> */}
     </div>

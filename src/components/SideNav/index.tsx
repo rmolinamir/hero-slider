@@ -5,10 +5,11 @@ import * as React from 'react';
 import { ISideNavProps } from '../../typings/definitions';
 import { SliderContext } from '../Context';
 
-// CSS
-import SideNavModuleCss from './SideNav.module.css';
+// Components
+import ExtendedThemeProvider from '../ExtendedThemeProvider';
+import { Wrapper } from './styled-components';
 
-const { useContext, memo } = React;
+const { useContext, useMemo, memo } = React;
 
 const SliderNav = memo((props: ISideNavProps) => {
   /**
@@ -17,9 +18,6 @@ const SliderNav = memo((props: ISideNavProps) => {
   const {
     color,
     activeColor,
-    // totalSlides,
-    // activeSlide,
-    // changeSlide,
     left,
     right,
     position,
@@ -31,12 +29,12 @@ const SliderNav = memo((props: ISideNavProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    '--nav-color': color,
-    '--nav-active-color': activeColor,
+  const extendedTheme = {
+    navColor: color,
+    navActiveColor: activeColor,
   };
 
-  const navButtons = React.useMemo(
+  const navButtons = useMemo(
     () => {
       if (
         !navProps ||
@@ -59,14 +57,14 @@ const SliderNav = memo((props: ISideNavProps) => {
             onClick={() => changeSlideHandler(index)}
             key={index}
             className={[
-              SideNavModuleCss.Button,
-              activeSlide === respectiveSlide && SideNavModuleCss.Active,
+              'slide-side-nav-button',
+              activeSlide === respectiveSlide ? 'slide-side-nav-active-button' : undefined,
             ].join(' ')}
             style={{
               justifyContent: isPositionedRight ? 'flex-end' : 'flex-start',
             }}>
-            <span className={SideNavModuleCss.Line} />
-            <span className={SideNavModuleCss.Number}>{respectiveSlide}</span>
+            <span className="slide-side-nav-button-line" />
+            <span className="slide-side-nav-button-number">{respectiveSlide}</span>
           </li>
         );
       });
@@ -75,18 +73,21 @@ const SliderNav = memo((props: ISideNavProps) => {
   );
 
   return (
-    <ul
-      style={{
-        top: !position ? '50%' : undefined,
-        left: !position && !isPositionedRight ? left || '1rem' : undefined,
-        right: !position && isPositionedRight ? right || '1rem' : undefined,
-        transform: !position ? 'translateY(-50%)' : undefined,
-        ...position,
-        ...CSSVariables,
-      }}
-      className={SideNavModuleCss.Wrapper}>
-      {navButtons}
-    </ul>
+    <ExtendedThemeProvider
+      extendedTheme={extendedTheme}
+    >
+      <Wrapper
+        style={{
+          top: !position ? '50%' : undefined,
+          left: !position && !isPositionedRight ? left || '1rem' : undefined,
+          right: !position && isPositionedRight ? right || '1rem' : undefined,
+          transform: !position ? 'translateY(-50%)' : undefined,
+          ...position,
+        }}
+      >
+        {navButtons}
+      </Wrapper>
+    </ExtendedThemeProvider>
   );
 });
 

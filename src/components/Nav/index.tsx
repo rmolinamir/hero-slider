@@ -5,10 +5,11 @@ import * as React from 'react';
 import { INavProps } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-import NavModuleCss from './Nav.module.css';
+// Components
+import ExtendedThemeProvider from '../ExtendedThemeProvider';
+import { Wrapper } from './styled-components';
 
-const { useContext, memo } = React;
+const { useContext, useMemo, memo } = React;
 
 const SliderNav = memo((props: INavProps) => {
   /**
@@ -22,7 +23,7 @@ const SliderNav = memo((props: INavProps) => {
 
   const { navProps, slidesArray } = useContext(SliderContext);
 
-  const navButtons = React.useMemo(
+  const navButtons = useMemo(
     () => {
       if (
         !navProps ||
@@ -44,8 +45,8 @@ const SliderNav = memo((props: INavProps) => {
             onClick={() => changeSlideHandler(index)}
             key={index}
             className={[
-              NavModuleCss.Button,
-              activeSlide === index + 1 && NavModuleCss.Active,
+              'slide-nav-button',
+              activeSlide === index + 1 ? 'slide-nav-active-button' : undefined,
             ].join(' ')} />
         );
       });
@@ -58,23 +59,26 @@ const SliderNav = memo((props: INavProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    '--nav-color': color,
-    '--nav-active-color': activeColor,
+  const extendedTheme = {
+    navColor: color,
+    navActiveColor: activeColor,
   };
 
   return (
-    <ul
-      style={{
-        bottom: !position ? '1.5rem' : undefined,
-        left: !position ? '50%' : undefined,
-        transform: !position ? 'translateX(-50%)' : undefined,
-        ...position,
-        ...CSSVariables,
-      }}
-      className={NavModuleCss.Wrapper}>
-      {navButtons}
-    </ul>
+    <ExtendedThemeProvider
+      extendedTheme={extendedTheme}
+    >
+      <Wrapper
+        style={{
+          bottom: !position ? '1.5rem' : undefined,
+          left: !position ? '50%' : undefined,
+          transform: !position ? 'translateX(-50%)' : undefined,
+          ...position,
+        }}
+      >
+        {navButtons}
+      </Wrapper>
+    </ExtendedThemeProvider>
   );
 });
 

@@ -9,10 +9,6 @@ const absolutelyPositioned = css`
 `;
 
 const backgroundAnimationDuration = css`
-  ${({ theme }) => {
-    console.log('theme', theme);
-    return '';
-  }}
   ${({ theme }) => theme.backgroundAnimationDuration || '1500ms'}
 `;
 const backgroundAnimationDelay = css`

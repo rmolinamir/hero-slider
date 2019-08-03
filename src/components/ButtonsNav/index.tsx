@@ -5,13 +5,12 @@ import * as React from 'react';
 import { IButtonsNavProps } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-import ButtonsNavModuleCss from './ButtonsNav.module.css';
-
 // Components
+import ExtendedThemeProvider from '../ExtendedThemeProvider';
 import { Nav } from '../Nav';
+import { Wrapper, Container, ExtraButton, Button, Description, Text } from './styled-components';
 
-const { useContext, memo } = React;
+const { useContext, useMemo, memo } = React;
 
 const SliderNav = memo((props: IButtonsNavProps) => {
   /**
@@ -22,12 +21,8 @@ const SliderNav = memo((props: IButtonsNavProps) => {
     activeColor,
     backgroundColor,
     position,
-    // totalSlides,
-    // activeSlide,
-    // changeSlide,
     justifyContent,
     alignItems,
-    // navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
@@ -40,13 +35,13 @@ const SliderNav = memo((props: IButtonsNavProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    '--nav-color': color,
-    '--nav-background-color': backgroundColor,
-    '--nav-active-color': activeColor,
+  const extendedTheme = {
+    navColor: color,
+    navActiveColor: activeColor,
+    navBackgroundColor: backgroundColor,
   };
 
-  const ButtonNavButtons = React.useMemo(
+  const ButtonNavButtons = useMemo(
     () => {
       if (
         !navProps ||
@@ -66,19 +61,17 @@ const SliderNav = memo((props: IButtonsNavProps) => {
         const description = navDescription;
         const respectiveSlide = index + 1;
         return (
-          <li
+          <Button
             key={index}
             onClick={() => changeSlideHandler(index)}
-            className={[
-              ButtonsNavModuleCss.Button,
-              activeSlide === respectiveSlide && ButtonsNavModuleCss.Active,
-            ].join(' ')}>
-            <div className={ButtonsNavModuleCss.Description}>
-              <div className={ButtonsNavModuleCss.Text}>
+            className={activeSlide === respectiveSlide ? 'slide-button-nav-active-button' : undefined}
+          >
+            <Description>
+              <Text>
                 {description}
-              </div>
-            </div>
-          </li>
+              </Text>
+            </Description>
+          </Button>
         );
       });
     },
@@ -93,41 +86,44 @@ const SliderNav = memo((props: IButtonsNavProps) => {
   }
 
   return (
-    <div
-      style={{
-        bottom: !position ? '0' : undefined,
-        left: !position ? '50%' : undefined,
-        transform: !position ? 'translateX(-50%)' : undefined,
-        ...position,
-        ...CSSVariables,
-      }}
-      className={ButtonsNavModuleCss.Wrapper}>
-      <ul
+    <ExtendedThemeProvider
+      extendedTheme={extendedTheme}
+    >
+      <Wrapper
         style={{
-          justifyContent: justifyContent || 'center',
-          /**
-           * The **vertical alignment** of the buttons can be set manually.
-           * If it's undefined and if there is a position top passed as prop,
-           * then `alignItems` will be `flex-start`. Otherwise,
-           * it is set as `flex-end`.
-           */
-          alignItems: (
-            alignItems || ((position && position.top !== undefined) ? 'flex-start' : 'flex-end')
-          ),
+          bottom: !position ? '0' : undefined,
+          left: !position ? '50%' : undefined,
+          transform: !position ? 'translateX(-50%)' : undefined,
+          ...position,
         }}
-        className={ButtonsNavModuleCss.Container}>
-        {ButtonNavButtons}
-        {extraButton && (
-          <div
-            style={{
-              order: isExtraButtonRight ? 1 : 0,
-            }}
-            className={ButtonsNavModuleCss.ExtraButton}>
-            {extraButton}
-          </div>
-        )}
-      </ul>
-    </div>
+      >
+        <Container
+          style={{
+            justifyContent: justifyContent || 'center',
+            /**
+             * The **vertical alignment** of the buttons can be set manually.
+             * If it's undefined and if there is a position top passed as prop,
+             * then `alignItems` will be `flex-start`. Otherwise,
+             * it is set as `flex-end`.
+             */
+            alignItems: (
+              alignItems || ((position && position.top !== undefined) ? 'flex-start' : 'flex-end')
+            ),
+          }}
+        >
+          {ButtonNavButtons}
+          {extraButton && (
+            <ExtraButton
+              style={{
+                order: isExtraButtonRight ? 1 : 0,
+              }}
+            >
+              {extraButton}
+            </ExtraButton>
+          )}
+        </Container>
+      </Wrapper>
+    </ExtendedThemeProvider>
   );
 });
 

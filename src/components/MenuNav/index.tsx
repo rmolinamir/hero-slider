@@ -5,13 +5,12 @@ import * as React from 'react';
 import { IMenuNavProps } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-import MenuNavModuleCss from './MenuNav.module.css';
-
 // Components
+import ExtendedThemeProvider from '../ExtendedThemeProvider';
 import { Nav } from '../Nav';
+import { Wrapper, Container, Bar, ExtraButtonWrapper, ExtraButton } from './styled-components';
 
-const { useContext, memo } = React;
+const { useContext, useMemo, memo } = React;
 
 const SliderNav = memo((props: IMenuNavProps) => {
   /**
@@ -22,7 +21,6 @@ const SliderNav = memo((props: IMenuNavProps) => {
     activeColor,
     position,
     justifyContent,
-    // navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
@@ -32,7 +30,7 @@ const SliderNav = memo((props: IMenuNavProps) => {
 
   const { navProps, slidesArray } = useContext(SliderContext);
 
-  const MenuNavButtons = React.useMemo(
+  const MenuNavButtons = useMemo(
     () => {
       if (
         !navProps ||
@@ -56,15 +54,15 @@ const SliderNav = memo((props: IMenuNavProps) => {
             onClick={() => changeSlideHandler(index)}
             key={index}
             className={[
-              MenuNavModuleCss.Button,
-              activeSlide === respectiveSlide && MenuNavModuleCss.Active,
+              'slide-menu-nav-button',
+              activeSlide === respectiveSlide && 'slide-menu-nav-active-button',
             ].join(' ')}>
-            <div className={MenuNavModuleCss.Description}>
-              <div className={MenuNavModuleCss.Number}>
+            <div className="slide-menu-nav-button-description">
+              <div className="slide-menu-nav-button-number">
                 {respectiveSlide}
-                <span className={MenuNavModuleCss.Square} />
+                <span className="slide-menu-nav-button-square" />
               </div>
-              <div className={MenuNavModuleCss.Text}>
+              <div className="slide-menu-nav-button-text">
                 {description}
               </div>
             </div>
@@ -92,50 +90,46 @@ const SliderNav = memo((props: IMenuNavProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    '--nav-color': color,
-    '--nav-active-color': activeColor,
+  const extendedTheme = {
+    navColor: color,
+    navActiveColor: activeColor,
   };
 
   return (
-    <div
-      style={{
-        bottom: !position ? '0' : undefined,
-        left: !position ? '50%' : undefined,
-        transform: !position ? 'translateX(-50%)' : undefined,
-        ...position,
-        ...CSSVariables,
-        justifyContent: justifyContent || 'center',
-      }}
-      className={MenuNavModuleCss.Wrapper}>
-      {extraButton && (
-        <div
-          style={{
-            order: isExtraButtonRight ? 1 : 0,
-          }}
-          className={MenuNavModuleCss.Extra}>
-          <span
+    <ExtendedThemeProvider
+      extendedTheme={extendedTheme}
+    >
+      <Wrapper
+        style={{
+          bottom: !position ? '0' : undefined,
+          left: !position ? '50%' : undefined,
+          transform: !position ? 'translateX(-50%)' : undefined,
+          justifyContent: justifyContent || 'center',
+          ...position,
+        }}
+      >
+        {extraButton && (
+          <ExtraButtonWrapper
+            isExtraButtonRight={isExtraButtonRight}
+          >
+            <ExtraButton
+              isExtraButtonRight={isExtraButtonRight}
+            >
+              {extraButton}
+            </ExtraButton>
+          </ExtraButtonWrapper>
+        )}
+        <Container>
+          {MenuNavButtons}
+          <Bar
             style={{
-              borderLeft: isExtraButtonRight ?
-                '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))' : undefined,
-              borderRight: !isExtraButtonRight ?
-                '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))' : undefined,
+              width: `${100 / totalSlides}%`,
+              transform: `translate3d(${activeSlide - 1}00%, 0, 0)`,
             }}
-            className={MenuNavModuleCss.ExtraButton}>
-            {extraButton}
-          </span>
-        </div>
-      )}
-      <ul className={MenuNavModuleCss.Container}>
-        {MenuNavButtons}
-        <span
-          style={{
-            width: `${100 / totalSlides}%`,
-            transform: `translate3d(${activeSlide - 1}00%, 0, 0)`,
-          }}
-          className={MenuNavModuleCss.Bar} />
-      </ul>
-    </div>
+          />
+        </Container>
+      </Wrapper>
+    </ExtendedThemeProvider>
   );
 });
 

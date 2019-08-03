@@ -6,8 +6,8 @@ import * as React from 'react';
 import { IButtonProps } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-import ButtonsModuleCss from './Buttons.module.css';
+// Components
+import { Wrapper } from './styled-components';
 
 const { useContext, memo } = React;
 
@@ -31,32 +31,30 @@ const Buttons = (props: IButtonProps) => {
 
   return (
     <>
-      <div className={[
-        ButtonsModuleCss.Wrapper,
-        ButtonsModuleCss.Previous,
-        props.isHorizontal ? ButtonsModuleCss.Horizontal : ButtonsModuleCss.Vertical,
+      <Wrapper className={[
+        'slide-button-previous',
+        props.isHorizontal ? 'slide-button-horizontal' : 'slide-button-vertical',
       ].join(' ')}>
-        <div className={ButtonsModuleCss.Container}>
+        <div className="slide-button-container">
           <button
             onClick={props.previousSlide}
-            className={ButtonsModuleCss.Button}>
+            className="slide-button-button-svg">
               <ButtonSVG />
             </button>
         </div>
-      </div>
-      <div className={[
-        ButtonsModuleCss.Wrapper,
-        ButtonsModuleCss.Next,
-        props.isHorizontal ? ButtonsModuleCss.Horizontal : ButtonsModuleCss.Vertical,
+      </Wrapper>
+      <Wrapper className={[
+        'slide-button-next',
+        props.isHorizontal ? 'slide-button-horizontal' : 'slide-button-vertical',
       ].join(' ')}>
-        <div className={ButtonsModuleCss.Container}>
+        <div className="slide-button-container">
           <button
             onClick={props.nextSlide}
-            className={ButtonsModuleCss.Button}>
+            className="slide-button-button-svg">
               <ButtonSVG />
             </button>
         </div>
-      </div>
+      </Wrapper>
     </>
   );
 };

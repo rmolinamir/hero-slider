@@ -115,7 +115,6 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
     slideUniqueIdsArrayRef.current = slideUniqueIdsArray.filter(slideId => removedSlideId !== slideId);
   }, [slideUniqueIdsArray]);
 
-
   const [sliderContextProps, dispatchProps]: [IReducerState, React.Dispatch<IReducerAction>] = (
     useReducer<React.Reducer<IReducerState, IReducerAction>>(reducer, {
       // Creating a new array to not affect other context values due to immutability.

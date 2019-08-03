@@ -8,8 +8,8 @@ import {
 } from './typings';
 import { SliderContext } from '../Context';
 
-// CSS
-import AutoplayButtonsModuleCss from './AutoplayButtons.module.css';
+// Components
+import { Button } from './styled-components';
 
 const { useContext, useState, memo } = React;
 
@@ -75,26 +75,23 @@ const AutoplayButtons = memo((props: IAutoplayButtonProps) => {
   };
 
   return (
-  <button
-    className={[
-      AutoplayButtonsModuleCss.Button,
-      className,
-    ].join(' ')}
-    onClick={onClickHandler}
-    style={{
-      bottom: !position ? '0' : undefined,
-      left: !position ? '0' : undefined,
-      ...position,
-      ...style,
-    }}>
-    <svg
-      fill="currentColor"
-      height="100%"
-      width="100%"
-      viewBox="0 0 36 36" >
-      <path d={setPath()} />
-    </svg>
-  </button>
+    <Button
+      className={className}
+      onClick={onClickHandler}
+      style={{
+        bottom: !position ? '0' : undefined,
+        left: !position ? '0' : undefined,
+        ...position,
+        ...style,
+      }}>
+      <svg
+        fill="currentColor"
+        height="100%"
+        width="100%"
+        viewBox="0 0 36 36" >
+        <path d={setPath()} />
+      </svg>
+    </Button>
   );
 });
 
