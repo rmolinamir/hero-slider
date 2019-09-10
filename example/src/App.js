@@ -13,16 +13,16 @@ const app = () => {
   return (
     <div style={{
       color: '#FFF',
-      height: '500vh'
+      // height: '500vh'
     }}>
       <BasicSlider />
-      <VerticalSlider />
+      {/* <VerticalSlider />
       <ZoomSlider />
       <SlidesChildrenSlider />
       <BlendModeSlider />
       <NavbarSlider />
       <ButtonsSlider />
-      <AutoplayButtonSlider />
+      <AutoplayButtonSlider /> */}
     </div>
   )
 }

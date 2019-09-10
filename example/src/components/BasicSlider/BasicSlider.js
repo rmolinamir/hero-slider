@@ -1,18 +1,21 @@
-import React from 'react'
+import React from 'react';
+
 // Images
-import bogliasco from './backgrounds/Bogliasco - Italy.jpg'
-import countyClare from './backgrounds/County Clare - Ireland.jpg'
-import craterRock from './backgrounds/Crater Rock - United States.jpg'
-import giauPass from './backgrounds/Giau Pass - Italy.jpg'
+import bogliasco from './backgrounds/Bogliasco - Italy.jpg';
+import countyClare from './backgrounds/County Clare - Ireland.jpg';
+import craterRock from './backgrounds/Crater Rock - United States.jpg';
+import giauPass from './backgrounds/Giau Pass - Italy.jpg' ;
+
 // Components
 import HeroSlider, {
   Slide,
   Nav,
   OverlayContainer,
 } from 'hero-slider'
-import Wrapper from '../UI/Wrapper/Wrapper'
-import Title from '../UI/Title/Title'
-import Subtitle from '../UI/Subtitle/Subtitle'
+import StyledSlide from './StyledSlide';
+import Wrapper from '../UI/Wrapper/Wrapper';
+import Title from '../UI/Title/Title';
+import Subtitle from '../UI/Subtitle/Subtitle';
 
 const app = () => {
   const nextSlideHandler = React.useRef()
@@ -63,7 +66,7 @@ const app = () => {
         )
       })()}
 
-      <Slide
+      <StyledSlide
         navDescription='Bogliasco - Italy'
         background={{
           backgroundImage: bogliasco,
