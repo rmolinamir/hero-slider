@@ -1,6 +1,6 @@
 {
   "name": "hero-slider",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "",
   "author": "rmolinamir",
   "license": "MIT",
@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "react-intersection-observer": "^8.24.1",
-    "react-lazyload": "^2.6.2",
-    "styled-components": "^4.3.2"
+    "react-lazyload": "^2.6.2"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "styled-components": "^>= 4"
   },
   "devDependencies": {
     "@svgr/rollup": "^4.3.2",

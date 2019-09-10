@@ -26,6 +26,7 @@ const HeroSlide = memo((props: ISlideProps) => {
     onBackgroundLoad,
     children,
     navDescription,
+    ...rest
   } = props;
 
   const { dispatchProps, slidesArray, slideProps, generateNewSlideId, removeSlideId } = useContext(SliderContext);
@@ -108,32 +109,35 @@ const HeroSlide = memo((props: ISlideProps) => {
         style={{
           ...style,
         }}
-          isActive={isActive}
-          isDoneSliding={isDoneSliding}
-          slidingAnimation={slidingAnimation}
-        >
-          <Background
-            onLoad={onBackgroundLoad}
-            {...background} />
-          <div className="slide-wrapper">
-            {/* Inner Mask */}
-            {shouldRenderMask ? (
-              <Mask
-                background={background}
-                isActive={isActive}
-                isDoneSliding={isDoneSliding} />
-            ) : null}
-            {/* Container */}
-            {children && (
-              <div
+        isActive={isActive}
+        isDoneSliding={isDoneSliding}
+        slidingAnimation={slidingAnimation}
+        {...rest}
+      >
+        <Background
+          onLoad={onBackgroundLoad}
+          {...background}
+        />
+        <div className="slide-wrapper">
+          {/* Inner Mask */}
+          {shouldRenderMask ? (
+            <Mask
+              background={background}
+              isActive={isActive}
+              isDoneSliding={isDoneSliding} />
+          ) : null}
+          {/* Container */}
+          {children && (
+            <div
               className={[
                 'slide-container',
                 (isActive && isDoneSliding) ? 'slide-active' : null,
-              ].join(' ')}>
+              ].join(' ')}
+            >
               {children}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
       </StyledSlide>
     </ExtendedThemeProvider>
   );
