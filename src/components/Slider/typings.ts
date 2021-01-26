@@ -24,6 +24,7 @@ export interface ISettings extends ISettingsProps {
  * Type definition for `ISliderProps.settings`.
  */
 export interface ISettingsProps {
+  debug: boolean;
   slidingDuration: number;
   slidingDelay: number;
   sliderColor: string;
