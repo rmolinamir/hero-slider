@@ -6,6 +6,12 @@
 
 ---
 
+## Archived
+
+Please note that I decided to archive this repository, I could not invest effort into maintaining it and there are much better designed libraries out there. I would recommend [Swiper](https://swiperjs.com/) or [Embla Carousel](https://www.embla-carousel.com/get-started/react/). For further scalability and safety, I would also recommend abstracting these libraries behind components, as shown in [this example](https://github.com/rmolinamir/learning-solidity/blob/master/projects/nft-marketplace-101/src/components/ui/slider/Slider.tsx). I apologize for any inconviniences.
+
+---
+
 ## Introduction
 
 This package contains multiple components with a fair range of options to help developers quickly set up a hero slider. In short, it functions just how you would expect a package of React components. In short, all you have to do is import the Slider & Slide components. You can set the sliding animations, the background lazy loaded image animation, navs, buttons, callbacks, and even set your own buttons if you need to. The style and animations were inspired by different sliders from websites such as Lamborghini's, Lonely Planet, Kreativa Studio.
