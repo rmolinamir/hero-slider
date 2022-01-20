@@ -8,7 +8,9 @@
 
 ## Archived
 
-Please note that I decided to archive this repository, I could not invest effort into maintaining it and there are much better designed libraries out there. I would recommend [Swiper](https://swiperjs.com/) or [Embla Carousel](https://www.embla-carousel.com/get-started/react/). For further scalability and safety, I would also recommend abstracting these libraries behind components, as shown in [this example](https://github.com/rmolinamir/learning-solidity/blob/master/projects/nft-marketplace-101/src/components/ui/slider/Slider.tsx). I apologize for any inconviniences.
+Please note that for the time being I have decided to archive this repository, I could not invest effort into maintaining it and there are much better designed libraries out there. It wouldn't be worth using this component unless a severe refactor is done.
+
+I would recommend [Swiper](https://swiperjs.com/) or [Embla Carousel](https://www.embla-carousel.com/get-started/react/). For further scalability and safety, I would also recommend abstracting these libraries behind components, as shown in [this example](https://github.com/rmolinamir/learning-solidity/blob/master/projects/nft-marketplace-101/src/components/ui/slider/Slider.tsx). I apologize for any inconviniences.
 
 ---
 
