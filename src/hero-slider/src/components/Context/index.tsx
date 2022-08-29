@@ -1,14 +1,11 @@
-// Library
-import * as React from 'react';
-
-// Dependencies
+import React from 'react';
 import { isMobile as setDefaultIsMobile } from '../../dependencies/isMobile';
 import {
   ISliderContext,
   ISliderProviderProps,
   EActionTypes,
   IReducerState,
-  IReducerAction,
+  IReducerAction
 } from './typings';
 
 const initialContext: ISliderContext = {
@@ -17,27 +14,29 @@ const initialContext: ISliderContext = {
   slideProps: undefined,
   navProps: undefined,
   autoplayButtonProps: undefined,
-  dispatchProps: () => undefined,
+  dispatchProps: () => undefined
 };
 const { useState, useEffect, useReducer } = React;
 
 export const SliderContext = React.createContext(initialContext);
 
-const reducer = (state: IReducerState, action: IReducerAction): IReducerState => {
+const reducer = (
+  state: IReducerState,
+  action: IReducerAction
+): IReducerState => {
   const newState = { ...state };
   switch (action.type) {
     case EActionTypes.SET_SLIDE_DATA: {
       const { payload } = action;
-      const {
-        slideNumber,
-        navDescription,
-      } = payload;
+      const { slideNumber, navDescription } = payload;
       if (
-        !newState.slidesArray.find(({ slideNumber: number }) => number === slideNumber)
+        !newState.slidesArray.find(
+          ({ slideNumber: number }) => number === slideNumber
+        )
       ) {
         newState.slidesArray.push({
           slideNumber,
-          navDescription,
+          navDescription
         });
         return newState;
       }
@@ -45,31 +44,22 @@ const reducer = (state: IReducerState, action: IReducerAction): IReducerState =>
     }
     case EActionTypes.SET_SLIDE_PROPS: {
       const { payload } = action;
-      const {
-        activeSlide,
-        isDoneSliding,
-        slidingAnimation,
-      } = payload;
+      const { activeSlide, isDoneSliding, slidingAnimation } = payload;
       newState.slideProps = {
         activeSlide,
         isDoneSliding,
-        slidingAnimation,
+        slidingAnimation
       };
       return newState;
     }
     case EActionTypes.SET_NAVBAR_PROPS: {
       const { payload } = action;
-      const {
-        changeSlide,
-        activeSlide,
-        totalSlides,
-        sliderWidth,
-      } = payload;
+      const { changeSlide, activeSlide, totalSlides, sliderWidth } = payload;
       newState.navProps = {
         changeSlide,
         activeSlide,
         totalSlides,
-        sliderWidth,
+        sliderWidth
       };
       return newState;
     }
@@ -79,13 +69,13 @@ const reducer = (state: IReducerState, action: IReducerAction): IReducerState =>
         setIsManuallyPaused,
         autoplayHandlerTimeout,
         shouldAutoplay,
-        autoplay,
+        autoplay
       } = payload;
       newState.autoplayButtonProps = {
         setIsManuallyPaused,
         autoplayHandlerTimeout,
         shouldAutoplay,
-        autoplay,
+        autoplay
       };
       return newState;
     }
@@ -95,40 +85,29 @@ const reducer = (state: IReducerState, action: IReducerAction): IReducerState =>
 };
 
 const SliderContextProvider = (props: ISliderProviderProps) => {
-  const {
-    isMobile: mobile,
-    children,
-  } = props;
+  const { isMobile: mobile, children } = props;
 
-  const [sliderContextProps, dispatchProps]: [IReducerState, React.Dispatch<IReducerAction>] = (
-    useReducer<React.Reducer<IReducerState, IReducerAction>>(reducer, {
-      // Creating a new array to not affect other context values due to immutability.
-      slidesArray: [...initialContext.slidesArray],
-      slideProps: initialContext.slideProps,
-      navProps: initialContext.navProps,
-      autoplayButtonProps: initialContext.autoplayButtonProps,
-    })
-  );
+  const [sliderContextProps, dispatchProps]: [
+    IReducerState,
+    React.Dispatch<IReducerAction>
+  ] = useReducer<React.Reducer<IReducerState, IReducerAction>>(reducer, {
+    // Creating a new array to not affect other context values due to immutability.
+    slidesArray: [...initialContext.slidesArray],
+    slideProps: initialContext.slideProps,
+    navProps: initialContext.navProps,
+    autoplayButtonProps: initialContext.autoplayButtonProps
+  });
 
-  const {
-    slideProps,
-    slidesArray,
-    navProps,
-    autoplayButtonProps,
-  } = sliderContextProps;
+  const { slideProps, slidesArray, navProps, autoplayButtonProps } =
+    sliderContextProps;
 
   const [isMobile, setIsMobile] = useState<boolean>(mobile);
 
   // When mounting, if `isMobile` is undefined, then set the default is mobile
   // based on the browser user agent.
-  useEffect(
-    () => {
-      if (typeof isMobile === 'undefined') {
-        setIsMobile(setDefaultIsMobile());
-      }
-    },
-    [isMobile],
-  );
+  useEffect(() => {
+    if (typeof isMobile === 'undefined') setIsMobile(setDefaultIsMobile());
+  }, [isMobile]);
 
   return (
     <SliderContext.Provider
@@ -138,7 +117,7 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
         slidesArray,
         slideProps,
         navProps,
-        autoplayButtonProps,
+        autoplayButtonProps
       }}
     >
       {children}

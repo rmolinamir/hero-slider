@@ -1,62 +1,37 @@
-// Libraries
-import * as React from 'react';
+import React from 'react';
 import { useInView } from 'react-intersection-observer';
-
-// Dependencies
 import IntervalTimer, { EState } from '../../dependencies/IntervalTimer';
-import {
-  // EAnimations,
-  // ISettings,
-  // ISliderProps,
-  // EOrientation,
-  // ISliderDimensions,
-  // ITouchState,
-  // IChildren,
-  // ISlideProps,
-  // IMenuNavProps,
-  // INavProps,
-  // IAutoplayButtonProps,
-  IWithProviderProps,
-  EActionTypes,
-} from '../../typings/definitions';
 import {
   EAnimations,
   ISettings,
   ISliderProps,
   EOrientation,
   ISliderDimensions,
-  ITouchState,
+  ITouchState
 } from './typings';
 import { setInitialSlidingAnimation } from '../../dependencies/setInitialSlidingAnimation';
-
-// CSS
 import HeroSliderModuleCss from './HeroSlider.module.css';
-
-// Components
 import Context, { SliderContext } from '../Context';
 import Buttons from '../Buttons';
+import { EActionTypes, IWithProviderProps } from '../Context/typings';
 
-const { useContext, useEffect, useState, useLayoutEffect, memo } = React;
-
-const HeroSlider = memo((props: ISliderProps) => {
-  const {
-    onBeforeChange,
-    onAfterChange,
-    onChange,
-  } = props;
+const HeroSlider = (props: ISliderProps) => {
+  const { onBeforeChange, onAfterChange, onChange } = props;
 
   /**
    * Slider reference object to calculate its dimensions.
    */
   const sliderRef = React.useRef<HTMLDivElement>(null);
-  const [sliderDimensions, setSliderDimensions] = useState<ISliderDimensions>({});
+  const [sliderDimensions, setSliderDimensions] =
+    React.useState<ISliderDimensions>({});
   /**
    * Initial settings for the carousel.
    */
   const initialSettings: ISettings = React.useMemo(
     () => ({
       // Dependants
-      initialSlidingAnimation: props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
+      initialSlidingAnimation:
+        props.slidingAnimation || EAnimations.RIGHT_TO_LEFT,
       slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
       sliderOrientation: props.orientation || EOrientation.HORIZONTAL,
       // Defaults
@@ -74,19 +49,20 @@ const HeroSlider = memo((props: ISliderProps) => {
       autoplayHandlerTimeout: 1000,
       width: '100%',
       height: '100%',
-      ...props.settings,
+      ...props.settings
     }),
-    [props.settings, props.orientation, props.slidingAnimation],
+    [props.settings, props.orientation, props.slidingAnimation]
   );
 
-  const [sliderSettings, setSettings] = useState<ISettings>(initialSettings);
+  const [sliderSettings, setSettings] =
+    React.useState<ISettings>(initialSettings);
 
   const settings = React.useMemo(
     () => ({
       ...sliderSettings,
-      ...props.settings,
+      ...props.settings
     }),
-    [sliderSettings, props.settings],
+    [sliderSettings, props.settings]
   );
 
   const initialTouchState: ITouchState = {
@@ -95,13 +71,14 @@ const HeroSlider = memo((props: ISliderProps) => {
     currentX: undefined,
     currentY: undefined,
     finalX: undefined,
-    finalY: undefined,
+    finalY: undefined
   };
 
-  const [touchState, setTouchState] = useState<ITouchState>(initialTouchState);
+  const [touchState, setTouchState] =
+    React.useState<ITouchState>(initialTouchState);
 
-  const [activeSlide, setActiveSlide] = useState(props.initialSlide || 1);
-  const [isDoneSliding, setIsDoneSliding] = useState(true);
+  const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1);
+  const [isDoneSliding, setIsDoneSliding] = React.useState(true);
   /**
    * `activeSlideWatcher` `isDoneSlidingWatcher` are a mutable
    * objects that will persist for the full
@@ -116,26 +93,25 @@ const HeroSlider = memo((props: ISliderProps) => {
   const isDoneSlidingWatcher = React.useRef<boolean>(true);
   const activeSlideWatcher = React.useRef(activeSlide);
 
-  const [delayTimeout, setDelayTimeout] = useState<NodeJS.Timeout>();
-  const [slidingTimeout, setSlidingTimeout] = useState<NodeJS.Timeout>();
+  const [delayTimeout, setDelayTimeout] = React.useState<NodeJS.Timeout>();
+  const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>();
 
   /**
    * `slidingTimeoutDuration` is the total time it takes for
    * the transition of each slide. It's the sum of the duration
    * of the slide, plus any delay of the animation.
    */
-  const slidingTimeoutDuration = (
-    (settings.slidingDuration + settings.slidingDelay) * 1.1
-  ); // 110% safety factor.
+  const slidingTimeoutDuration =
+    (settings.slidingDuration + settings.slidingDelay) * 1.1; // 110% safety factor.
 
   const setSlidingAnimation = React.useCallback(
     (newAnimation: string) => {
       setSettings({
         ...settings,
-        slidingAnimation: newAnimation,
+        slidingAnimation: newAnimation
       });
     },
-    [settings],
+    [settings]
   );
 
   /**
@@ -150,28 +126,22 @@ const HeroSlider = memo((props: ISliderProps) => {
       setIsDoneSliding(false);
       // Only save the delay timeout if `onChange` exists.
       if (onChange) {
-        const delayTimeoutId = setTimeout(
-          () => {
-            onChange && onChange(nextSlide);
-          },
-          settings.slidingDelay,
-        );
+        const delayTimeoutId = setTimeout(() => {
+          onChange && onChange(nextSlide);
+        }, settings.slidingDelay);
         setDelayTimeout(delayTimeoutId);
       }
       // Sliding timeout ID's for the transitions.
-      const slidingTimeoutId = setTimeout(
-        () => {
-          setIsDoneSliding(true);
-          if (onAfterChange) {
-            onAfterChange(nextSlide);
-          }
-        },
-        slidingTimeoutDuration,
-      );
+      const slidingTimeoutId = setTimeout(() => {
+        setIsDoneSliding(true);
+        if (onAfterChange) {
+          onAfterChange(nextSlide);
+        }
+      }, slidingTimeoutDuration);
       // Saving the timeout ID's in case clearing them is needed.
       setSlidingTimeout(slidingTimeoutId);
     },
-    [onChange, onAfterChange, settings.slidingDelay, slidingTimeoutDuration],
+    [onChange, onAfterChange, settings.slidingDelay, slidingTimeoutDuration]
   );
 
   /**
@@ -190,7 +160,7 @@ const HeroSlider = memo((props: ISliderProps) => {
         onSlidingHandler(nextSlide);
       }
     },
-    [onSlidingHandler, onBeforeChange],
+    [onSlidingHandler, onBeforeChange]
   );
 
   /**
@@ -218,17 +188,18 @@ const HeroSlider = memo((props: ISliderProps) => {
           }
       }
     },
-    [setSlidingAnimation, settings.initialSlidingAnimation],
+    [setSlidingAnimation, settings.initialSlidingAnimation]
   );
 
-  const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] = useState<NodeJS.Timeout>();
+  const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] =
+    React.useState<NodeJS.Timeout>();
 
   /**
    * Autoplay manually paused state handled by the autoplay buttons.
    */
-  const [isManuallyPaused , setIsManuallyPaused] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = React.useState(false);
 
-  const { dispatchProps, slidesArray } = useContext(SliderContext);
+  const { dispatchProps, slidesArray } = React.useContext(SliderContext);
 
   /**
    * Calculates the next slide based on the current slide (`activeSlide` by default)
@@ -241,36 +212,35 @@ const HeroSlider = memo((props: ISliderProps) => {
       /**
        * If **not** at the last slide, then add one. Otherwise set the next slide back to 1.
        */
-      if (currentSlide <= (totalSlides - 1)) {
+      if (currentSlide <= totalSlides - 1) {
         nextSlide = currentSlide + 1;
       } else {
         nextSlide = 1;
       }
       return nextSlide;
     },
-    [activeSlide, slidesArray.length],
+    [activeSlide, slidesArray.length]
   );
 
   /**
    * `autoplay` is the callback sent to the autoplay instance.
    */
-  const autoplay = React.useCallback(
-    (): void => {
-      const nextSlide = getNextSlide(activeSlideWatcher.current);
-      if (settings.isSmartSliding) {
-        smartAnimations(nextSlide);
-      }
-      changeSlide(getNextSlide(activeSlideWatcher.current));
-    },
-    [changeSlide, getNextSlide, settings.isSmartSliding, smartAnimations],
-  );
+  const autoplay = React.useCallback((): void => {
+    const nextSlide = getNextSlide(activeSlideWatcher.current);
+    if (settings.isSmartSliding) {
+      smartAnimations(nextSlide);
+    }
+    changeSlide(getNextSlide(activeSlideWatcher.current));
+  }, [changeSlide, getNextSlide, settings.isSmartSliding, smartAnimations]);
 
-  const autoplayInstanceRef = React.useRef((React.useMemo(
-    () => {
-      return new IntervalTimer(autoplay, settings.autoplayDuration + slidingTimeoutDuration);
-    },
-    [autoplay, settings.autoplayDuration, slidingTimeoutDuration])
-  ));
+  const autoplayInstanceRef = React.useRef(
+    React.useMemo(() => {
+      return new IntervalTimer(
+        autoplay,
+        settings.autoplayDuration + slidingTimeoutDuration
+      );
+    }, [autoplay, settings.autoplayDuration, slidingTimeoutDuration])
+  );
 
   const autoplayInstance = autoplayInstanceRef.current;
 
@@ -291,8 +261,8 @@ const HeroSlider = memo((props: ISliderProps) => {
       autoplayHandlerTimeout,
       changeSlide,
       settings.isSmartSliding,
-      smartAnimations,
-    ],
+      smartAnimations
+    ]
   );
 
   /**
@@ -304,7 +274,10 @@ const HeroSlider = memo((props: ISliderProps) => {
      * or from top to bottom so long as the initial animation is not fade.
      */
     const animationParam = slidesArray.length + 1;
-    changeSlideHandler(getNextSlide(activeSlideWatcher.current), animationParam);
+    changeSlideHandler(
+      getNextSlide(activeSlideWatcher.current),
+      animationParam
+    );
   };
 
   /**
@@ -334,7 +307,10 @@ const HeroSlider = memo((props: ISliderProps) => {
      * or from bottom to top unless the fade animation is active.
      */
     const animationParam = 1;
-    changeSlideHandler(getPreviousSlide(activeSlideWatcher.current), animationParam);
+    changeSlideHandler(
+      getPreviousSlide(activeSlideWatcher.current),
+      animationParam
+    );
   };
 
   /**
@@ -346,16 +322,14 @@ const HeroSlider = memo((props: ISliderProps) => {
    * slider component.
    */
   const autoplayHandler = (): void => {
-    const isPausedOrIdle = autoplayInstance.state === EState.IDLE || isManuallyPaused;
-    if (isPausedOrIdle) return;  // If the slider has been paused, do nothing.
+    const isPausedOrIdle =
+      autoplayInstance.state === EState.IDLE || isManuallyPaused;
+    if (isPausedOrIdle) return; // If the slider has been paused, do nothing.
     autoplayInstance.pause();
     if (autoplayHandlerTimeout) clearTimeout(autoplayHandlerTimeout);
-    const autoplayHandlerTimeoutId = setTimeout(
-      () => {
-        autoplayInstance.resume();
-      },
-      settings.autoplayHandlerTimeout,
-    );
+    const autoplayHandlerTimeoutId = setTimeout(() => {
+      autoplayInstance.resume();
+    }, settings.autoplayHandlerTimeout);
     setAutoplayHandlerTimeout(autoplayHandlerTimeoutId);
   };
 
@@ -372,7 +346,7 @@ const HeroSlider = memo((props: ISliderProps) => {
   const setSliderDimensionsHandler = (): void => {
     const sliderDimensions: ISliderDimensions = {
       width: sliderRef.current ? sliderRef.current.clientWidth : undefined,
-      height: sliderRef.current ? sliderRef.current.clientHeight : undefined,
+      height: sliderRef.current ? sliderRef.current.clientHeight : undefined
     };
     setSliderDimensions(sliderDimensions);
   };
@@ -386,7 +360,7 @@ const HeroSlider = memo((props: ISliderProps) => {
     setTouchState({
       ...touchState,
       initialX,
-      initialY,
+      initialY
     });
   };
 
@@ -399,7 +373,7 @@ const HeroSlider = memo((props: ISliderProps) => {
     setTouchState({
       ...touchState,
       currentX,
-      currentY,
+      currentY
     });
   };
 
@@ -410,19 +384,23 @@ const HeroSlider = memo((props: ISliderProps) => {
    * everything is undefined.
    */
   const onTouchEndHandler = () => {
-    const diffX: number = touchState && Number(touchState.initialX) - Number(touchState.currentX);
-    const diffY: number = touchState && Number(touchState.initialY) - Number(touchState.currentY);
+    const diffX: number =
+      touchState && Number(touchState.initialX) - Number(touchState.currentX);
+    const diffY: number =
+      touchState && Number(touchState.initialY) - Number(touchState.currentY);
     const thresholdToSlide = 50;
 
     const isSlidingHorizontally: boolean = Math.abs(diffX) > Math.abs(diffY);
-    const isSliderSetHorizontally: boolean = settings.sliderOrientation === EOrientation.HORIZONTAL;
-    const isSliderVertically: boolean = settings.sliderOrientation === EOrientation.VERTICAL;
+    const isSliderSetHorizontally: boolean =
+      settings.sliderOrientation === EOrientation.HORIZONTAL;
+    const isSliderVertically: boolean =
+      settings.sliderOrientation === EOrientation.VERTICAL;
 
     if (
-        isSlidingHorizontally &&
-        isSliderSetHorizontally &&
-        Math.abs(diffX) >= thresholdToSlide
-      ) {
+      isSlidingHorizontally &&
+      isSliderSetHorizontally &&
+      Math.abs(diffX) >= thresholdToSlide
+    ) {
       // Sliding horizontally.
       if (diffX > 0) {
         // Swiped left.
@@ -431,10 +409,7 @@ const HeroSlider = memo((props: ISliderProps) => {
         // Swiped right.
         setPreviousSlide();
       }
-    } else if (
-        isSliderVertically &&
-        Math.abs(diffY) >= thresholdToSlide
-      ) {
+    } else if (isSliderVertically && Math.abs(diffY) >= thresholdToSlide) {
       // Sliding vertically.
       if (diffY > 0) {
         // Swiped up.
@@ -473,23 +448,17 @@ const HeroSlider = memo((props: ISliderProps) => {
   /**
    * Update the respective watchers' current values.
    */
-  useEffect(
-    () => {
-      activeSlideWatcher.current = activeSlide;
-    },
-    [activeSlide],
-  );
-  useEffect(
-    () => {
-      isDoneSlidingWatcher.current = isDoneSliding;
-    },
-    [isDoneSliding],
-  );
+  React.useEffect(() => {
+    activeSlideWatcher.current = activeSlide;
+  }, [activeSlide]);
+  React.useEffect(() => {
+    isDoneSlidingWatcher.current = isDoneSliding;
+  }, [isDoneSliding]);
 
   /**
    * After mounting, akin to `componentDidMount`.
    */
-  useEffect(
+  React.useEffect(
     () => {
       activeSlideWatcher.current = activeSlide;
       /**
@@ -511,7 +480,10 @@ const HeroSlider = memo((props: ISliderProps) => {
        * Calculates the initial dimensions of the slider and adds event listener.
        */
       setSliderDimensionsHandler();
-      window.addEventListener('resize', setSliderDimensions as EventListenerOrEventListenerObject);
+      window.addEventListener(
+        'resize',
+        setSliderDimensions as EventListenerOrEventListenerObject
+      );
       if (settings.shouldSlideOnArrowKeypress) {
         window.addEventListener('keydown', onArrowKeypressHandler);
       }
@@ -525,7 +497,7 @@ const HeroSlider = memo((props: ISliderProps) => {
         autoplayInstance.stop();
         window.removeEventListener(
           'resize',
-          setSliderDimensions as EventListenerOrEventListenerObject,
+          setSliderDimensions as EventListenerOrEventListenerObject
         );
         if (settings.shouldSlideOnArrowKeypress) {
           window.removeEventListener('keydown', onArrowKeypressHandler);
@@ -539,33 +511,42 @@ const HeroSlider = memo((props: ISliderProps) => {
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = React.useMemo(
-    () => {
-      return {
-        // Default: 800ms
-        '--sliding-duration': `${settings.slidingDuration}ms`,
-        // Default: 0ms
-        '--sliding-delay': `${settings.slidingDelay}ms`,
-        // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
-        '--sliding-animation': settings.slidingAnimation,
-        // Default: 800ms
-        '--slide-transition-delay': `${settings.slidingDuration + settings.slidingDelay}ms`,
-        '--slider-width': `${sliderDimensions.width}px`,
-        '--slider-height': `${sliderDimensions.height}px`,
-        '--slider-color': settings.sliderColor,
-        '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
-        '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
-        '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
-        '--nav-background-color': props.navbarSettings ? props.navbarSettings.color : undefined,
-        '--nav-active-color': props.navbarSettings ? props.navbarSettings.activeColor : undefined,
-        // Default: 800ms
-        '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`,
-      };
-    },
-    [settings, props.navbarSettings, sliderDimensions.height, sliderDimensions.width],
-  );
+  const CSSVariables = React.useMemo(() => {
+    return {
+      // Default: 800ms
+      '--sliding-duration': `${settings.slidingDuration}ms`,
+      // Default: 0ms
+      '--sliding-delay': `${settings.slidingDelay}ms`,
+      // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
+      '--sliding-animation': settings.slidingAnimation,
+      // Default: 800ms
+      '--slide-transition-delay': `${
+        settings.slidingDuration + settings.slidingDelay
+      }ms`,
+      '--slider-width': `${sliderDimensions.width}px`,
+      '--slider-height': `${sliderDimensions.height}px`,
+      '--slider-color': settings.sliderColor,
+      '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
+      '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
+      '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
+      '--nav-background-color': props.navbarSettings
+        ? props.navbarSettings.color
+        : undefined,
+      '--nav-active-color': props.navbarSettings
+        ? props.navbarSettings.activeColor
+        : undefined,
+      // Default: 800ms
+      '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`
+    };
+  }, [
+    settings,
+    props.navbarSettings,
+    sliderDimensions.height,
+    sliderDimensions.width
+  ]);
 
-  const [inViewTimeoutHandler, setInViewTimeoutHandler] = useState<NodeJS.Timeout>();
+  const [inViewTimeoutHandler, setInViewTimeoutHandler] =
+    React.useState<NodeJS.Timeout>();
 
   /**
    * Subscribe to changes in `inView`.
@@ -573,11 +554,9 @@ const HeroSlider = memo((props: ISliderProps) => {
    * instance if it's running. If it comes back into viewport, resume the
    * autoplay instance.
    */
-  useLayoutEffect(
+  React.useLayoutEffect(
     () => {
-      if (
-        settings.shouldAutoplay
-      ) {
+      if (settings.shouldAutoplay) {
         console.log('autoplayInstance.state', autoplayInstance.state);
         console.log('EState', EState[autoplayInstance.state]);
         console.log('props.inView', props.inView);
@@ -594,26 +573,20 @@ const HeroSlider = memo((props: ISliderProps) => {
           // When in view and idle, start it.
           case autoplayInstance.state === EState.IDLE && props.inView: {
             console.log('STARTING TIMEOUT');
-            const timeoutId = setTimeout(
-              () => {
-                console.log('STARTING');
-                autoplayInstance.start();
-              },
-              settings.autoplayHandlerTimeout,
-            );
+            const timeoutId = setTimeout(() => {
+              console.log('STARTING');
+              autoplayInstance.start();
+            }, settings.autoplayHandlerTimeout);
             setInViewTimeoutHandler(timeoutId);
             break;
           }
           // When in view and paused, resume it.
           case autoplayInstance.state === EState.PAUSED && props.inView: {
             console.log('RESUMING TIMEOUT');
-            const timeoutId = setTimeout(
-              () => {
-                console.log('RESUMING');
-                autoplayInstance.resume();
-              },
-              settings.autoplayHandlerTimeout,
-            );
+            const timeoutId = setTimeout(() => {
+              console.log('RESUMING');
+              autoplayInstance.resume();
+            }, settings.autoplayHandlerTimeout);
             setInViewTimeoutHandler(timeoutId);
             break;
           }
@@ -628,94 +601,83 @@ const HeroSlider = memo((props: ISliderProps) => {
     // eslint-disable-next-line
     [
       autoplayInstance,
-      isManuallyPaused, props.inView,
+      isManuallyPaused,
+      props.inView,
       settings.shouldAutoplay,
-      settings.autoplayHandlerTimeout,
-    ],
+      settings.autoplayHandlerTimeout
+    ]
   );
 
   // Setting slides props for the contexts.
-  useEffect(
-    () => {
-      if (dispatchProps && typeof dispatchProps === 'function') {
-        dispatchProps({
-          type: EActionTypes.SET_SLIDE_PROPS,
-          payload: {
-            activeSlide,
-            isDoneSliding,
-            slidingAnimation: settings.slidingAnimation,
-          },
-        });
-      }
-    },
-    [dispatchProps, activeSlide, isDoneSliding, settings.slidingAnimation],
-  );
+  React.useEffect(() => {
+    if (dispatchProps && typeof dispatchProps === 'function') {
+      dispatchProps({
+        type: EActionTypes.SET_SLIDE_PROPS,
+        payload: {
+          activeSlide,
+          isDoneSliding,
+          slidingAnimation: settings.slidingAnimation
+        }
+      });
+    }
+  }, [dispatchProps, activeSlide, isDoneSliding, settings.slidingAnimation]);
 
   // Setting navbars props for the contexts.
-  useEffect(
-    () => {
-      if (dispatchProps && typeof dispatchProps === 'function') {
-        dispatchProps({
-          type: EActionTypes.SET_NAVBAR_PROPS,
-          payload: {
-            activeSlide,
-            changeSlide: changeSlideHandler,
-            totalSlides: slidesArray.length,
-            sliderWidth: sliderDimensions.width || 0,
-          },
-        });
-      }
-    },
-    [
-      changeSlideHandler,
-      activeSlide,
-      dispatchProps,
-      sliderDimensions.width,
-      slidesArray.length,
-    ],
-  );
+  React.useEffect(() => {
+    if (dispatchProps && typeof dispatchProps === 'function') {
+      dispatchProps({
+        type: EActionTypes.SET_NAVBAR_PROPS,
+        payload: {
+          activeSlide,
+          changeSlide: changeSlideHandler,
+          totalSlides: slidesArray.length,
+          sliderWidth: sliderDimensions.width || 0
+        }
+      });
+    }
+  }, [
+    changeSlideHandler,
+    activeSlide,
+    dispatchProps,
+    sliderDimensions.width,
+    slidesArray.length
+  ]);
 
   // Setting autoplay buttons props props for the contexts.
-  useEffect(
-    () => {
-      if (dispatchProps && typeof dispatchProps === 'function') {
-        dispatchProps({
-          type: EActionTypes.SET_AUTOPLAY_BUTTON_PROPS,
-          payload: {
-            setIsManuallyPaused,
-            autoplayHandlerTimeout,
-            shouldAutoplay: settings.shouldAutoplay,
-            autoplay: autoplayInstanceRef,
-          },
-        });
-      }
-    },
-    [
-      dispatchProps,
-      setIsManuallyPaused,
-      settings.shouldAutoplay,
-      autoplayHandlerTimeout,
-      autoplayInstanceRef,
-    ],
-  );
-
-  useEffect(
-    () => {
-      console.log('isDoneSliding', isDoneSliding);
-      if (isDoneSliding) {
-        if (settings.shouldAutoplay && !isManuallyPaused) {
-          console.log('RESETTING');
-          autoplayInstance.reset();
+  React.useEffect(() => {
+    if (dispatchProps && typeof dispatchProps === 'function') {
+      dispatchProps({
+        type: EActionTypes.SET_AUTOPLAY_BUTTON_PROPS,
+        payload: {
+          setIsManuallyPaused,
+          autoplayHandlerTimeout,
+          shouldAutoplay: settings.shouldAutoplay,
+          autoplay: autoplayInstanceRef
         }
+      });
+    }
+  }, [
+    dispatchProps,
+    setIsManuallyPaused,
+    settings.shouldAutoplay,
+    autoplayHandlerTimeout,
+    autoplayInstanceRef
+  ]);
+
+  React.useEffect(() => {
+    console.log('isDoneSliding', isDoneSliding);
+    if (isDoneSliding) {
+      if (settings.shouldAutoplay && !isManuallyPaused) {
+        console.log('RESETTING');
+        autoplayInstance.reset();
       }
-    },
-    [
-      isDoneSliding,
-      autoplayInstance,
-      isManuallyPaused,
-      settings.shouldAutoplay,
-    ],
-  );
+    }
+  }, [
+    isDoneSliding,
+    autoplayInstance,
+    isManuallyPaused,
+    settings.shouldAutoplay
+  ]);
 
   return (
     <div
@@ -724,49 +686,40 @@ const HeroSlider = memo((props: ISliderProps) => {
       onTouchMove={onTouchMoveHandler}
       onTouchEnd={onTouchEndHandler}
       style={{
-        ...CSSVariables as React.CSSProperties,
+        ...(CSSVariables as React.CSSProperties),
         ...props.style,
         width: settings.width,
-        height: settings.height,
+        height: settings.height
       }}
       onMouseMoveCapture={onMouseMoveCaptureHandler}
-      className={HeroSliderModuleCss.Wrapper}>
+      className={HeroSliderModuleCss.Wrapper}
+    >
       {props.children}
       {settings.shouldDisplayButtons && (
         <Buttons
           isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}
           previousSlide={setPreviousSlide}
-          nextSlide={setNextSlide} />
+          nextSlide={setNextSlide}
+        />
       )}
     </div>
   );
-});
+};
 
-const WithProvider = memo((props: IWithProviderProps) => {
-  const {
-    isMobile,
-    ...rest
-  } = props;
+const WithProvider = (props: IWithProviderProps) => {
+  const { isMobile, ...rest } = props;
   const [ref, inView] = useInView({
     /* Optional options */
-    threshold: 0,
+    threshold: 0
   });
 
   return (
-    <Context
-      isMobile={isMobile}
-    >
-      <div
-        className="rm-hero-slider"
-        ref={ref}
-      >
-        <HeroSlider
-          inView={inView}
-          {...rest}
-        />
+    <Context isMobile={isMobile}>
+      <div className="rm-hero-slider" ref={ref}>
+        <HeroSlider {...rest} inView={inView} />
       </div>
     </Context>
   );
-});
+};
 
-export default memo(WithProvider);
+export default WithProvider;

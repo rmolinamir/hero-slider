@@ -1,29 +1,12 @@
-import {
-  BackdropFilterProperty,
-  BackfaceVisibilityProperty,
-  BackgroundProperty,
-  BackgroundAttachmentProperty,
-  BackgroundClipProperty,
-  BackgroundColorProperty,
-  BackgroundImageProperty,
-  BackgroundOriginProperty,
-  BackgroundPositionProperty,
-  BackgroundPositionXProperty,
-  BackgroundPositionYProperty,
-  BackgroundRepeatProperty,
-  BackgroundSizeProperty,
-  BackgroundBlendModeProperty,
-  WidthProperty,
-  HeightProperty,
-  TAnyFunction,
-} from '../../../typings/definitions';
+import type * as CSS from 'csstype';
+import { TAnyFunction } from '../../../typings/definitions';
 
 /**
  * Type definition for `IBackgroundProps.backgroundAnimation`.
  */
 export enum EBackgroundAnimations {
   FADE = 'fade',
-  ZOOM = 'zoom',
+  ZOOM = 'zoom'
 }
 
 /**
@@ -35,26 +18,36 @@ export enum EBackgroundAnimations {
 export interface IBackgroundProps {
   shouldLazyLoad?: boolean;
   lazyLoadingOffset?: number;
-  backdropFilter?: BackdropFilterProperty;
-  backfaceVisibility?: BackfaceVisibilityProperty;
-  background?: BackgroundProperty<string | number>;
-  backgroundAttachment?: BackgroundAttachmentProperty;
-  backgroundBlendMode?: BackgroundBlendModeProperty;
-  backgroundClip?: BackgroundClipProperty;
-  backgroundColor?: BackgroundColorProperty;
-  backgroundImage?: BackgroundImageProperty;
-  backgroundOrigin?: BackgroundOriginProperty;
-  backgroundPosition?: BackgroundPositionProperty<string | number>;
-  backgroundPositionX?: BackgroundPositionXProperty<string | number>;
-  backgroundPositionY?: BackgroundPositionYProperty<string | number>;
-  backgroundRepeat?: BackgroundRepeatProperty;
-  backgroundSize?: BackgroundSizeProperty<string | number>;
-  backgroundAnimationDuration?: number;
-  backgroundAnimationDelay?: number;
+  backdropFilter?: CSS.Properties['backdropFilter'];
+  backfaceVisibility?: CSS.Properties['backfaceVisibility'];
+  background?: CSS.Properties['background'];
+  backgroundAttachment?: CSS.Properties['backgroundAttachment'];
+  backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
+  backgroundClip?: CSS.Properties['backgroundClip'];
+  backgroundColor?: CSS.Properties['backgroundColor'];
+  backgroundImage?: CSS.Properties['backgroundImage'];
+  backgroundOrigin?: CSS.Properties['backgroundOrigin'];
+  backgroundPosition?: CSS.Properties['backgroundPosition'];
+  backgroundPositionX?: CSS.Properties['backgroundPositionX'];
+  backgroundPositionY?: CSS.Properties['backgroundPositionY'];
+  backgroundRepeat?: CSS.Properties['backgroundRepeat'];
+  backgroundSize?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
   backgroundAnimation?: EBackgroundAnimations;
-  maskBackgroundBlendMode?: BackgroundBlendModeProperty;
-  width?: WidthProperty<string | number>;
-  height?: HeightProperty<string | number>;
+  maskBackgroundBlendMode?:
+    | 'normal'
+    | 'multiply'
+    | 'screen'
+    | 'overlay'
+    | 'darken'
+    | 'lighten'
+    | 'color-dodge'
+    | 'saturation'
+    | 'color'
+    | 'luminosity';
+  width?: CSS.Properties['width'];
+  height?: CSS.Properties['height'];
   alt?: string;
   src: string | undefined;
   onLoad: TAnyFunction;

@@ -1,6 +1,4 @@
-import {
-  IMenuNavProps,
-} from '../../typings/definitions';
+import { IMenuNavProps } from '../MenuNav/typings';
 
 /**
  * `ButtonsNav` component props.

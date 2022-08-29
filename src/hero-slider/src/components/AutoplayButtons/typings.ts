@@ -1,10 +1,8 @@
-import {
-  INavPosition,
-} from '../../typings/definitions';
+import { INavPosition } from '../Nav/typings';
 
 export enum EAutoplayButtons {
   PLAY = 'play',
-  PAUSE = 'pause',
+  PAUSE = 'pause'
 }
 
 /**

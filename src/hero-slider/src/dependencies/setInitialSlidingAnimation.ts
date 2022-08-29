@@ -1,9 +1,4 @@
-// Dependencies
-import {
-  EAnimations,
-} from '../typings/definitions';
-
-// CSS
+import { EAnimations } from '../typings/definitions';
 import HeroSliderModuleCss from '../components/Slider/HeroSlider.module.css';
 
 export const setInitialSlidingAnimation = (animation?: EAnimations): string => {

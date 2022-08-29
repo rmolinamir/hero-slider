@@ -1,6 +1,4 @@
-import {
-  IBackgroundProps,
-} from '../../../typings/definitions';
+import { IBackgroundProps } from '../Background/typings';
 
 export interface IMaskProps {
   isActive: boolean;

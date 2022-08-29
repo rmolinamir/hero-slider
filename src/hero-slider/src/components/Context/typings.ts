@@ -1,8 +1,6 @@
 import IntervalTimer from '../../dependencies/IntervalTimer';
-import {
-  TAnyFunction,
-  ISliderProps,
-} from '../../typings/definitions';
+import { TAnyFunction } from '../../typings/definitions';
+import { ISliderProps } from '../Slider/typings';
 
 /**
  * `ISliderContext` is the React Context interface definition.
@@ -16,7 +14,7 @@ export enum EActionTypes {
   SET_SLIDE_PROPS,
   SET_NAVBAR_PROPS,
   SET_AUTOPLAY_BUTTON_PROPS,
-  SET_SLIDE_DATA,
+  SET_SLIDE_DATA
 }
 
 export interface IReducerState {
@@ -26,12 +24,11 @@ export interface IReducerState {
   autoplayButtonProps: IReducerAutoplayButtonPayload | undefined;
 }
 
-export type IReducerAction = (
-  IReducerSlideAction |
-  IReducerSetSlideNumbereAction |
-  IReducerNavAction |
-  IReducerAutoplayButtonAction
-);
+export type IReducerAction =
+  | IReducerSlideAction
+  | IReducerSetSlideNumbereAction
+  | IReducerNavAction
+  | IReducerAutoplayButtonAction;
 
 export interface IReducerSlideAction {
   type: EActionTypes.SET_SLIDE_PROPS;
@@ -89,4 +86,6 @@ export interface ISliderProviderProps {
 /**
  * `IWithProviderProps` is the HOC Slider component.
  */
-export interface IWithProviderProps extends ISliderProps, ISliderProviderProps {}
+export interface IWithProviderProps
+  extends ISliderProps,
+    ISliderProviderProps {}

@@ -1,6 +1,4 @@
-import {
-  INavProps,
-} from '../../typings/definitions';
+import { INavProps } from '../Nav/typings';
 
 /**
  * `SideNav` component props.

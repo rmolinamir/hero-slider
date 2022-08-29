@@ -1,21 +1,7 @@
-// Libraries
-import * as React from 'react';
-
-// Dependencies
-import {
-  EBackgroundAnimations,
-} from '../../../typings/definitions';
-import {
-  IBackgroundProps,
-} from './typings';
-
-// CSS
-import BackgroundModuleCss from './Background.module.css';
-
-// Components
+import React from 'react';
 import LazyLoad from 'react-lazyload';
-
-const { useState, memo } = React;
+import { EBackgroundAnimations, IBackgroundProps } from './typings';
+import BackgroundModuleCss from './Background.module.css';
 
 const Background = (props: IBackgroundProps) => {
   const {
@@ -35,11 +21,13 @@ const Background = (props: IBackgroundProps) => {
    * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
    * - `img` tag element will not render.
    */
-  const [className, setClassName] = useState((
+  const [className, setClassName] = React.useState(
     backgroundImage ? BackgroundModuleCss.Loading : BackgroundModuleCss.Loaded
-  ));
+  );
 
-  const onLoadHandler = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
+  const onLoadHandler = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ): void => {
     if (onLoad) {
       onLoad(event);
     }
@@ -56,19 +44,16 @@ const Background = (props: IBackgroundProps) => {
     setClassName(className.join(' '));
   };
 
-  const style: React.CSSProperties = React.useMemo(
-    () => {
-      return {
-        backgroundPosition: 'center top',
-        backgroundSize: 'cover',
-        width: width || '100%',
-        height: height || '100%',
-        ...background,
-        backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined,
-      };
-    },
-    [background, backgroundImage, height, width],
-  );
+  const style: React.CSSProperties = React.useMemo(() => {
+    return {
+      backgroundPosition: 'center top',
+      backgroundSize: 'cover',
+      width: width || '100%',
+      height: height || '100%',
+      ...background,
+      backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined
+    };
+  }, [background, backgroundImage, height, width]);
 
   const content = (
     <React.Fragment>
@@ -77,24 +62,24 @@ const Background = (props: IBackgroundProps) => {
           className={BackgroundModuleCss.Loader}
           onLoad={onLoadHandler}
           alt={alt}
-          src={backgroundImage}/>
+          src={backgroundImage}
+        />
       )}
-      <div
-        style={style}
-        className={className} />
+      <div style={style} className={className} />
     </React.Fragment>
   );
 
-  return (
-    shouldLazyLoad ? (
-      <LazyLoad
-        offset={lazyLoadingOffset || window.innerHeight}
-        debounce={false}
-        height={height || '100%'}>
-        {content}
-      </LazyLoad>
-    ) : content
+  return shouldLazyLoad ? (
+    <LazyLoad
+      offset={lazyLoadingOffset || window.innerHeight}
+      debounce={false}
+      height={height || '100%'}
+    >
+      {content}
+    </LazyLoad>
+  ) : (
+    content
   );
 };
 
-export default memo(Background);
+export default Background;

@@ -1,7 +1,5 @@
-import {
-  IBackgroundProps,
-  TAnyFunction,
-} from '../../typings/definitions';
+import { TAnyFunction } from '../../typings/definitions';
+import { IBackgroundProps } from './Background/typings';
 
 /**
  * `Slide` component props.
@@ -12,5 +10,5 @@ export interface ISlideProps {
   navDescription: string;
   style: React.CSSProperties;
   onBackgroundLoad: TAnyFunction;
-  children: React.ReactChildren;
+  children: React.ReactNode;
 }

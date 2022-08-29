@@ -1,6 +1,4 @@
-import {
-  INavProps,
-} from '../../typings/definitions';
+import { INavProps } from '../Nav/typings';
 
 /**
  * `MenuNav` component props.
@@ -11,6 +9,6 @@ export interface IMenuNavProps extends INavProps {
   sliderWidth: number;
   mobileThreshold: number;
   isNullAfterThreshold: boolean;
-  extraButton: React.ReactElement | React.Component;
+  extraButton: React.ReactNode;
   isExtraButtonRight: boolean;
 }

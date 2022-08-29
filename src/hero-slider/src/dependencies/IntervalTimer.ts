@@ -10,7 +10,7 @@ export enum EState {
   IDLE,
   RUNNING,
   PAUSED,
-  RESUME,
+  RESUME
 }
 
 export interface IIntervalTimer {
@@ -21,10 +21,10 @@ export interface IIntervalTimer {
   fires: number;
   maxFires?: number;
   pausedTime: number | Date;
-  lastTimeFired: Date;
-  timerId: NodeJS.Timeout;
-  resumeId: NodeJS.Timeout;
-  lastPauseTime: Date;
+  timerId?: NodeJS.Timeout;
+  resumeId?: NodeJS.Timeout;
+  lastTimeFired?: Date;
+  lastPauseTime?: Date;
 }
 
 class IntervalTimer implements IIntervalTimer {
@@ -36,15 +36,15 @@ class IntervalTimer implements IIntervalTimer {
   public remaining: number;
   public fires: number;
   public pausedTime: number | Date;
-  public lastTimeFired: Date;
-  public timerId: NodeJS.Timeout;
-  public resumeId: NodeJS.Timeout;
-  public lastPauseTime: Date;
+  public lastTimeFired?: Date;
+  public timerId?: NodeJS.Timeout;
+  public resumeId?: NodeJS.Timeout;
+  public lastPauseTime?: Date;
 
-  public constructor (
+  public constructor(
     callback: TAnyFunction,
     interval: number,
-    maxFires: number | undefined = undefined,
+    maxFires: number | undefined = undefined
   ) {
     /**
      * Remaining time before the next interval.
@@ -81,14 +81,18 @@ class IntervalTimer implements IIntervalTimer {
    * interval was at least started once before, then never fire again.
    */
   private proxyCallback = () => {
-    if (this.maxFires != null && this.fires !== 0 && this.fires >= this.maxFires) {
+    if (
+      this.maxFires != null &&
+      this.fires !== 0 &&
+      this.fires >= this.maxFires
+    ) {
       this.stop();
       return;
     }
     this.lastTimeFired = new Date();
     this.fires += 1;
     this.callback();
-  }
+  };
 
   /**
    * `start` executes the interval, and saves the interval ID for further use.
@@ -99,7 +103,7 @@ class IntervalTimer implements IIntervalTimer {
     this.timerId = setInterval(() => this.proxyCallback(), this.interval);
     this.lastTimeFired = new Date();
     this.state = EState.RUNNING;
-  }
+  };
 
   /**
    * `stop` clears every respective timeout and interval, then sets the state as idle.
@@ -110,7 +114,7 @@ class IntervalTimer implements IIntervalTimer {
     clearInterval(this.timerId);
     clearTimeout(this.resumeId);
     this.state = EState.IDLE;
-  }
+  };
 
   /**
    * Resets the interval.
@@ -118,7 +122,7 @@ class IntervalTimer implements IIntervalTimer {
   public reset = () => {
     this.stop();
     this.start();
-  }
+  };
 
   /**
    * `pause` tries to mimic pausing the interval by calculating the remaining time and storing it
@@ -128,12 +132,15 @@ class IntervalTimer implements IIntervalTimer {
   public pause = () => {
     if (this.state !== EState.RUNNING && this.state !== EState.RESUME) return;
 
-    this.remaining = +this.interval - (+new Date() - +this.lastTimeFired) + +this.pausedTime;
+    this.remaining =
+      +this.interval -
+      (+new Date() - +(this.lastTimeFired || 0)) +
+      +this.pausedTime;
     this.lastPauseTime = new Date();
     clearInterval(this.timerId);
     clearTimeout(this.resumeId);
     this.state = EState.PAUSED;
-  }
+  };
 
   /**
    * `resume` calculates the remaining time for the callback to trigger using the values
@@ -143,10 +150,11 @@ class IntervalTimer implements IIntervalTimer {
   public resume = () => {
     if (this.state !== EState.PAUSED) return;
     const currentDate = new Date();
-    this.pausedTime = +this.pausedTime + +currentDate - +this.lastPauseTime;
+    this.pausedTime =
+      +this.pausedTime + +currentDate - +(this.lastPauseTime || 0);
     this.state = EState.RESUME;
     this.resumeId = setTimeout(() => this.timeoutCallback(), this.remaining);
-  }
+  };
 
   /**
    * `timeoutCallback` is executed by `resume`. `timeoutCallback` is the
@@ -161,7 +169,7 @@ class IntervalTimer implements IIntervalTimer {
     this.pausedTime = 0;
     this.proxyCallback();
     this.start();
-  }
+  };
 
   /**
    * Set a new interval to use on the next interval loop.
@@ -176,7 +184,7 @@ class IntervalTimer implements IIntervalTimer {
       // If stopped, idle, or paused then switch it.
       this.interval = newInterval;
     }
-  }
+  };
 
   /**
    * Maximum amount of times the `callback` member will execute, it's infinite by default.
@@ -186,7 +194,7 @@ class IntervalTimer implements IIntervalTimer {
       this.stop();
     }
     this.maxFires = newMax;
-  }
+  };
 }
 
 export default IntervalTimer;

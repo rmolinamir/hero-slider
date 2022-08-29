@@ -1,6 +1,4 @@
-import {
-  TAnyFunction,
-} from '../../typings/definitions';
+import { TAnyFunction } from '../../typings/definitions';
 
 export interface IButtonProps {
   isHorizontal: boolean;

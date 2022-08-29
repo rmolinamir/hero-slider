@@ -1,6 +1,4 @@
-import {
-  TAnyFunction,
-} from '../../typings/definitions';
+import { TAnyFunction } from '../../typings/definitions';
 
 /**
  * `INavPosition` define a position object used to position the nav components

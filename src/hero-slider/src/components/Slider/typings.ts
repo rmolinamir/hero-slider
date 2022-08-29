@@ -1,9 +1,5 @@
-import {
-  WidthProperty,
-  HeightProperty,
-  INavbarSettings,
-  TAnyFunction,
-} from '../../typings/definitions';
+import type * as CSS from 'csstype';
+import { INavbarSettings, TAnyFunction } from '../../typings/definitions';
 
 /**
  * `ISettings` is used for a `settings` object variable
@@ -33,8 +29,8 @@ export interface ISettingsProps {
   shouldSlideOnArrowKeypress: boolean;
   autoplayDuration: number;
   autoplayHandlerTimeout: number;
-  width: WidthProperty<string | number>;
-  height: HeightProperty<string | number>;
+  width: CSS.Properties['width'];
+  height: CSS.Properties<string | number>['height'];
 }
 
 /**
@@ -65,39 +61,7 @@ export enum EAnimations {
   BOTTOM_TO_TOP = 'bottom_to_top',
   LEFT_TO_RIGHT = 'left_to_right',
   RIGHT_TO_LEFT = 'right_to_left',
-  FADE = 'fade',
-}
-
-/**
- * `ISettings` is used for a `settings` object variable
- * inside `HeroSlider`, this extends to `ISettingsProps`.
- * These properties are set inside the slider and are not
- * part of the received props.
- */
-export interface ISettings extends ISettingsProps {
-  initialSlidingAnimation: EAnimations;
-  slidingAnimation: string;
-  sliderOrientation: EOrientation;
-}
-
-/**
- * `HeroSlider` props.
- */
-export interface ISliderProps {
-  settings?: ISettingsProps;
-  orientation?: EOrientation;
-  slidingAnimation?: EAnimations;
-  isSmartSliding?: boolean;
-  initialSlide?: number;
-  nextSlide?: React.MutableRefObject<any>;
-  previousSlide?: React.MutableRefObject<any>;
-  navbarSettings?: INavbarSettings;
-  style?: React.CSSProperties;
-  onBeforeChange?: TAnyFunction;
-  onChange?: TAnyFunction;
-  onAfterChange?: TAnyFunction;
-  inView: boolean;
-  children: React.ReactElement[] | React.ReactElement;
+  FADE = 'fade'
 }
 
 /**
@@ -107,7 +71,7 @@ export interface ISliderProps {
  */
 export enum EOrientation {
   VERTICAL = 'vertical',
-  HORIZONTAL = 'horizontal',
+  HORIZONTAL = 'horizontal'
 }
 
 /**

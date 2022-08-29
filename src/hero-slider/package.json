@@ -46,9 +46,9 @@
     "watch": "tsc --project tsconfig.build.json --watch"
   },
   "dependencies": {
-    "react-intersection-observer": "8.24.1",
-    "react-lazyload": "2.6.2",
-    "styled-components": "4.3.2"
+    "react-intersection-observer": "9.4.0",
+    "react-lazyload": "3.2.0",
+    "styled-components": "5.3.5"
   },
   "peerDependencies": {
     "prop-types": "15.7.2",
@@ -56,11 +56,12 @@
     "react-dom": "16.8.6"
   },
   "devDependencies": {
-    "@svgr/rollup": "4.3.2",
-    "@types/jest": "24.0.15",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/react-lazyload": "2.5.0",
+    "@svgr/rollup": "6.3.1",
+    "@types/jest": "28.1.8",
+    "@types/node": "18.7.13",
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
+    "@types/react-lazyload": "3.2.0",
     "babel-core": "6.26.3",
     "babel-eslint": "10.0.2",
     "babel-plugin-external-helpers": "6.22.0",
@@ -68,20 +69,21 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "babel-runtime": "6.26.0",
-    "cross-env": "5.2.0",
-    "gh-pages": "2.0.1",
-    "prettier": "1.18.2",
-    "react": "16.8.3",
-    "react-dom": "16.8.3",
+    "cross-env": "7.0.3",
+    "csstype": "3.1.0",
+    "gh-pages": "4.0.0",
+    "prettier": "2.7.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-scripts-ts": "3.1.0",
-    "rollup": "1.17.0",
+    "rollup": "2.78.1",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "10.0.1",
     "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-peer-deps-external": "2.2.0",
-    "rollup-plugin-postcss": "2.0.3",
-    "rollup-plugin-typescript2": "0.21.2",
+    "rollup-plugin-peer-deps-external": "2.2.4",
+    "rollup-plugin-postcss": "4.0.2",
+    "rollup-plugin-typescript2": "0.33.0",
     "rollup-plugin-url": "2.2.2",
-    "typescript": "3.5.3"
+    "typescript": "4.8.2"
   }
 }
