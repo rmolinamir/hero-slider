@@ -1,5 +1,5 @@
 import React from 'react';
-import LazyLoad from 'react-lazyload';
+import LazyLoad from 'react-lazy-load';
 import { EBackgroundAnimations, IBackgroundProps } from './typings';
 import BackgroundModuleCss from './Background.module.css';
 
@@ -72,7 +72,6 @@ const Background = (props: IBackgroundProps) => {
   return shouldLazyLoad ? (
     <LazyLoad
       offset={lazyLoadingOffset || window.innerHeight}
-      debounce={false}
       height={height || '100%'}
     >
       {content}

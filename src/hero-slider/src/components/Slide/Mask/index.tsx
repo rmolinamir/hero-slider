@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMaskProps } from './typings';
 import MaskModuleCss from './Mask.module.css';
-import LazyLoad from 'react-lazyload';
+import LazyLoad from 'react-lazy-load';
 
 const Mask = (props: IMaskProps) => {
   const { background } = props;
@@ -35,7 +35,7 @@ const Mask = (props: IMaskProps) => {
           : MaskModuleCss.Inactive
       ].join(' ')}
     >
-      <LazyLoad offset={window.innerHeight} debounce={false} height="100%">
+      <LazyLoad offset={window.innerHeight} height="100%">
         <img
           alt=""
           className={MaskModuleCss.Loader}
