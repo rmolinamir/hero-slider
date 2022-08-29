@@ -40,6 +40,7 @@
     "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
     "predeploy": "cd example && npm install && npm run build",
     "prepublish": "pnpm build",
+    "prestart": "pnpm prebuild",
     "start": "rollup -c -w",
     "test": "pnpm jest",
     "test:watch": "pnpm jest --watch",

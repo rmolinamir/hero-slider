@@ -64,12 +64,12 @@ const SliderNav = (props: ISideNavProps) => {
   return (
     <ul
       style={{
-        bottom: position.bottom,
-        top: position.top || '50%',
-        left: position.left || !isPositionedRight ? left || '1rem' : undefined,
+        bottom: position?.bottom,
+        top: position?.top || '50%',
+        left: position?.left || !isPositionedRight ? left || '1rem' : undefined,
         right:
-          position.right || isPositionedRight ? right || '1rem' : undefined,
-        transform: position.transform || 'translateY(-50%)',
+          position?.right || isPositionedRight ? right || '1rem' : undefined,
+        transform: position?.transform || 'translateY(-50%)',
         ...CSSVariables
       }}
       className={SideNavModuleCss.Wrapper}

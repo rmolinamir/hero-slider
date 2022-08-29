@@ -1,26 +1,59 @@
 {
-  "name": "@hero-slider/examples",
-  "version": "0.0.0",
+  "name": "examples",
+  "version": "0.1.0",
   "private": true,
-  "license": "MIT",
   "dependencies": {
     "hero-slider": "workspace:*",
-    "prop-types": "15.6.2",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-png-button": "1.0.4",
-    "react-scripts": "2.1.5"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.8.2",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "pnpm storybook:start",
+    "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
+    "start": "react-scripts start",
+    "storybook:build": "build-storybook -s public",
+    "storybook:start": "start-storybook -p 6006 -s public",
+    "test": "react-scripts test",
+    "test:watch": "pnpm test -- --watch",
+    "watch": "react-scripts watch"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-interactions": "^6.5.10",
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/builder-webpack5": "^6.5.10",
+    "@storybook/manager-webpack5": "^6.5.10",
+    "@storybook/node-logger": "^6.5.10",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/react": "^6.5.10",
+    "@storybook/testing-library": "^0.0.13",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.56",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/testing-library__jest-dom": "^5.14.5",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "prop-types": "^15.8.1",
+    "webpack": "^5.74.0"
+  }
 }

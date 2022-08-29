@@ -695,6 +695,7 @@ const HeroSlider = (props: ISliderProps) => {
       className={HeroSliderModuleCss.Wrapper}
     >
       {props.children}
+
       {settings.shouldDisplayButtons && (
         <Buttons
           isHorizontal={settings.sliderOrientation === EOrientation.HORIZONTAL}

@@ -49,11 +49,11 @@ const SliderNav = (props: INavProps) => {
   return (
     <ul
       style={{
-        top: position.top,
-        right: position.right,
-        bottom: position.bottom || '1.5rem',
-        left: position.left || '50%',
-        transform: position.transform || 'translateX(-50%)',
+        top: position?.top,
+        right: position?.right,
+        bottom: position?.bottom || '1.5rem',
+        left: position?.left || '50%',
+        transform: position?.transform || 'translateX(-50%)',
         ...CSSVariables
       }}
       className={NavModuleCss.Wrapper}
