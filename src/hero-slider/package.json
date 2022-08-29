@@ -1,0 +1,87 @@
+{
+  "name": "hero-slider",
+  "version": "3.0.0-alpha",
+  "private": false,
+  "description": "",
+  "author": "rmolinamir",
+  "license": "MIT",
+  "repository": "rmolinamir/hero-slider",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    },
+    "./**/*": {
+      "import": "./dist/**/*.js",
+      "require": "./dist/**/*.js",
+      "types": "./dist/**/*.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*.d.ts",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "deploy": "gh-pages -d example/build",
+    "dev": "pnpm watch",
+    "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
+    "predeploy": "cd example && npm install && npm run build",
+    "prepublish": "pnpm build",
+    "start": "rollup -c -w",
+    "test": "pnpm jest",
+    "test:watch": "pnpm jest --watch",
+    "watch": "tsc --project tsconfig.build.json --watch"
+  },
+  "dependencies": {
+    "react-intersection-observer": "8.24.1",
+    "react-lazyload": "2.6.2",
+    "styled-components": "4.3.2"
+  },
+  "peerDependencies": {
+    "prop-types": "15.7.2",
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
+  },
+  "devDependencies": {
+    "@svgr/rollup": "4.3.2",
+    "@types/jest": "24.0.15",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.4",
+    "@types/react-lazyload": "2.5.0",
+    "babel-core": "6.26.3",
+    "babel-eslint": "10.0.2",
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-0": "6.24.1",
+    "babel-runtime": "6.26.0",
+    "cross-env": "5.2.0",
+    "gh-pages": "2.0.1",
+    "prettier": "1.18.2",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "react-scripts-ts": "3.1.0",
+    "rollup": "1.17.0",
+    "rollup-plugin-babel": "4.3.3",
+    "rollup-plugin-commonjs": "10.0.1",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-peer-deps-external": "2.2.0",
+    "rollup-plugin-postcss": "2.0.3",
+    "rollup-plugin-typescript2": "0.21.2",
+    "rollup-plugin-url": "2.2.2",
+    "typescript": "3.5.3"
+  }
+}

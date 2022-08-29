@@ -1,16 +1,15 @@
 {
-  "name": "example",
-  "homepage": "https://rmolinamir.github.io/react-png-ts-component",
+  "name": "@hero-slider/examples",
   "version": "0.0.0",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
   "dependencies": {
-    "hero-slider": "file:..",
-    "prop-types": "^15.6.2",
-    "react": "file:../node_modules/react",
-    "react-dom": "file:../node_modules/react-dom",
-    "react-png-button": "^1.0.4",
-    "react-scripts": "^2.1.5"
+    "hero-slider": "workspace:*",
+    "prop-types": "15.6.2",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-png-button": "1.0.4",
+    "react-scripts": "2.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
