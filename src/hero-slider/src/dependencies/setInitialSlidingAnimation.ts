@@ -1,7 +1,10 @@
 import { EAnimations } from '../typings/definitions';
 import HeroSliderModuleCss from '../components/Slider/HeroSlider.module.css';
 
-export const setInitialSlidingAnimation = (animation?: EAnimations): string => {
+// TODO: Rename to getInitialSlidingAnimation
+export const setInitialSlidingAnimation = (
+  animation?: `${EAnimations}`
+): string => {
   switch (animation) {
     case EAnimations.FADE:
       return HeroSliderModuleCss.Sliding_Fade_In;

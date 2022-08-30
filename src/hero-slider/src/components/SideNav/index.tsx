@@ -1,9 +1,9 @@
 import React from 'react';
 import { SliderContext } from '../Context';
 import SideNavModuleCss from './SideNav.module.css';
-import { ISideNavProps } from './typings';
+import { SideNavProps } from './typings';
 
-const SliderNav = (props: ISideNavProps) => {
+const SliderNav = (props: SideNavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */
@@ -79,7 +79,7 @@ const SliderNav = (props: ISideNavProps) => {
   );
 };
 
-export const SideNav = (props: ISideNavProps): JSX.Element => (
+export const SideNav = (props: SideNavProps): JSX.Element => (
   <SliderNav {...props} />
 );
 

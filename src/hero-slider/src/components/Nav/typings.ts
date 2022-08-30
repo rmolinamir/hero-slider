@@ -1,10 +1,10 @@
 import { TAnyFunction } from '../../typings/definitions';
 
 /**
- * `INavPosition` define a position object used to position the nav components
+ * `NavPosition` define a position object used to position the nav components
  * through inline CSS styles.
  */
-export interface INavPosition {
+export interface NavPosition {
   top: string;
   left: string;
   bottom: string;
@@ -13,19 +13,19 @@ export interface INavPosition {
 }
 
 /**
- * `INavSettings` is the base definition of the nav components prop.
+ * `NavSettings` is the base definition of the nav components prop.
  */
-export interface INavSettings {
-  position: INavPosition;
-  color: string;
-  activeColor: string;
+export interface NavSettings {
+  position?: NavPosition;
+  color?: string;
+  activeColor?: string;
 }
 
 /**
  * `Nav` component props.
  */
-export interface INavProps extends INavSettings {
-  totalSlides: number;
-  activeSlide: number;
-  changeSlide: TAnyFunction;
+export interface NavProps extends NavSettings {
+  totalSlides?: number;
+  activeSlide?: number;
+  changeSlide?: TAnyFunction;
 }

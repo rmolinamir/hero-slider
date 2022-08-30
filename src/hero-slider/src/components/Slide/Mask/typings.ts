@@ -1,7 +1,7 @@
-import { IBackgroundProps } from '../Background/typings';
+import { BackgroundProps } from '../Background/typings';
 
-export interface IMaskProps {
-  isActive: boolean;
-  isDoneSliding: boolean;
-  background: IBackgroundProps;
+export interface MaskProps {
+  isActive?: boolean;
+  isDoneSliding?: boolean;
+  background?: Partial<BackgroundProps>;
 }

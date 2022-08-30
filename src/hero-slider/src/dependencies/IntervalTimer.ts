@@ -13,21 +13,7 @@ export enum EState {
   RESUME
 }
 
-export interface IIntervalTimer {
-  callback: TAnyFunction;
-  state: EState;
-  remaining: number;
-  interval: number;
-  fires: number;
-  maxFires?: number;
-  pausedTime: number | Date;
-  timerId?: NodeJS.Timeout;
-  resumeId?: NodeJS.Timeout;
-  lastTimeFired?: Date;
-  lastPauseTime?: Date;
-}
-
-class IntervalTimer implements IIntervalTimer {
+export default class IntervalTimer {
   // Init
   public callback: TAnyFunction = () => null;
   public interval: number;
@@ -196,5 +182,3 @@ class IntervalTimer implements IIntervalTimer {
     this.maxFires = newMax;
   };
 }
-
-export default IntervalTimer;

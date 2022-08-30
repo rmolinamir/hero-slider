@@ -1,5 +1,5 @@
 import React from 'react';
-import { IButtonProps } from './typings';
+import { ButtonProps } from './typings';
 import { SliderContext } from '../Context';
 import ButtonsModuleCss from './Buttons.module.css';
 
@@ -17,7 +17,7 @@ const ButtonSVG = () => (
   </svg>
 );
 
-const Buttons = (props: IButtonProps) => {
+const Buttons = (props: ButtonProps) => {
   const { isMobile } = React.useContext(SliderContext);
 
   if (isMobile) return null;

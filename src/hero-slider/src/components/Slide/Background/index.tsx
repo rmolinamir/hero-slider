@@ -1,9 +1,9 @@
 import React from 'react';
 import LazyLoad from 'react-lazy-load';
-import { EBackgroundAnimations, IBackgroundProps } from './typings';
+import { EBackgroundAnimations, BackgroundProps } from './typings';
 import BackgroundModuleCss from './Background.module.css';
 
-const Background = (props: IBackgroundProps) => {
+const Background = (props: BackgroundProps) => {
   const {
     shouldLazyLoad = true,
     lazyLoadingOffset,

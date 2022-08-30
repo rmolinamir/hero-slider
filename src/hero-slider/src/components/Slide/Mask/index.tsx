@@ -1,9 +1,9 @@
 import React from 'react';
-import { IMaskProps } from './typings';
+import { MaskProps } from './typings';
 import MaskModuleCss from './Mask.module.css';
 import LazyLoad from 'react-lazy-load';
 
-const Mask = (props: IMaskProps) => {
+const Mask = (props: MaskProps) => {
   const { background } = props;
 
   const [className, setClassName] = React.useState(MaskModuleCss.Loading);
@@ -14,14 +14,14 @@ const Mask = (props: IMaskProps) => {
 
   const style: React.CSSProperties = React.useMemo(() => {
     return {
-      backgroundColor: background.backgroundColor,
-      backgroundBlendMode: background.maskBackgroundBlendMode,
-      backgroundImage: `url('${background.backgroundImage}')`
+      backgroundColor: background?.backgroundColor,
+      backgroundBlendMode: background?.maskBackgroundBlendMode,
+      backgroundImage: `url('${background?.backgroundImage}')`
     } as React.CSSProperties;
   }, [
-    background.backgroundColor,
-    background.backgroundImage,
-    background.maskBackgroundBlendMode
+    background?.backgroundColor,
+    background?.backgroundImage,
+    background?.maskBackgroundBlendMode
   ]);
 
   const isLoaded = className === MaskModuleCss.Loaded;
@@ -40,7 +40,7 @@ const Mask = (props: IMaskProps) => {
           alt=""
           className={MaskModuleCss.Loader}
           onLoad={onLoadHandler}
-          src={background.backgroundImage}
+          src={background?.backgroundImage}
         />
         {isLoaded && (
           <div

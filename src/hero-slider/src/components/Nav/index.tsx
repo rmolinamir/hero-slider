@@ -1,9 +1,9 @@
 import React from 'react';
-import { INavProps } from './typings';
+import { NavProps } from './typings';
 import { SliderContext } from '../Context';
 import NavModuleCss from './Nav.module.css';
 
-const SliderNav = (props: INavProps) => {
+const SliderNav = (props: NavProps) => {
   /**
    * Deconstructing navSettings to set it up.
    */
@@ -63,6 +63,6 @@ const SliderNav = (props: INavProps) => {
   );
 };
 
-export const Nav = (props: INavProps): JSX.Element => <SliderNav {...props} />;
+export const Nav = (props: NavProps): JSX.Element => <SliderNav {...props} />;
 
 (Nav as React.FunctionComponent).displayName = 'hero-slider/nav';

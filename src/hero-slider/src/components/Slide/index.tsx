@@ -1,12 +1,12 @@
 import React from 'react';
-import { ISlideProps } from './typings';
+import { SlideProps } from './typings';
 import { SliderContext } from '../Context';
 import SlideModuleCss from './Slide.module.css';
 import Background from './Background';
 import Mask from './Mask';
 import { EActionTypes } from '../Context/typings';
 
-const HeroSlide = (props: ISlideProps) => {
+const HeroSlide = (props: SlideProps) => {
   const {
     shouldRenderMask,
     style,
@@ -16,8 +16,13 @@ const HeroSlide = (props: ISlideProps) => {
     navDescription
   } = props;
 
-  const { dispatchProps, slidesArray, slideProps } =
-    React.useContext(SliderContext);
+  const {
+    dispatchProps,
+    slidesArray,
+    slideProps,
+    generateNewSlideId,
+    removeSlideId
+  } = React.useContext(SliderContext);
 
   const [slideNumber, setSlideNumber] = React.useState<number>(
     slidesArray.length
@@ -29,7 +34,7 @@ const HeroSlide = (props: ISlideProps) => {
 
   React.useEffect(() => {
     if (dispatchProps && !currentSlideData) {
-      const newSlideNumber = Math.random();
+      const newSlideNumber = generateNewSlideId();
       dispatchProps({
         type: EActionTypes.SET_SLIDE_DATA,
         payload: {
@@ -44,8 +49,16 @@ const HeroSlide = (props: ISlideProps) => {
     currentSlideData,
     slideNumber,
     slidesArray,
-    navDescription
+    navDescription,
+    generateNewSlideId
   ]);
+
+  // When unmounting, remove the slideNumber.
+  React.useEffect(() => {
+    return () => {
+      if (slideNumber) removeSlideId(slideNumber);
+    };
+  }, [slideNumber, removeSlideId]);
 
   /**
    * CSS variables for the transitions.
@@ -108,7 +121,7 @@ const HeroSlide = (props: ISlideProps) => {
   );
 };
 
-export const Slide = (props: ISlideProps): JSX.Element => (
+export const Slide = (props: SlideProps): JSX.Element => (
   <HeroSlide {...props} />
 );
 

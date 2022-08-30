@@ -1,4 +1,4 @@
-import { INavPosition } from '../Nav/typings';
+import { NavPosition } from '../Nav/typings';
 
 export enum EAutoplayButtons {
   PLAY = 'play',
@@ -8,8 +8,8 @@ export enum EAutoplayButtons {
 /**
  * `AutoplayButton` component props.
  */
-export interface IAutoplayButtonProps {
+export interface AutoplayButtonProps {
   className?: string;
-  position?: INavPosition;
+  position?: NavPosition;
   style?: React.CSSProperties;
 }

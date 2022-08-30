@@ -1,9 +1,9 @@
 import React from 'react';
-import { EAutoplayButtons, IAutoplayButtonProps } from './typings';
+import { EAutoplayButtons, AutoplayButtonProps } from './typings';
 import { SliderContext } from '../Context';
 import AutoplayButtonsModuleCss from './AutoplayButtons.module.css';
 
-const AutoplayButtons = (props: IAutoplayButtonProps) => {
+const AutoplayButtons = (props: AutoplayButtonProps) => {
   const { className, style, position } = props;
 
   const { autoplayButtonProps } = React.useContext(SliderContext);
@@ -83,7 +83,7 @@ const AutoplayButtons = (props: IAutoplayButtonProps) => {
   );
 };
 
-export const AutoplayButton = (props: IAutoplayButtonProps): JSX.Element => (
+export const AutoplayButton = (props: AutoplayButtonProps): JSX.Element => (
   <AutoplayButtons {...props} />
 );
 

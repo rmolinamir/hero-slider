@@ -16,9 +16,7 @@ export default function BasicSlider() {
     <Slider
       nextSlide={nextSlideHandler}
       previousSlide={previousSlideHandler}
-      // @ts-ignore
       slidingAnimation="left_to_right"
-      // @ts-ignore
       orientation="horizontal"
       initialSlide={1}
       // onBeforeChange={(previousSlide, nextSlide) => console.log('onBeforeChange', previousSlide, nextSlide)}
@@ -27,7 +25,6 @@ export default function BasicSlider() {
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.33)'
       }}
-      // @ts-ignore
       settings={{
         slidingDuration: 250,
         slidingDelay: 100,
@@ -50,7 +47,6 @@ export default function BasicSlider() {
         return (
           <Slide
             navDescription="Giau Pass - Italy"
-            // @ts-ignore
             background={{
               backgroundImage: giauPass,
               backgroundAttachment: 'fixed'
@@ -61,7 +57,6 @@ export default function BasicSlider() {
 
       <Slide
         navDescription="Bogliasco - Italy"
-        // @ts-ignore
         background={{
           backgroundImage: bogliasco,
           backgroundAttachment: 'fixed'
@@ -70,7 +65,6 @@ export default function BasicSlider() {
 
       <Slide
         navDescription="County Clare - Ireland"
-        // @ts-ignore
         background={{
           backgroundImage: countyClare,
           backgroundAttachment: 'fixed'
@@ -79,14 +73,12 @@ export default function BasicSlider() {
 
       <Slide
         navDescription="Crater Rock, OR - United States"
-        // @ts-ignore
         background={{
           backgroundImage: craterRock,
           backgroundAttachment: 'fixed'
         }}
       />
 
-      {/* @ts-ignore */}
       <Nav />
     </Slider>
   );

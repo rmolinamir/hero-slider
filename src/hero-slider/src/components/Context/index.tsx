@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { isMobile as setDefaultIsMobile } from '../../dependencies/isMobile';
 import {
-  ISliderContext,
-  ISliderProviderProps,
+  SliderContext as ISliderContext,
+  SliderProviderProps,
   EActionTypes,
-  IReducerState,
-  IReducerAction
+  ReducerState,
+  ReducerAction
 } from './typings';
 
 const initialContext: ISliderContext = {
@@ -14,16 +14,14 @@ const initialContext: ISliderContext = {
   slideProps: undefined,
   navProps: undefined,
   autoplayButtonProps: undefined,
-  dispatchProps: () => undefined
+  dispatchProps: () => undefined,
+  generateNewSlideId: () => undefined,
+  removeSlideId: () => undefined
 };
-const { useState, useEffect, useReducer } = React;
 
 export const SliderContext = React.createContext(initialContext);
 
-const reducer = (
-  state: IReducerState,
-  action: IReducerAction
-): IReducerState => {
+const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   const newState = { ...state };
   switch (action.type) {
     case EActionTypes.SET_SLIDE_DATA: {
@@ -84,13 +82,31 @@ const reducer = (
   }
 };
 
-const SliderContextProvider = (props: ISliderProviderProps) => {
-  const { isMobile: mobile, children } = props;
+const SliderContextProvider = (props: SliderProviderProps) => {
+  const { children } = props;
+
+  const slideUniqueIdsArrayRef = React.useRef<number[]>([]);
+  const slideUniqueIdsArray = slideUniqueIdsArrayRef.current;
+
+  const generateNewSlideId = React.useCallback((): number => {
+    const newSlideId = slideUniqueIdsArray.length + 1;
+    slideUniqueIdsArray.push(newSlideId);
+    return newSlideId;
+  }, [slideUniqueIdsArray]);
+
+  const removeSlideId = React.useCallback(
+    (removedSlideId: number): void => {
+      slideUniqueIdsArrayRef.current = slideUniqueIdsArray.filter(
+        (slideId) => removedSlideId !== slideId
+      );
+    },
+    [slideUniqueIdsArray]
+  );
 
   const [sliderContextProps, dispatchProps]: [
-    IReducerState,
-    React.Dispatch<IReducerAction>
-  ] = useReducer<React.Reducer<IReducerState, IReducerAction>>(reducer, {
+    ReducerState,
+    React.Dispatch<ReducerAction>
+  ] = React.useReducer<React.Reducer<ReducerState, ReducerAction>>(reducer, {
     // Creating a new array to not affect other context values due to immutability.
     slidesArray: [...initialContext.slidesArray],
     slideProps: initialContext.slideProps,
@@ -101,12 +117,14 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
   const { slideProps, slidesArray, navProps, autoplayButtonProps } =
     sliderContextProps;
 
-  const [isMobile, setIsMobile] = useState<boolean>(mobile);
+  const [isMobile, setIsMobile] = React.useState<boolean>();
 
   // When mounting, if `isMobile` is undefined, then set the default is mobile
   // based on the browser user agent.
-  useEffect(() => {
-    if (typeof isMobile === 'undefined') setIsMobile(setDefaultIsMobile());
+  React.useEffect(() => {
+    if (typeof isMobile === 'undefined') {
+      setIsMobile(setDefaultIsMobile());
+    }
   }, [isMobile]);
 
   return (
@@ -117,7 +135,9 @@ const SliderContextProvider = (props: ISliderProviderProps) => {
         slidesArray,
         slideProps,
         navProps,
-        autoplayButtonProps
+        autoplayButtonProps,
+        generateNewSlideId,
+        removeSlideId
       }}
     >
       {children}

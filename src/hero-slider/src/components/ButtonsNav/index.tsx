@@ -1,9 +1,9 @@
 import React from 'react';
-import { IButtonsNavProps } from './typings';
+import { ButtonsNavProps } from './typings';
 import ButtonsNavModuleCss from './ButtonsNav.module.css';
 import { Nav } from '../Nav';
 
-const SliderNav = (props: IButtonsNavProps) => {
+const SliderNav = (props: ButtonsNavProps) => {
   /**
    * Deconstructing ButtonNavSettings to set it up.
    */
@@ -37,7 +37,7 @@ const SliderNav = (props: IButtonsNavProps) => {
   const ButtonNavButtons = React.useMemo(() => {
     const changeSlideHandler = (ButtonNavButtonIndex: number) => {
       const nextSlide = ButtonNavButtonIndex + 1;
-      if (nextSlide !== activeSlide) {
+      if (changeSlide && nextSlide !== activeSlide) {
         changeSlide(nextSlide);
       }
     };
@@ -72,11 +72,11 @@ const SliderNav = (props: IButtonsNavProps) => {
   return (
     <div
       style={{
-        top: position.top,
-        right: position.right,
-        bottom: position.bottom || '0',
-        left: position.left || '50%',
-        transform: position.transform || 'translateX(-50%)',
+        top: position?.top,
+        right: position?.right,
+        bottom: position?.bottom || '0',
+        left: position?.left || '50%',
+        transform: position?.transform || 'translateX(-50%)',
         ...CSSVariables
       }}
       className={ButtonsNavModuleCss.Wrapper}
@@ -112,7 +112,7 @@ const SliderNav = (props: IButtonsNavProps) => {
   );
 };
 
-export const ButtonsNav = (props: IButtonsNavProps): JSX.Element => (
+export const ButtonsNav = (props: ButtonsNavProps): JSX.Element => (
   <SliderNav {...props} />
 );
 

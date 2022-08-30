@@ -1,6 +1,6 @@
 import { TAnyFunction } from '../../typings/definitions';
 
-export interface IButtonProps {
+export interface ButtonProps {
   isHorizontal: boolean;
   previousSlide: TAnyFunction;
   nextSlide: TAnyFunction;

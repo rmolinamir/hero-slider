@@ -1,9 +1,9 @@
-import { IMenuNavProps } from '../MenuNav/typings';
+import { MenuNavProps } from '../MenuNav/typings';
 
 /**
  * `ButtonsNav` component props.
  */
-export interface IButtonsNavProps extends IMenuNavProps {
+export interface ButtonsNavProps extends MenuNavProps {
   backgroundColor: string;
   alignItems: string;
 }

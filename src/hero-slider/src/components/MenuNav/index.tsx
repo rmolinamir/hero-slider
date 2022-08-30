@@ -1,10 +1,10 @@
 import React from 'react';
-import { IMenuNavProps } from './typings';
+import { MenuNavProps } from './typings';
 import { SliderContext } from '../Context';
 import MenuNavModuleCss from './MenuNav.module.css';
 import { Nav } from '../Nav';
 
-const SliderNav = (props: IMenuNavProps) => {
+const SliderNav = (props: MenuNavProps) => {
   /**
    * Deconstructing MenuNavSettings to set it up.
    */
@@ -78,11 +78,11 @@ const SliderNav = (props: IMenuNavProps) => {
   return (
     <div
       style={{
-        top: position.top,
-        right: position.right,
-        bottom: position.bottom || '0',
-        left: position.left || '50%',
-        transform: position.transform || 'translateX(-50%)',
+        top: position?.top,
+        right: position?.right,
+        bottom: position?.bottom || '0',
+        left: position?.left || '50%',
+        transform: position?.transform || 'translateX(-50%)',
         ...CSSVariables,
         justifyContent: justifyContent || 'center'
       }}
@@ -124,7 +124,7 @@ const SliderNav = (props: IMenuNavProps) => {
   );
 };
 
-export const MenuNav = (props: IMenuNavProps): JSX.Element => (
+export const MenuNav = (props: MenuNavProps): JSX.Element => (
   <SliderNav {...props} />
 );
 

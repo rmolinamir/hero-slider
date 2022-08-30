@@ -1,9 +1,9 @@
-import { INavProps } from '../Nav/typings';
+import { NavProps } from '../Nav/typings';
 
 /**
  * `MenuNav` component props.
  */
-export interface IMenuNavProps extends INavProps {
+export interface MenuNavProps extends NavProps {
   navDescriptions: string[];
   justifyContent: string;
   sliderWidth: number;

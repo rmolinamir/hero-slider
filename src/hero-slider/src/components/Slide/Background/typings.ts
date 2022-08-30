@@ -2,7 +2,7 @@ import type * as CSS from 'csstype';
 import { TAnyFunction } from '../../../typings/definitions';
 
 /**
- * Type definition for `IBackgroundProps.backgroundAnimation`.
+ * Type definition for `BackgroundProps.backgroundAnimation`.
  */
 export enum EBackgroundAnimations {
   FADE = 'fade',
@@ -10,12 +10,12 @@ export enum EBackgroundAnimations {
 }
 
 /**
- * `IBackgroundProps` interface for the `Background` JSX
+ * `BackgroundProps` interface for the `Background` JSX
  * component's props used inside the `Slide` components.
  * The `Slide` components `background` prop is also defined
- * by `IBackgroundProps`.
+ * by `BackgroundProps`.
  */
-export interface IBackgroundProps {
+export interface BackgroundProps {
   shouldLazyLoad?: boolean;
   lazyLoadingOffset?: number;
   backdropFilter?: CSS.Properties['backdropFilter'];
@@ -49,6 +49,6 @@ export interface IBackgroundProps {
   width?: CSS.Properties['width'];
   height?: CSS.Properties['height'];
   alt?: string;
-  src: string | undefined;
-  onLoad: TAnyFunction;
+  src?: string;
+  onLoad?: TAnyFunction;
 }

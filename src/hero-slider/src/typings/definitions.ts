@@ -1,9 +1,9 @@
 export type TAnyFunction = (...anyArg: any[]) => any;
 
 /**
- * `INavbarSettings` settings definition for all of the nav components.
+ * `NavbarSettings` settings definition for all of the nav components.
  */
-export interface INavbarSettings {
+export interface NavbarSettings {
   color: string;
   activeColor: string;
 }

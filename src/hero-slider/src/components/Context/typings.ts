@@ -1,13 +1,15 @@
 import IntervalTimer from '../../dependencies/IntervalTimer';
 import { TAnyFunction } from '../../typings/definitions';
-import { ISliderProps } from '../Slider/typings';
+import { SliderProps } from '../Slider/typings';
 
 /**
- * `ISliderContext` is the React Context interface definition.
+ * `SliderContext` is the React Context interface definition.
  */
-export interface ISliderContext extends IReducerState {
+export interface SliderContext extends ReducerState {
   isMobile: boolean | undefined;
-  dispatchProps: React.Dispatch<IReducerAction> | undefined;
+  dispatchProps: React.Dispatch<ReducerAction> | undefined;
+  generateNewSlideId: TAnyFunction;
+  removeSlideId: TAnyFunction;
 }
 
 export enum EActionTypes {
@@ -17,58 +19,58 @@ export enum EActionTypes {
   SET_SLIDE_DATA
 }
 
-export interface IReducerState {
-  slidesArray: ISlideDataPayload[];
-  slideProps: ISlidePayload | undefined;
-  navProps: INavPayload | undefined;
-  autoplayButtonProps: IReducerAutoplayButtonPayload | undefined;
+export interface ReducerState {
+  slidesArray: SlideDataPayload[];
+  slideProps: SlidePayload | undefined;
+  navProps: NavPayload | undefined;
+  autoplayButtonProps: ReducerAutoplayButtonPayload | undefined;
 }
 
-export type IReducerAction =
-  | IReducerSlideAction
-  | IReducerSetSlideNumbereAction
-  | IReducerNavAction
-  | IReducerAutoplayButtonAction;
+export type ReducerAction =
+  | ReducerSlideAction
+  | ReducerSetSlideNumbereAction
+  | ReducerNavAction
+  | ReducerAutoplayButtonAction;
 
-export interface IReducerSlideAction {
+export interface ReducerSlideAction {
   type: EActionTypes.SET_SLIDE_PROPS;
-  payload: ISlidePayload;
+  payload: SlidePayload;
 }
 
-export interface ISlidePayload {
+export interface SlidePayload {
   activeSlide: number;
   isDoneSliding: boolean;
   slidingAnimation: string;
 }
 
-export interface IReducerSetSlideNumbereAction {
+export interface ReducerSetSlideNumbereAction {
   type: EActionTypes.SET_SLIDE_DATA;
-  payload: ISlideDataPayload;
+  payload: SlideDataPayload;
 }
 
-export interface ISlideDataPayload {
+export interface SlideDataPayload {
   slideNumber: number;
-  navDescription: string;
+  navDescription?: string;
 }
 
-export interface IReducerNavAction {
+export interface ReducerNavAction {
   type: EActionTypes.SET_NAVBAR_PROPS;
-  payload: INavPayload;
+  payload: NavPayload;
 }
 
-export interface INavPayload {
+export interface NavPayload {
   changeSlide: TAnyFunction;
   activeSlide: number;
   totalSlides: number;
   sliderWidth: number;
 }
 
-export interface IReducerAutoplayButtonAction {
+export interface ReducerAutoplayButtonAction {
   type: EActionTypes.SET_AUTOPLAY_BUTTON_PROPS;
-  payload: IReducerAutoplayButtonPayload;
+  payload: ReducerAutoplayButtonPayload;
 }
 
-export interface IReducerAutoplayButtonPayload {
+export interface ReducerAutoplayButtonPayload {
   setIsManuallyPaused: React.Dispatch<React.SetStateAction<boolean>>;
   autoplayHandlerTimeout: NodeJS.Timeout | undefined;
   shouldAutoplay: boolean;
@@ -76,16 +78,13 @@ export interface IReducerAutoplayButtonPayload {
 }
 
 /**
- * `ISliderProps` is the Slider Context's Provider props interface definition.
+ * `SliderProps` is the Slider Context's Provider props interface definition.
  */
-export interface ISliderProviderProps {
-  isMobile: boolean;
-  children: React.ReactElement[] | React.ReactElement;
+export interface SliderProviderProps {
+  children?: React.ReactNode;
 }
 
 /**
- * `IWithProviderProps` is the HOC Slider component.
+ * `HeroSliderProps` is the HOC Slider component.
  */
-export interface IWithProviderProps
-  extends ISliderProps,
-    ISliderProviderProps {}
+export interface HeroSliderProps extends Omit<SliderProps, 'inView'> {}
