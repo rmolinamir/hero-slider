@@ -77,12 +77,12 @@ export interface SettingsState extends Required<SettingsProps> {}
 //
 //
 
-export interface DimensionsProps {
+export interface LayoutProps {
   width?: CSS.Properties['width'];
   height?: CSS.Properties['height'];
 }
 
-export interface DimensionsState extends Required<DimensionsProps> {
+export interface Layout extends Required<LayoutProps> {
   slider: React.RefObject<HTMLDivElement>;
 }
 

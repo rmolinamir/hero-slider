@@ -29,7 +29,7 @@ export interface SliderSettings extends SliderSettingsProps {
   sliderOrientation: EOrientation;
 }
 
-export default function useSliderSettings(
+export default function useSettings(
   props: SliderProps
 ): [SliderSettings, React.Dispatch<React.SetStateAction<SliderSettings>>] {
   const [sliderSettings, setSettings] = React.useState<SliderSettings>({

@@ -4,7 +4,7 @@ import { SliderDimensions } from '../typings';
 /**
  * Returns the slider reference object to calculate its dimensions.
  */
-export default function useSliderDimensions(): [
+export default function useLayout(): [
   React.RefObject<HTMLDivElement>,
   SliderDimensions,
   React.Dispatch<React.SetStateAction<SliderDimensions>>

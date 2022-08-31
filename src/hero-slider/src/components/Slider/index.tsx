@@ -6,16 +6,16 @@ import HeroSliderModuleCss from './HeroSlider.module.css';
 import Context, { SliderContext } from '../Context';
 import Buttons from '../Buttons';
 import { EActionTypes, HeroSliderProps } from '../Context/typings';
-import useSliderSettings from './hooks/useSliderSettings';
-import useSliderDimensions from './hooks/useSliderDimensions';
-import useSliderManager from './hooks/useSliderManager';
+import useSettings from './hooks/useSettings';
+import useLayout from './hooks/useLayout';
+import useController from './hooks/useController';
 
 const Slider = (props: SliderProps) => {
   console.log('[Slider] rerender');
 
-  const [sliderRef, sliderDimensions] = useSliderDimensions();
+  const [sliderRef, sliderDimensions] = useLayout();
 
-  const [settings, setSettings] = useSliderSettings(props);
+  const [settings, setSettings] = useSettings(props);
 
   const {
     activeSlide,
@@ -26,7 +26,7 @@ const Slider = (props: SliderProps) => {
     changeSlide,
     setNextSlide,
     setPreviousSlide
-  } = useSliderManager(props, settings);
+  } = useController(props, settings);
 
   const initialTouchState: TouchState = {
     initialX: undefined,

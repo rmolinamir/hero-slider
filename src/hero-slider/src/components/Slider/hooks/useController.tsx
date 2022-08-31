@@ -15,7 +15,7 @@ function usePreviousValue<Type>(value: Type): Type {
 /**
  * Manages the Slider's slide transitions and event handlers.
  */
-export default function useSliderManager( // TODO: Rename to useSliderController
+export default function useController(
   props: SliderProps,
   settings: Settings
 ): {
