@@ -1,9 +1,3 @@
-/**
- * Based on **`[Pause and resume setInterval](https://stackoverflow.com/a/42240115/10246377)`**.
- * `IntervalTimer` is a class that handles logic for intervals, e.g. start
- * stop, reset, resume, pause & maximum amount of fires.
- */
-
 import { TAnyFunction } from '../typings/definitions';
 
 export enum EState {
@@ -13,6 +7,11 @@ export enum EState {
   RESUME
 }
 
+/**
+ * Based on **`[Pause and resume setInterval](https://stackoverflow.com/a/42240115/10246377)`**.
+ * `IntervalTimer` is a class that handles logic for intervals, e.g. start
+ * stop, reset, resume, pause & maximum amount of fires.
+ */
 export default class IntervalTimer {
   // Init
   public callback: TAnyFunction = () => null;
@@ -27,7 +26,7 @@ export default class IntervalTimer {
   public resumeId?: NodeJS.Timeout;
   public lastPauseTime?: Date;
 
-  public constructor(
+  private constructor(
     callback: TAnyFunction,
     interval: number,
     maxFires: number | undefined = undefined
@@ -181,4 +180,19 @@ export default class IntervalTimer {
     }
     this.maxFires = newMax;
   };
+
+  private static instance: IntervalTimer | undefined;
+
+  public static new(
+    callback: TAnyFunction,
+    interval: number,
+    maxFires: number | undefined = undefined
+  ) {
+    if (!this.instance)
+      this.instance = new IntervalTimer(callback, interval, maxFires);
+    else {
+      this.instance.callback = callback;
+    }
+    return this.instance;
+  }
 }

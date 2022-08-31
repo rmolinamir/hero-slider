@@ -6,6 +6,7 @@
   - [ ] Change name of `SliderContext` to something like `SliderStateContext`.
   - [ ] Replace `React.useContext(SliderContext);` calls for a custom hook that returns the state of the context.
   - [ ] Logger singleton to easily hide telemetry.
+  - [ ] Telemetry static class containing decorators to analyze rerenders and performance, not sure if possible in React tho.
   - [ ] Deal with TODOs.
 - [ ] Improve the `hero-slider` logic such as the hooks and the root component, optimize for performance ONLY when and where it makes sense. Code First, Optimize Later.
 - [ ] Address the open issues and PRs of v2.x.

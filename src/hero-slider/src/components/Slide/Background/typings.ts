@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type CSS from 'csstype';
 import { TAnyFunction } from '../../../typings/definitions';
 
 /**

@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type CSS from 'csstype';
 import { NavbarSettings, TAnyFunction } from '../../typings/definitions';
 
 /**
@@ -9,29 +9,29 @@ import { NavbarSettings, TAnyFunction } from '../../typings/definitions';
  */
 // TODO: Rename to SliderSettings
 export interface Settings extends SettingsProps {
-  initialSlidingAnimation: EAnimations;
-  slidingAnimation: string;
-  sliderOrientation: EOrientation;
+  initialSlidingAnimation: EAnimations; // [x]
+  slidingAnimation: string; // [x]
+  sliderOrientation: EOrientation; // [x]
 }
 
 /**
  * Type definition for `SliderProps.settings`.
  */
 export interface SettingsProps {
-  slidingDuration: number;
-  slidingDelay: number;
-  sliderColor: string;
-  sliderFadeInDuration: number;
-  navbarFadeInDuration: number;
-  navbarFadeInDelay: number;
-  isSmartSliding: boolean;
-  shouldDisplayButtons: boolean;
-  shouldAutoplay: boolean;
-  shouldSlideOnArrowKeypress: boolean;
+  slidingDuration: number; // [x]
+  slidingDelay: number; // [x]
+  sliderColor: string; // [x]
+  sliderFadeInDuration: number; // [x]
+  navbarFadeInDuration: number; // [x]
+  navbarFadeInDelay: number; // [x]
+  isSmartSliding: boolean; // [x]
+  shouldDisplayButtons: boolean; // [x]
+  shouldAutoplay: boolean; // [x]
+  shouldSlideOnArrowKeypress: boolean; // [x]
   autoplayDuration: number;
   autoplayHandlerTimeout: number;
-  width: CSS.Properties['width'];
-  height: CSS.Properties<string | number>['height'];
+  width: CSS.Properties['width']; // [x]
+  height: CSS.Properties<string | number>['height']; // [x]
 }
 
 /**
@@ -39,19 +39,19 @@ export interface SettingsProps {
  */
 export interface SliderProps {
   settings?: Partial<SettingsProps>;
-  orientation?: `${EOrientation}`;
+  orientation?: `${EOrientation}`; // [x]
   slidingAnimation?: `${EAnimations}`;
   isSmartSliding?: boolean;
-  initialSlide?: number;
-  nextSlide?: React.MutableRefObject<any>;
-  previousSlide?: React.MutableRefObject<any>;
-  navbarSettings?: Partial<NavbarSettings>;
-  style?: React.CSSProperties;
-  onBeforeChange?: TAnyFunction;
-  onChange?: TAnyFunction;
-  onAfterChange?: TAnyFunction;
-  inView?: boolean;
-  children?: React.ReactNode;
+  initialSlide?: number; // [x]
+  nextSlide?: React.MutableRefObject<any>; // [x]
+  previousSlide?: React.MutableRefObject<any>; // [x]
+  navbarSettings?: Partial<NavbarSettings>; // [x]
+  style?: React.CSSProperties; // [x]
+  onBeforeChange?: TAnyFunction; // [x]
+  onChange?: TAnyFunction; // [x]
+  onAfterChange?: TAnyFunction; // [x]
+  inView?: boolean; // [x]
+  children?: React.ReactNode; // [x]
 }
 
 /**

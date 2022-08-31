@@ -1,11 +1,38 @@
 import React from 'react';
+import type CSS from 'csstype';
 import { setInitialSlidingAnimation } from '../../../dependencies/setInitialSlidingAnimation';
-import { EAnimations, EOrientation, Settings, SliderProps } from '../typings';
+import { EAnimations, EOrientation, SliderProps } from '../typings';
+
+/**
+ * Type definition for `SliderProps.settings`.
+ */
+export interface SliderSettingsProps {
+  slidingDuration: number;
+  slidingDelay: number;
+  sliderColor: string;
+  sliderFadeInDuration: number;
+  navbarFadeInDuration: number;
+  navbarFadeInDelay: number;
+  isSmartSliding: boolean;
+  shouldDisplayButtons: boolean;
+  shouldAutoplay: boolean;
+  shouldSlideOnArrowKeypress: boolean;
+  autoplayDuration: number;
+  autoplayHandlerTimeout: number;
+  width: CSS.Properties['width'];
+  height: CSS.Properties<string | number>['height'];
+}
+
+export interface SliderSettings extends SliderSettingsProps {
+  initialSlidingAnimation: EAnimations;
+  slidingAnimation: string;
+  sliderOrientation: EOrientation;
+}
 
 export default function useSliderSettings(
   props: SliderProps
-): [Settings, React.Dispatch<React.SetStateAction<Settings>>] {
-  const [sliderSettings, setSettings] = React.useState<Settings>({
+): [SliderSettings, React.Dispatch<React.SetStateAction<SliderSettings>>] {
+  const [sliderSettings, setSettings] = React.useState<SliderSettings>({
     // Dependants
     initialSlidingAnimation:
       (props.slidingAnimation as EAnimations | undefined) ||

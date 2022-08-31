@@ -1,61 +1,27 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import IntervalTimer, { EState } from '../../dependencies/IntervalTimer';
-import {
-  EAnimations,
-  Settings,
-  SliderProps,
-  EOrientation,
-  SliderDimensions,
-  TouchState
-} from './typings';
-import { setInitialSlidingAnimation } from '../../dependencies/setInitialSlidingAnimation';
+import { EAnimations, SliderProps, EOrientation, TouchState } from './typings';
 import HeroSliderModuleCss from './HeroSlider.module.css';
 import Context, { SliderContext } from '../Context';
 import Buttons from '../Buttons';
 import { EActionTypes, HeroSliderProps } from '../Context/typings';
+import useSliderSettings from './hooks/useSliderSettings';
+import useSliderDimensions from './hooks/useSliderDimensions';
+import useSliderManager from './hooks/useSliderManager';
 
 const Slider = (props: SliderProps) => {
-  const { onBeforeChange, onAfterChange, onChange } = props;
+  const [sliderRef, sliderDimensions] = useSliderDimensions();
 
-  /**
-   * Slider reference object to calculate its dimensions.
-   */
-  const sliderRef = React.useRef<HTMLDivElement>(null);
-  const [sliderDimensions, setSliderDimensions] =
-    React.useState<SliderDimensions>({});
+  const [settings, setSettings] = useSliderSettings(props);
 
-  const [sliderSettings, setSettings] = React.useState<Settings>({
-    // Dependants
-    initialSlidingAnimation:
-      (props.slidingAnimation as EAnimations | undefined) ||
-      EAnimations.RIGHT_TO_LEFT,
-    slidingAnimation: setInitialSlidingAnimation(props.slidingAnimation),
-    sliderOrientation:
-      (props.orientation as EOrientation | undefined) ||
-      EOrientation.HORIZONTAL,
-    // Defaults
-    slidingDuration: 500,
-    slidingDelay: 200,
-    sliderColor: 'inherit',
-    sliderFadeInDuration: 100,
-    navbarFadeInDuration: 1000,
-    navbarFadeInDelay: 500,
-    isSmartSliding: true,
-    shouldDisplayButtons: true,
-    shouldAutoplay: true,
-    shouldSlideOnArrowKeypress: false,
-    autoplayDuration: 8000,
-    autoplayHandlerTimeout: 1000,
-    width: '100%',
-    height: '100%',
-    ...props.settings
-  });
-
-  const settings = {
-    ...sliderSettings,
-    ...props.settings
-  };
+  const {
+    activeSlide,
+    isDoneSliding,
+    changeSlide,
+    setNextSlide,
+    setPreviousSlide
+  } = useSliderManager(props, settings);
 
   const initialTouchState: TouchState = {
     initialX: undefined,
@@ -69,25 +35,25 @@ const Slider = (props: SliderProps) => {
   const [touchState, setTouchState] =
     React.useState<TouchState>(initialTouchState);
 
-  const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1);
-  const [isDoneSliding, setIsDoneSliding] = React.useState(true);
+  // const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1);
+  // const [isDoneSliding, setIsDoneSliding] = React.useState(true);
 
-  /**
-   * `activeSlideWatcher` `isDoneSlidingWatcher` are a mutable
-   * objects that will persist for the full
-   * lifetime of the component.
-   *  - `isDoneSlidingWatcher` will serve as a pointer in case
-   *    a `nextSlide` event is called from outside.
-   *  - `activeSlideWatcher` serves as a pointer to the `activeSlide`
-   *    so that the auto play instance won't be out of sync with the
-   *    current slide. It is updated during the `useEffects` subscribed
-   *    to the `activeSlide` state whenever the user changes slide.
-   */
-  const isDoneSlidingWatcher = React.useRef<boolean>(true);
-  const activeSlideWatcher = React.useRef(activeSlide);
+  // /**
+  //  * `activeSlideWatcher` `isDoneSlidingWatcher` are a mutable
+  //  * objects that will persist for the full
+  //  * lifetime of the component.
+  //  *  - `isDoneSlidingWatcher` will serve as a pointer in case
+  //  *    a `nextSlide` event is called from outside.
+  //  *  - `activeSlideWatcher` serves as a pointer to the `activeSlide`
+  //  *    so that the auto play instance won't be out of sync with the
+  //  *    current slide. It is updated during the `useEffects` subscribed
+  //  *    to the `activeSlide` state whenever the user changes slide.
+  //  */
+  // const isDoneSlidingWatcher = React.useRef<boolean>(true);
+  // const activeSlideWatcher = React.useRef(activeSlide);
 
-  const [delayTimeout, setDelayTimeout] = React.useState<NodeJS.Timeout>();
-  const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>();
+  // const [delayTimeout, setDelayTimeout] = React.useState<NodeJS.Timeout>();
+  // const [slidingTimeout, setSlidingTimeout] = React.useState<NodeJS.Timeout>();
 
   /**
    * `slidingTimeoutDuration` is the total time it takes for
@@ -97,80 +63,94 @@ const Slider = (props: SliderProps) => {
   const slidingTimeoutDuration =
     (settings.slidingDuration + settings.slidingDelay) * 1.1; // 110% safety factor.
 
-  function setSlidingAnimation(newAnimation: string) {
-    setSettings({
-      ...settings,
-      slidingAnimation: newAnimation
-    });
-  }
+  const setSlidingAnimation = React.useCallback(
+    (newAnimation: string) => {
+      setSettings({
+        ...settings,
+        slidingAnimation: newAnimation
+      });
+    },
+    [settings]
+  );
 
-  /**
-   * `onSlidingHandler` sets `isDoneSliding` as false when executed
-   * and triggers a `setTimeout` that will set `isDoneSliding` as true
-   * after the time it takes for the slide to change passes.
-   * Saves the timeout ID to `slidingTimeout`.
-   * The `onChange` and `onAfterChange` events are executed here.
-   */
-  const onSlidingHandler = (nextSlide: number): void => {
-    setIsDoneSliding(false);
-    // Only save the delay timeout if `onChange` exists.
-    if (onChange) {
-      const delayTimeoutId = setTimeout(() => {
-        onChange && onChange(nextSlide);
-      }, settings.slidingDelay);
-      setDelayTimeout(delayTimeoutId);
-    }
-    // Sliding timeout ID's for the transitions.
-    const slidingTimeoutId = setTimeout(() => {
-      setIsDoneSliding(true);
-      if (onAfterChange) {
-        onAfterChange(nextSlide);
-      }
-    }, slidingTimeoutDuration);
-    // Saving the timeout ID's in case clearing them is needed.
-    setSlidingTimeout(slidingTimeoutId);
-  };
+  // /**
+  //  * `onSlidingHandler` sets `isDoneSliding` as false when executed
+  //  * and triggers a `setTimeout` that will set `isDoneSliding` as true
+  //  * after the time it takes for the slide to change passes.
+  //  * Saves the timeout ID to `slidingTimeout`.
+  //  * The `onChange` and `onAfterChange` events are executed here.
+  //  */
+  // const onSlidingHandler = React.useCallback(
+  //   (nextSlide: number): void => {
+  //     setIsDoneSliding(false);
+  //     // Only save the delay timeout if `onChange` exists.
+  //     if (onChange) {
+  //       const delayTimeoutId = setTimeout(() => {
+  //         onChange && onChange(nextSlide);
+  //       }, settings.slidingDelay);
+  //       setDelayTimeout(delayTimeoutId);
+  //     }
+  //     // Sliding timeout ID's for the transitions.
+  //     const slidingTimeoutId = setTimeout(() => {
+  //       setIsDoneSliding(true);
+  //       if (onAfterChange) {
+  //         onAfterChange(nextSlide);
+  //       }
+  //     }, slidingTimeoutDuration);
+  //     // Saving the timeout ID's in case clearing them is needed.
+  //     setSlidingTimeout(slidingTimeoutId);
+  //   },
+  //   [onChange, onAfterChange, settings.slidingDelay, slidingTimeoutDuration]
+  // );
 
-  /**
-   * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle
-   * the smooth transition and set `isDoneSlidingWatcher.current` (like a pointer)
-   * as true. While `isDoneSliding` is true, no the slides won't change.
-   * The `onBeforeChange` event is executed here.
-   */
-  const changeSlide = (nextSlide: number): void => {
-    if (isDoneSlidingWatcher.current) {
-      if (onBeforeChange) {
-        onBeforeChange(activeSlideWatcher.current, nextSlide);
-      }
-      setActiveSlide(nextSlide);
-      onSlidingHandler(nextSlide);
-    }
-  };
+  // /**
+  //  * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle
+  //  * the smooth transition and set `isDoneSlidingWatcher.current` (like a pointer)
+  //  * as true. While `isDoneSliding` is true, no the slides won't change.
+  //  * The `onBeforeChange` event is executed here.
+  //  */
+  // const changeSlide = React.useCallback(
+  //   (nextSlide: number): void => {
+  //     if (isDoneSlidingWatcher.current) {
+  //       if (onBeforeChange) {
+  //         onBeforeChange(activeSlideWatcher.current, nextSlide);
+  //       }
+  //       setActiveSlide(nextSlide);
+  //       onSlidingHandler(nextSlide);
+  //     }
+  //   },
+  //   [onSlidingHandler, onBeforeChange]
+  // );
 
   /**
    * `smartAnimations` decides which animation to do next depending on the chosen
    * animation set by the programmer, the current and next slides, and if
    * `settings.initialSlidingAnimation` is `true`.
    */
-  const smartAnimations = (nextSlide: number): void => {
-    switch (settings.initialSlidingAnimation) {
-      case EAnimations.TOP_TO_BOTTOM:
-      case EAnimations.BOTTOM_TO_TOP:
-        if (nextSlide > activeSlideWatcher.current) {
-          setSlidingAnimation(HeroSliderModuleCss.Sliding_Bottom_To_Top);
-        } else {
-          setSlidingAnimation(HeroSliderModuleCss.Sliding_Top_To_Bottom);
-        }
-        break;
-      case EAnimations.RIGHT_TO_LEFT:
-      case EAnimations.LEFT_TO_RIGHT:
-        if (nextSlide > activeSlideWatcher.current) {
-          setSlidingAnimation(HeroSliderModuleCss.Sliding_Right_To_Left);
-        } else {
-          setSlidingAnimation(HeroSliderModuleCss.Sliding_Left_To_Right);
-        }
-    }
-  };
+  const smartAnimations = React.useCallback(
+    (nextSlide: number): void => {
+      switch (settings.initialSlidingAnimation) {
+        case EAnimations.TOP_TO_BOTTOM:
+        case EAnimations.BOTTOM_TO_TOP:
+          // TODO: Might cause issues
+          // if (nextSlide > activeSlideWatcher.current) {
+          if (nextSlide > activeSlide) {
+            setSlidingAnimation(HeroSliderModuleCss.Sliding_Bottom_To_Top);
+          } else {
+            setSlidingAnimation(HeroSliderModuleCss.Sliding_Top_To_Bottom);
+          }
+          break;
+        case EAnimations.RIGHT_TO_LEFT:
+        case EAnimations.LEFT_TO_RIGHT:
+          if (nextSlide > activeSlide) {
+            setSlidingAnimation(HeroSliderModuleCss.Sliding_Right_To_Left);
+          } else {
+            setSlidingAnimation(HeroSliderModuleCss.Sliding_Left_To_Right);
+          }
+      }
+    },
+    [setSlidingAnimation, settings.initialSlidingAnimation]
+  );
 
   const [autoplayHandlerTimeout, setAutoplayHandlerTimeout] =
     React.useState<NodeJS.Timeout>();
@@ -186,95 +166,114 @@ const Slider = (props: SliderProps) => {
    * Calculates the next slide based on the current slide (`activeSlide` by default)
    * based on the total amount of slides.
    */
-  const getNextSlide = (currentSlide: number = activeSlide) => {
-    const totalSlides = slidesArray.length;
-    let nextSlide: number;
-    /**
-     * If **not** at the last slide, then add one. Otherwise set the next slide back to 1.
-     */
-    if (currentSlide <= totalSlides - 1) {
-      nextSlide = currentSlide + 1;
-    } else {
-      nextSlide = 1;
-    }
-    return nextSlide;
-  };
+  const getNextSlide = React.useCallback(
+    (currentSlide: number = activeSlide) => {
+      const totalSlides = slidesArray.length;
+      let nextSlide: number;
+      /**
+       * If **not** at the last slide, then add one. Otherwise set the next slide back to 1.
+       */
+      if (currentSlide <= totalSlides - 1) {
+        nextSlide = currentSlide + 1;
+      } else {
+        nextSlide = 1;
+      }
+      return nextSlide;
+    },
+    [activeSlide, slidesArray.length]
+  );
+
+  /**
+   * `autoplay` is the callback sent to the autoplay instance.
+   */
+  const autoplay = React.useCallback((): void => {
+    // TODO: Might cause issues
+    // const nextSlide = getNextSlide(activeSlideWatcher.current);
+    const nextSlide = getNextSlide();
+    if (settings.isSmartSliding) smartAnimations(nextSlide);
+    // TODO: Might cause issues
+    changeSlide(nextSlide);
+  }, [changeSlide, getNextSlide, settings.isSmartSliding, smartAnimations]);
 
   const autoplayInstanceRef = React.useRef(
-    new IntervalTimer((): void => {
-      const nextSlide = getNextSlide(activeSlideWatcher.current);
-      if (settings.isSmartSliding) {
-        smartAnimations(nextSlide);
-      }
-      changeSlide(getNextSlide(activeSlideWatcher.current));
-    }, settings.autoplayDuration + slidingTimeoutDuration)
+    React.useMemo(() => {
+      return new IntervalTimer(
+        autoplay,
+        settings.autoplayDuration + slidingTimeoutDuration
+      );
+    }, [autoplay, settings.autoplayDuration, slidingTimeoutDuration])
   );
 
   const autoplayInstance = autoplayInstanceRef.current;
 
-  /**
-   * Handles slide changes. If the user interacts with the slide, the timer of the
-   * autoplay instance is reset and the next animation is algo decided depending on
-   * the parameter (which is a slide number) **so long as it has not been manually paused**.
-   */
-  const changeSlideHandler = (
-    nextSlide: number,
-    animationParam: number
-  ): void => {
-    clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout);
-    if (settings.isSmartSliding) {
-      smartAnimations(animationParam || nextSlide);
-    }
-    changeSlide(nextSlide);
-  };
+  // /**
+  //  * Handles slide changes. If the user interacts with the slide, the timer of the
+  //  * autoplay instance is reset and the next animation is algo decided depending on
+  //  * the parameter (which is a slide number) **so long as it has not been manually paused**.
+  //  */
+  // const changeSlideHandler = React.useCallback(
+  //   (nextSlide: number, animationParam: number): void => {
+  //     clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout);
+  //     if (settings.isSmartSliding) {
+  //       smartAnimations(animationParam || nextSlide);
+  //     }
+  //     changeSlide(nextSlide);
+  //   },
+  //   [
+  //     autoplayHandlerTimeout,
+  //     changeSlide,
+  //     settings.isSmartSliding,
+  //     smartAnimations
+  //   ]
+  // );
 
-  /**
-   * Changes the active slide to the next one.
-   */
-  const setNextSlide = () => {
-    /**
-     * Forces the animation to be set as the same always, it will slide from right to left,
-     * or from top to bottom so long as the initial animation is not fade.
-     */
-    const animationParam = slidesArray.length + 1;
-    changeSlideHandler(
-      getNextSlide(activeSlideWatcher.current),
-      animationParam
-    );
-  };
+  // /**
+  //  * Changes the active slide to the next one.
+  //  */
+  // const setNextSlide = () => {
+  //   /**
+  //    * Forces the animation to be set as the same always, it will slide from right to left,
+  //    * or from top to bottom so long as the initial animation is not fade.
+  //    */
+  //   const animationParam = slidesArray.length + 1;
+  //   changeSlideHandler(
+  //     getNextSlide(activeSlideWatcher.current),
+  //     animationParam
+  //   );
+  // };
 
-  /**
-   * Calculates the previous slide similar to `getNextSlide`.
-   */
-  const getPreviousSlide = (currentSlide: number = activeSlide) => {
-    const totalSlides = slidesArray.length;
-    let nextSlide: number;
-    /**
-     * If **not** at the first slide, then add one. Otherwise set the next slide to the
-     * last one.
-     */
-    if (currentSlide > 1) {
-      nextSlide = currentSlide - 1;
-    } else {
-      nextSlide = totalSlides;
-    }
-    return nextSlide;
-  };
+  // /**
+  //  * Calculates the previous slide similar to `getNextSlide`.
+  //  */
+  // const getPreviousSlide = (currentSlide: number = activeSlide) => {
+  //   const totalSlides = slidesArray.length;
+  //   let nextSlide: number;
+  //   /**
+  //    * If **not** at the first slide, then add one. Otherwise set the next slide to the
+  //    * last one.
+  //    */
+  //   if (currentSlide > 1) {
+  //     nextSlide = currentSlide - 1;
+  //   } else {
+  //     nextSlide = totalSlides;
+  //   }
+  //   return nextSlide;
+  // };
 
-  /**
-   * Changes the active slide to the previous one.
-   */
-  const setPreviousSlide = () => {
-    /**
-     * Similar to `setNextSlide`, it will always slide from left to right,
-     * or from bottom to top unless the fade animation is active.
-     */
-    const animationParam = 1;
-    changeSlideHandler(
-      getPreviousSlide(activeSlideWatcher.current),
-      animationParam
-    );
-  };
+  // /**
+  //  * Changes the active slide to the previous one.
+  //  */
+  // const setPreviousSlide = () => {
+  //   /**
+  //    * Similar to `setNextSlide`, it will always slide from left to right,
+  //    * or from bottom to top unless the fade animation is active.
+  //    */
+  //   const animationParam = 1;
+  //   changeSlideHandler(
+  //     getPreviousSlide(activeSlideWatcher.current),
+  //     animationParam
+  //   );
+  // };
 
   /**
    * `autoplayHandler` will pause the autoplay timer whenever the mouse
@@ -304,14 +303,6 @@ const Slider = (props: SliderProps) => {
     if (settings.shouldAutoplay) {
       autoplayHandler();
     }
-  };
-
-  const setSliderDimensionsHandler = (): void => {
-    const sliderDimensions: SliderDimensions = {
-      width: sliderRef.current ? sliderRef.current.clientWidth : undefined,
-      height: sliderRef.current ? sliderRef.current.clientHeight : undefined
-    };
-    setSliderDimensions(sliderDimensions);
   };
 
   /**
@@ -408,88 +399,93 @@ const Slider = (props: SliderProps) => {
     }
   };
 
-  /**
-   * Update the respective watchers' current values.
-   */
-  React.useEffect(() => {
-    activeSlideWatcher.current = activeSlide;
-  }, [activeSlide]);
-  React.useEffect(() => {
-    isDoneSlidingWatcher.current = isDoneSliding;
-  }, [isDoneSliding]);
+  // /**
+  //  * Update the respective watchers' current values.
+  //  */
+  // React.useEffect(() => {
+  //   activeSlideWatcher.current = activeSlide;
+  // }, [activeSlide]);
+  // React.useEffect(() => {
+  //   isDoneSlidingWatcher.current = isDoneSliding;
+  // }, [isDoneSliding]);
 
   /**
    * After mounting, akin to `componentDidMount`.
    */
-  React.useEffect(() => {
-    activeSlideWatcher.current = activeSlide;
-    /**
-     * Sets up the `nextSlide` and `previousSlide` reference object if they exist.
-     */
-    if (props.nextSlide) {
-      props.nextSlide.current = setNextSlide;
-    }
-    if (props.previousSlide) {
-      props.previousSlide.current = setPreviousSlide;
-    }
-    /**
-     * Calculates the initial dimensions of the slider and adds event listener.
-     */
-    setSliderDimensionsHandler();
-    window.addEventListener(
-      'resize',
-      setSliderDimensions as EventListenerOrEventListenerObject
-    );
-    if (settings.shouldSlideOnArrowKeypress) {
-      window.addEventListener('keydown', onArrowKeypressHandler);
-    }
-    /**
-     * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
-     */
-    return () => {
-      clearTimeout(delayTimeout && +delayTimeout);
-      clearTimeout(slidingTimeout && +slidingTimeout);
-      clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout);
-      autoplayInstance.stop();
-      window.removeEventListener(
-        'resize',
-        setSliderDimensions as EventListenerOrEventListenerObject
-      );
-      if (settings.shouldSlideOnArrowKeypress) {
-        window.removeEventListener('keydown', onArrowKeypressHandler);
+  React.useEffect(
+    () => {
+      // activeSlideWatcher.current = activeSlide;
+      /**
+       * Turn on autoplay if `props.shouldAutoplay` is true.
+       */
+      // if (settings.shouldAutoplay) {
+      //   autoplayInstance.start();
+      // }
+      /**
+       * Sets up the `nextSlide` and `previousSlide` reference object if they exist.
+       */
+      if (props.nextSlide) {
+        props.nextSlide.current = setNextSlide;
       }
-    };
-  }, []);
+      if (props.previousSlide) {
+        props.previousSlide.current = setPreviousSlide;
+      }
+      if (settings.shouldSlideOnArrowKeypress) {
+        window.addEventListener('keydown', onArrowKeypressHandler);
+      }
+      /**
+       * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
+       */
+      return () => {
+        // clearTimeout(delayTimeout && +delayTimeout);
+        // clearTimeout(slidingTimeout && +slidingTimeout);
+        clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout);
+        autoplayInstance.stop();
+        if (settings.shouldSlideOnArrowKeypress) {
+          window.removeEventListener('keydown', onArrowKeypressHandler);
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [],
+  );
 
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
-    // Default: 800ms
-    '--sliding-duration': `${settings.slidingDuration}ms`,
-    // Default: 0ms
-    '--sliding-delay': `${settings.slidingDelay}ms`,
-    // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
-    '--sliding-animation': settings.slidingAnimation,
-    // Default: 800ms
-    '--slide-transition-delay': `${
-      settings.slidingDuration + settings.slidingDelay
-    }ms`,
-    '--slider-width': `${sliderDimensions.width}px`,
-    '--slider-height': `${sliderDimensions.height}px`,
-    '--slider-color': settings.sliderColor,
-    '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
-    '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
-    '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
-    '--nav-background-color': props.navbarSettings
-      ? props.navbarSettings.color
-      : undefined,
-    '--nav-active-color': props.navbarSettings
-      ? props.navbarSettings.activeColor
-      : undefined,
-    // Default: 800ms
-    '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`
-  };
+  const CSSVariables = React.useMemo(() => {
+    return {
+      // Default: 800ms
+      '--sliding-duration': `${settings.slidingDuration}ms`,
+      // Default: 0ms
+      '--sliding-delay': `${settings.slidingDelay}ms`,
+      // Default: HeroSliderModuleCss.Sliding_Left_To_Right.
+      '--sliding-animation': settings.slidingAnimation,
+      // Default: 800ms
+      '--slide-transition-delay': `${
+        settings.slidingDuration + settings.slidingDelay
+      }ms`,
+      '--slider-width': `${sliderDimensions.width}px`,
+      '--slider-height': `${sliderDimensions.height}px`,
+      '--slider-color': settings.sliderColor,
+      '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
+      '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,
+      '--nav-fade-in-delay': `${settings.navbarFadeInDelay}ms`,
+      '--nav-background-color': props.navbarSettings
+        ? props.navbarSettings.color
+        : undefined,
+      '--nav-active-color': props.navbarSettings
+        ? props.navbarSettings.activeColor
+        : undefined,
+      // Default: 800ms
+      '--mask-duration': `${settings.slidingDuration + settings.slidingDelay}ms`
+    };
+  }, [
+    settings,
+    props.navbarSettings,
+    sliderDimensions.height,
+    sliderDimensions.width
+  ]);
 
   const [inViewTimeoutHandler, setInViewTimeoutHandler] =
     React.useState<NodeJS.Timeout>();
@@ -500,67 +496,73 @@ const Slider = (props: SliderProps) => {
    * instance if it's running. If it comes back into viewport, resume the
    * autoplay instance.
    */
-  React.useLayoutEffect(() => {
-    if (settings.shouldAutoplay) {
-      console.log('autoplayInstance.state', autoplayInstance.state);
-      console.log('EState', EState[autoplayInstance.state]);
-      console.log('props.inView', props.inView);
-      if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
-      switch (true) {
-        case isManuallyPaused:
-          break;
-        // When not in view, stop the autoplay.
-        case !props.inView:
-          console.log('STOPPPING');
-          autoplayInstance.stop();
-          setInViewTimeoutHandler(undefined);
-          break;
-        // When in view and idle, start it.
-        case autoplayInstance.state === EState.IDLE && props.inView: {
-          console.log('STARTING TIMEOUT');
-          const timeoutId = setTimeout(() => {
-            console.log('STARTING');
-            autoplayInstance.start();
-          }, settings.autoplayHandlerTimeout);
-          setInViewTimeoutHandler(timeoutId);
-          break;
-        }
-        // When in view and paused, resume it.
-        case autoplayInstance.state === EState.PAUSED && props.inView: {
-          console.log('RESUMING TIMEOUT');
-          const timeoutId = setTimeout(() => {
-            console.log('RESUMING');
-            autoplayInstance.resume();
-          }, settings.autoplayHandlerTimeout);
-          setInViewTimeoutHandler(timeoutId);
-          break;
+  React.useLayoutEffect(
+    () => {
+      if (settings.shouldAutoplay) {
+        console.log('autoplayInstance.state', autoplayInstance.state);
+        console.log('EState', EState[autoplayInstance.state]);
+        console.log('props.inView', props.inView);
+        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
+        switch (true) {
+          case isManuallyPaused:
+            break;
+          // When not in view, stop the autoplay.
+          case !props.inView:
+            console.log('STOPPPING');
+            autoplayInstance.stop();
+            setInViewTimeoutHandler(undefined);
+            break;
+          // When in view and idle, start it.
+          case autoplayInstance.state === EState.IDLE && props.inView: {
+            console.log('STARTING TIMEOUT');
+            const timeoutId = setTimeout(() => {
+              console.log('STARTING');
+              autoplayInstance.start();
+            }, settings.autoplayHandlerTimeout);
+            setInViewTimeoutHandler(timeoutId);
+            break;
+          }
+          // When in view and paused, resume it.
+          case autoplayInstance.state === EState.PAUSED && props.inView: {
+            console.log('RESUMING TIMEOUT');
+            const timeoutId = setTimeout(() => {
+              console.log('RESUMING');
+              autoplayInstance.resume();
+            }, settings.autoplayHandlerTimeout);
+            setInViewTimeoutHandler(timeoutId);
+            break;
+          }
         }
       }
-    }
-    return () => {
-      if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
-    };
-  }, [
-    autoplayInstance,
-    isManuallyPaused,
-    props.inView,
-    settings.shouldAutoplay,
-    settings.autoplayHandlerTimeout
-  ]);
+      return () => {
+        if (inViewTimeoutHandler) clearTimeout(inViewTimeoutHandler);
+      };
+    },
+    // react-hooks/exhaustive-deps is disabled because we wan't to keep
+    // inViewTimeoutHandler out of the effects to avoid infinite loops.
+    // eslint-disable-next-line
+    [
+      autoplayInstance,
+      isManuallyPaused,
+      props.inView,
+      settings.shouldAutoplay,
+      settings.autoplayHandlerTimeout
+    ]
+  );
 
-  // Setting slides props for the contexts.
-  React.useEffect(() => {
-    if (dispatchProps && typeof dispatchProps === 'function') {
-      dispatchProps({
-        type: EActionTypes.SET_SLIDE_PROPS,
-        payload: {
-          activeSlide,
-          isDoneSliding,
-          slidingAnimation: settings.slidingAnimation
-        }
-      });
-    }
-  }, [dispatchProps, activeSlide, isDoneSliding, settings.slidingAnimation]);
+  // // Setting slides props for the contexts.
+  // React.useEffect(() => {
+  //   if (dispatchProps && typeof dispatchProps === 'function') {
+  //     dispatchProps({
+  //       type: EActionTypes.SET_SLIDE_PROPS,
+  //       payload: {
+  //         activeSlide,
+  //         isDoneSliding,
+  //         slidingAnimation: settings.slidingAnimation
+  //       }
+  //     });
+  //   }
+  // }, [dispatchProps, activeSlide, isDoneSliding, settings.slidingAnimation]);
 
   // Setting navbars props for the contexts.
   React.useEffect(() => {
@@ -569,14 +571,16 @@ const Slider = (props: SliderProps) => {
         type: EActionTypes.SET_NAVBAR_PROPS,
         payload: {
           activeSlide,
-          changeSlide: changeSlideHandler,
+          // TODO: Might cause issues
+          changeSlide,
           totalSlides: slidesArray.length,
           sliderWidth: sliderDimensions.width || 0
         }
       });
     }
   }, [
-    changeSlideHandler,
+    // TODO: Might cause issues
+    changeSlide,
     activeSlide,
     dispatchProps,
     sliderDimensions.width,
@@ -619,6 +623,23 @@ const Slider = (props: SliderProps) => {
     settings.shouldAutoplay
   ]);
 
+  /**
+   * Handles slide changes. If the user interacts with the slide, the timer of the
+   * autoplay instance is reset and the next animation is algo decided depending on
+   * the parameter (which is a slide number) **so long as it has not been manually paused**.
+   */
+  React.useEffect(() => {
+    // TODO: Autoplay logic should be handled inside an autoplay hook
+    clearTimeout(autoplayHandlerTimeout && +autoplayHandlerTimeout);
+    // TODO: Animation logic should be handled inside an animation hook
+    if (settings.isSmartSliding) {
+      // const animationParam = slidesArray.length + 1;
+      smartAnimations(activeSlide);
+    }
+
+    return () => {};
+  }, [activeSlide]);
+
   return (
     <div
       ref={sliderRef}
@@ -649,12 +670,13 @@ const Slider = (props: SliderProps) => {
 
 export default function HeroSlider(props: HeroSliderProps) {
   const [ref, inView] = useInView({
+    /* Optional options */
     threshold: 0
   });
 
   return (
     <Context>
-      <div ref={ref}>
+      <div className="rm-hero-slider" ref={ref}>
         <Slider {...props} inView={inView} />
       </div>
     </Context>

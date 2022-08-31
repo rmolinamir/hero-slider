@@ -1,24 +1,49 @@
 import React from 'react';
 import { SliderContext } from '../../Context';
+import { EActionTypes } from '../../Context/typings';
 import { Settings, SliderProps } from '../typings';
+
+// TODO: Refactor this more elegantly later
+function usePreviousValue<Type>(value: Type): Type {
+  const ref = React.useRef(value);
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
 
 /**
  * Manages the Slider's slide transitions and event handlers.
  */
-export default function useSliderManager(
+export default function useSliderManager( // TODO: Rename to useSliderController
   props: SliderProps,
   settings: Settings
 ): {
   activeSlide: number;
-  setNextSlide(): void;
-  setPreviousSlide(): void;
+  prevActiveSlide: number;
+  isDoneSliding: boolean;
+  slidingDirection?: 'forward' | 'backward';
+  getNextSlide(aSlide: number): number;
+  getPreviousSlide(aSlide: number): number;
+  changeSlide( // TODO: Make an interface
+    nextSlide: number,
+    slidingDirection?: 'forward' | 'backward'
+  ): void;
+  setNextSlide(): void; // TODO: Rename to `goToNextSlide`
+  setPreviousSlide(): void; // TODO: Rename to `goToPrevSlide`
 } {
   const { onBeforeChange, onAfterChange, onChange } = props;
 
-  const { slidesArray } = React.useContext(SliderContext);
+  const { slidesArray, dispatchProps } = React.useContext(SliderContext);
 
   const [activeSlide, setActiveSlide] = React.useState(props.initialSlide || 1);
+  const prevActiveSlide = usePreviousValue(activeSlide);
+
+  // TODO: Rename to isSliding
   const [isDoneSliding, setIsDoneSliding] = React.useState(true);
+  const [slidingDirection, setSlidingDirection] = React.useState<
+    'forward' | 'backward'
+  >();
 
   /**
    * `activeSlideWatcher` `isDoneSlidingWatcher` are a mutable
@@ -31,7 +56,9 @@ export default function useSliderManager(
    *    current slide. It is updated during the `useEffects` subscribed
    *    to the `activeSlide` state whenever the user changes slide.
    */
+  // TODO: Might not be necessary after refactor
   const isDoneSlidingWatcher = React.useRef<boolean>(true);
+  // TODO: Might not be necessary after refactor
   const activeSlideWatcher = React.useRef(activeSlide);
 
   const [delayTimeout, setDelayTimeout] = React.useState<NodeJS.Timeout>();
@@ -49,7 +76,7 @@ export default function useSliderManager(
    * Returns the slide after of the given slide (`activeSlide` by default)
    * based on the total amount of slides.
    */
-  const getNextSlider = React.useCallback(
+  const getNextSlide = React.useCallback(
     (aSlide: number = activeSlide) => {
       const lastSlide = slidesArray.length;
 
@@ -65,7 +92,7 @@ export default function useSliderManager(
   );
 
   /**
-   * Returns the previous slide similar to `getNextSlider`.
+   * Returns the previous slide similar to `getNextSlide`.
    */
   const getPreviousSlide = (aSlide: number = activeSlide) => {
     const lastSlide = slidesArray.length;
@@ -86,17 +113,28 @@ export default function useSliderManager(
    * The `onBeforeChange` event is executed here. This triggers a useEffect
    * that handles effects after the sliding is done.
    */
-  const changeSlide = React.useCallback(
-    (nextSlide: number): void => {
-      if (isDoneSlidingWatcher.current) {
-        if (onBeforeChange)
-          onBeforeChange(activeSlideWatcher.current, nextSlide);
+  const changeSlide = (
+    nextSlide: number,
+    slidingDirection?: 'forward' | 'backward'
+  ): void => {
+    if (isDoneSlidingWatcher.current) {
+      console.log('[changeSlide] activeSlide: ', activeSlide);
+      console.log('[changeSlide] nextSlide: ', nextSlide);
+      console.log(
+        '[changeSlide] activeSlideWatcher.current: ',
+        activeSlideWatcher.current
+      );
+      console.log('[changeSlide] slidingDirection: ', slidingDirection);
 
-        setActiveSlide(nextSlide);
-      }
-    },
-    [onBeforeChange]
-  );
+      if (onBeforeChange) onBeforeChange(activeSlideWatcher.current, nextSlide);
+
+      setIsDoneSliding(false);
+
+      setSlidingDirection(slidingDirection);
+
+      setActiveSlide(nextSlide);
+    }
+  };
 
   /**
    * Sets `isDoneSliding` as false when executed and triggers
@@ -106,8 +144,6 @@ export default function useSliderManager(
    * The `onChange` and `onAfterChange` events are executed here.
    */
   React.useEffect(() => {
-    setIsDoneSliding(false);
-
     activeSlideWatcher.current = activeSlide;
 
     function startSliding() {
@@ -150,6 +186,7 @@ export default function useSliderManager(
 
   React.useEffect(() => {
     isDoneSlidingWatcher.current = isDoneSliding;
+    if (isDoneSliding) setSlidingDirection(undefined);
   }, [isDoneSliding]);
 
   // TODO: Animation logic should be handled inside an autoplay hook
@@ -227,10 +264,10 @@ export default function useSliderManager(
     //  */
     // const animationParam = slidesArray.length + 1;
     // changeSlideHandler(
-    //   getNextSlider(activeSlideWatcher.current),
+    //   getNextSlide(activeSlideWatcher.current),
     //   animationParam
     // );
-    changeSlide(getNextSlider(activeSlideWatcher.current));
+    changeSlide(getNextSlide(activeSlideWatcher.current), 'forward');
   };
 
   /**
@@ -247,7 +284,7 @@ export default function useSliderManager(
     //   getPreviousSlide(activeSlideWatcher.current),
     //   animationParam
     // );
-    changeSlide(getPreviousSlide(activeSlideWatcher.current));
+    changeSlide(getPreviousSlide(activeSlideWatcher.current), 'backward');
   };
 
   // TODO: Might or might not be needed, not sure.
@@ -265,8 +302,28 @@ export default function useSliderManager(
   //   };
   // }, []);
 
+  // Setting slides props for the contexts.
+  React.useEffect(() => {
+    if (dispatchProps && typeof dispatchProps === 'function') {
+      dispatchProps({
+        type: EActionTypes.SET_SLIDE_PROPS,
+        payload: {
+          activeSlide,
+          isDoneSliding,
+          slidingAnimation: settings.slidingAnimation
+        }
+      });
+    }
+  }, [dispatchProps, activeSlide, isDoneSliding, settings.slidingAnimation]);
+
   return {
     activeSlide,
+    prevActiveSlide,
+    isDoneSliding,
+    slidingDirection,
+    getNextSlide,
+    getPreviousSlide,
+    changeSlide,
     setNextSlide,
     setPreviousSlide
   };
