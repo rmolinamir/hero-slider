@@ -59,13 +59,10 @@ export default function useSettings(
     ...props.settings
   });
 
-  const settings = React.useMemo(
-    () => ({
-      ...sliderSettings,
-      ...props.settings
-    }),
-    [sliderSettings, props.settings]
-  );
+  const settings = {
+    ...sliderSettings,
+    ...props.settings
+  };
 
   return [settings, setSettings];
 }

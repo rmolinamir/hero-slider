@@ -57,15 +57,26 @@ export interface SliderState extends Required<Omit<SliderProps, 'children'>> {}
 //
 //
 
+export interface ManagerProps {} // TODO: Get the current Context stuff in here, discard whatever isn't needed anymore.
+
+export interface ManagerState extends Required<ManagerProps> {} // TODO: Get the current Context stuff in here, discard whatever isn't needed anymore.
+
+//
+//
+//
+//
+//
+//
+
 export interface SettingsProps {
   shouldDisplayButtons?: boolean;
   shouldAutoplay?: boolean;
   shouldSlideOnArrowKeypress?: boolean;
   sliderColor?: string;
-  style?: React.CSSProperties; // [x]
+  style?: CSS.Properties;
   nextSlide?: React.MutableRefObject<any>;
   previousSlide?: React.MutableRefObject<any>;
-  navbarSettings?: Partial<NavbarSettings>; // [x]
+  navbarSettings?: Partial<NavbarSettings>;
 }
 
 export interface SettingsState extends Required<SettingsProps> {}
@@ -119,13 +130,13 @@ export interface ControllerState extends Required<ControllerProps> {
 export interface AccessabilityProps {
   shouldDisplayButtons?: boolean;
   shouldSlideOnArrowKeypress?: boolean;
-  orientation?: `${AccessabilityOrientation}`; // [x]
+  orientation?: `${AccessabilityOrientation}`;
 }
 
 export interface AccessabilityState extends Required<AccessabilityProps> {
   slidingAnimation: string;
   sliderOrientation: AccessabilityOrientation; // TODO: Redundant. Can probably be removed.
-  orientation: AccessabilityOrientation; // [x]
+  orientation: AccessabilityOrientation;
   touchMotion: TouchMotion;
 }
 
@@ -184,7 +195,7 @@ export interface AutoplayState extends Required<AutoplayProps> {
 //
 
 export interface IntersectionObserverProps {
-  inView?: boolean; // [x]
+  inView?: boolean;
 }
 
 export interface IntersectionObserverState
