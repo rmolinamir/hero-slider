@@ -1,0 +1,117 @@
+.Wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* Removes gray highlight when clicked on safari/mobile. */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  animation: fade-in var(--slider-fade-in-duration, 100) ease-in;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* `pointer-events` manipulation to allow clicking inner children AND children inside the Container. */
+.Container * {
+  pointer-events: auto;
+}
+
+/**
+* ------------------------------------
+* ----------ANIMATIONS----------------
+* ------------------------------------
+*/
+
+.Sliding_Fade_In {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-fade-in var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.Sliding_Left_To_Right {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-left-to-right var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-left-to-right {
+  0% {
+    clip-path: inset(0% 100% 0% 0%);
+    -webkit-clip-path: inset(0% 100% 0% 0%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.Sliding_Right_To_Left {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-right-to-left var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-right-to-left {
+  0% {
+    clip-path: inset(0% 0% 0% 100%);
+    -webkit-clip-path: inset(0% 0% 0% 100%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.Sliding_Top_To_Bottom {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-top-to-bottom var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-top-to-bottom {
+  0% {
+    clip-path: inset(0% 0% 100% 0%);
+    -webkit-clip-path: inset(0% 0% 100% 0%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.Sliding_Bottom_To_Top {
+  /* keyframe name | duration | timing function | delay */
+  animation: slide-bottom-to-top var(--sliding-duration, 600ms) ease-in-out var(--sliding-delay, 0ms);
+}
+
+@keyframes slide-bottom-to-top {
+  0% {
+    clip-path: inset(100% 0% 0% 0%);
+    -webkit-clip-path: inset(100% 0% 0% 0%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
+  }
+}

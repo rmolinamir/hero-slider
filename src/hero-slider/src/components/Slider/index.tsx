@@ -250,15 +250,6 @@ const Slider = (props: SliderProps) => {
     // if (settings.shouldAutoplay) {
     //   autoplayInstance.start();
     // }
-    /**
-     * Sets up the `nextSlide` and `previousSlide` reference object if they exist.
-     */
-    if (props.nextSlide) {
-      props.nextSlide.current = setNextSlide;
-    }
-    if (props.previousSlide) {
-      props.previousSlide.current = setPreviousSlide;
-    }
     if (settings.shouldSlideOnArrowKeypress) {
       window.addEventListener('keydown', onArrowKeypressHandler);
     }
@@ -275,6 +266,20 @@ const Slider = (props: SliderProps) => {
   }, []);
 
   /**
+   * Sets up the `nextSlide` reference object if they exist.
+   */
+  React.useEffect(() => {
+    if (props.nextSlide) props.nextSlide.current = setNextSlide;
+  }, [setNextSlide]);
+
+  /**
+   * Sets up the `previousSlide` reference object if they exist.
+   */
+  React.useEffect(() => {
+    if (props.previousSlide) props.previousSlide.current = setPreviousSlide;
+  }, [setPreviousSlide]);
+
+  /**
    * CSS variables for the transitions.
    */
   const CSSVariables = React.useMemo(() => {
@@ -289,8 +294,12 @@ const Slider = (props: SliderProps) => {
       '--slide-transition-delay': `${
         settings.slidingDuration + settings.slidingDelay
       }ms`,
-      '--slider-width': `${sliderDimensions.width}px`,
-      '--slider-height': `${sliderDimensions.height}px`,
+      '--slider-width': sliderDimensions.width
+        ? `${sliderDimensions.width}px`
+        : undefined,
+      '--slider-height': sliderDimensions.height
+        ? `${sliderDimensions.height}px`
+        : undefined,
       '--slider-color': settings.sliderColor,
       '--slider-fade-in-duration': `${settings.sliderFadeInDuration}ms`,
       '--nav-fade-in-duration': `${settings.navbarFadeInDuration}ms`,

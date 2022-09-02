@@ -2,6 +2,7 @@ import React from 'react';
 import { ButtonsNavProps } from './typings';
 import ButtonsNavModuleCss from './ButtonsNav.module.css';
 import { Nav } from '../Nav';
+import { SliderContext } from '../Context';
 
 const SliderNav = (props: ButtonsNavProps) => {
   /**
@@ -12,18 +13,16 @@ const SliderNav = (props: ButtonsNavProps) => {
     activeColor,
     backgroundColor,
     position,
-    totalSlides,
-    activeSlide,
-    changeSlide,
     justifyContent,
     alignItems,
-    navDescriptions,
     sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
     extraButton,
     isExtraButtonRight
   } = props;
+
+  const { navProps, slidesArray } = React.useContext(SliderContext);
 
   /**
    * CSS variables for the transitions.
@@ -35,15 +34,16 @@ const SliderNav = (props: ButtonsNavProps) => {
   };
 
   const ButtonNavButtons = React.useMemo(() => {
+    if (!navProps || !slidesArray.length) return [];
+    const { changeSlide, activeSlide } = navProps;
     const changeSlideHandler = (ButtonNavButtonIndex: number) => {
       const nextSlide = ButtonNavButtonIndex + 1;
-      if (changeSlide && nextSlide !== activeSlide) {
+      if (nextSlide !== activeSlide) {
         changeSlide(nextSlide);
       }
     };
-    const emptyArray = Array.from(Array(totalSlides));
-    return emptyArray.map((_, index) => {
-      const description = navDescriptions[index];
+    return slidesArray.map(({ navDescription }, index) => {
+      const description = navDescription;
       const respectiveSlide = index + 1;
       return (
         // TODO: Deal with the disabled linting later:
@@ -62,8 +62,12 @@ const SliderNav = (props: ButtonsNavProps) => {
         </li>
       );
     });
-  }, [activeSlide, navDescriptions, totalSlides, changeSlide]);
+  }, [navProps, slidesArray]);
 
+  console.log(
+    'sliderWidth <= mobileThreshold: ',
+    sliderWidth <= mobileThreshold
+  );
   if (sliderWidth <= mobileThreshold) {
     if (isNullAfterThreshold) return null;
     return <Nav {...props} />;
@@ -72,11 +76,10 @@ const SliderNav = (props: ButtonsNavProps) => {
   return (
     <div
       style={{
-        top: position?.top,
-        right: position?.right,
-        bottom: position?.bottom || '0',
-        left: position?.left || '50%',
-        transform: position?.transform || 'translateX(-50%)',
+        bottom: !position ? '0' : undefined,
+        left: !position ? '50%' : undefined,
+        transform: !position ? 'translateX(-50%)' : undefined,
+        ...position,
         ...CSSVariables
       }}
       className={ButtonsNavModuleCss.Wrapper}
@@ -116,4 +119,4 @@ export const ButtonsNav = (props: ButtonsNavProps): JSX.Element => (
   <SliderNav {...props} />
 );
 
-(ButtonsNav as React.FunctionComponent).displayName = 'hero-slider/menu-nav';
+(ButtonsNav as React.FunctionComponent).displayName = 'hero-slider/buttons-nav';

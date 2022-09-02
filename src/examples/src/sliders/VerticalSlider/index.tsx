@@ -21,11 +21,13 @@ export default function VerticalSlider() {
       // @ts-ignore
       orientation="vertical"
       initialSlide={1}
-      onBeforeChange={(previousSlide, nextSlide) =>
+      onBeforeChange={(previousSlide: number, nextSlide: number) =>
         console.debug('onBeforeChange', previousSlide, nextSlide)
       }
-      onChange={(nextSlide) => console.debug('onChange', nextSlide)}
-      onAfterChange={(nextSlide) => console.debug('onAfterChange', nextSlide)}
+      onChange={(nextSlide: number) => console.debug('onChange', nextSlide)}
+      onAfterChange={(nextSlide: number) =>
+        console.debug('onAfterChange', nextSlide)
+      }
       style={{
         backgroundColor: '#000'
       }}
