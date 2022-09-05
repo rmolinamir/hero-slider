@@ -1,4 +1,4 @@
-import HeroSlider, { Slide, Container, Nav, AutoplayButton } from 'hero-slider';
+import HeroSlider, { Slide, Overlay, Nav, AutoplayButton } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 
@@ -27,12 +27,12 @@ export default function AutoplayButtonSlider() {
         shouldDisplayButtons: false
       }}
     >
-      <Container>
+      <Overlay>
         <Wrapper>
           <Title>Autoplay Button Slider</Title>
           <AutoplayButton />
         </Wrapper>
-      </Container>
+      </Overlay>
 
       <Slide
         shouldRenderMask

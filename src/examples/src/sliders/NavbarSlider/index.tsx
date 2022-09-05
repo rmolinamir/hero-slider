@@ -1,4 +1,4 @@
-import HeroSlider, { Slide, Container, MenuNav } from 'hero-slider';
+import HeroSlider, { Slide, Overlay, MenuNav } from 'hero-slider';
 import Navbar from '../../ui/Navbar';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
@@ -27,13 +27,13 @@ export default function NavbarSlider() {
         shouldDisplayButtons: false
       }}
     >
-      <Container>
+      <Overlay>
         <Navbar />
         <Wrapper>
           <Title>Navbar Slider</Title>
           <Subtitle>Cool stuff.</Subtitle>
         </Wrapper>
-      </Container>
+      </Overlay>
 
       <Slide
         shouldRenderMask

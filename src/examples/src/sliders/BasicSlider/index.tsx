@@ -1,4 +1,4 @@
-import HeroSlider, { Slide, Container, Nav } from 'hero-slider';
+import HeroSlider, { Slide, Overlay, Nav } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
@@ -28,12 +28,12 @@ export default function BasicSlider() {
           console.debug('onAfterChange(nextSlide): ', nextSlide)
       }}
     >
-      <Container>
+      <Overlay>
         <Wrapper>
           <Title>Basic Slider</Title>
           <Subtitle>Slides&apos; background attachment set to fixed</Subtitle>
         </Wrapper>
-      </Container>
+      </Overlay>
 
       <Slide
         label="Giau Pass - Italy"
