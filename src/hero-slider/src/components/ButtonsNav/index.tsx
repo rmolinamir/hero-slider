@@ -26,14 +26,15 @@ export function ButtonsNav(props: ButtonsNavProps) {
     },
     justifyContent,
     alignItems,
-    mobileThreshold = 1024, // TODO: This magic variable should be centralized. Other components use the same threshold.
+    mobileThreshold: componentMobileThreshold,
     isNullAfterThreshold = false,
     extraButton,
     isExtraButtonRight
   } = props;
 
   const {
-    state: { width }
+    state: { width },
+    mobileThreshold
   } = useLayout();
 
   const {
@@ -54,7 +55,7 @@ export function ButtonsNav(props: ButtonsNavProps) {
     '--nav-active-color': activeColor
   };
 
-  if (Number(width) <= mobileThreshold) {
+  if (Number(width) <= (componentMobileThreshold ?? mobileThreshold)) {
     if (isNullAfterThreshold) return null;
     return <Nav {...props} />;
   }

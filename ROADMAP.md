@@ -10,7 +10,7 @@
 - [x] There is a race condition between the `Slide` *animation* CSS classes being applied and the *active* CSS classes. This leads to jankiness when doing slides, because if the z-index changes happen before the animation CSS classes are applied, the next slide will flash on top of the current slide then disappear and slide in afterwards.
   - [x] The weird thing is that this **only** seems to happen when changing **sliding directions**. Not sure why...
 - [x] Currently in the modules, there is a shitty pattern that mixes the props with the state, and that forces too much data replication to update state if props change, this should be fixed. A solution is to simply update the first generic of the `React.createContext` function and add the props that should be exposed and proxied in there.
-- [ ] Deal with TODOs.
+- [x] Deal with TODOs.
 - [ ] Add classes to `hero-slider` such as `.Slider`, `.Slide`, etc. The goal is to allow other developers to target my components through CSS and customize their styling.
 - [ ] The space of the next/prev slide arrows of the slider on where the user can click does not match their actual rendered image.
 - [ ] Address the open issues of v2.x.

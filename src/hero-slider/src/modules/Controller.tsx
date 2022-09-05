@@ -29,9 +29,9 @@ export interface ControllerProps {
   slidingDuration?: number;
   slidingDelay?: number;
   initialSlide?: number;
-  onBeforeChange?(activeSlide: number, nextSlide: number): void; // TODO: Rename to onBeforeSliding
-  onChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onSliding
-  onAfterChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onAfterSliding
+  onBeforeSliding?(activeSlide: number, nextSlide: number): void;
+  onSliding?(activeSlide: number, prevSlide: number): void;
+  onAfterSliding?(activeSlide: number, prevSlide: number): void;
   /**
    * Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the `goToNextSlide` handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component.
    */
@@ -192,7 +192,7 @@ function ControllerProvider({ children, controller }: ProviderProps) {
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle
    * the smooth transition and set `isDoneSlidingWatcher.current` (like a pointer)
    * as true. While `isDoneSliding` is true, no the slides won't change.
-   * The `onBeforeChange` event is executed here. This triggers a useEffect
+   * The `onBeforeSliding` event is executed here. This triggers a useEffect
    * that handles effects after the sliding is done.
    */
   const changeSlide = (
@@ -201,8 +201,8 @@ function ControllerProvider({ children, controller }: ProviderProps) {
   ): void => {
     if (state.isSliding) return;
 
-    if (controller?.onBeforeChange)
-      controller.onBeforeChange(state.activeSlide, nextSlide);
+    if (controller?.onBeforeSliding)
+      controller.onBeforeSliding(state.activeSlide, nextSlide);
 
     dispatch({
       type: 'start-sliding',
@@ -231,10 +231,6 @@ function ControllerProvider({ children, controller }: ProviderProps) {
    * Sets up the `goToNextSlide` pointer if it exists.
    */
   React.useEffect(() => {
-    console.log(
-      'controller?.goToNextSlidePointer: ',
-      controller?.goToNextSlidePointer
-    );
     if (controller?.goToNextSlidePointer)
       controller.goToNextSlidePointer.current = goToNextSlide;
   }, [controller?.goToNextSlidePointer, goToNextSlide]);
@@ -249,14 +245,14 @@ function ControllerProvider({ children, controller }: ProviderProps) {
 
   /**
    * Starts a `setTimeout` that will set `isSliding` as `false` after the time it takes for the slide to change passes.
-   * Saves the timeout ID to `slidingTimeout`. The `onChange` and `onAfterChange` events are executed here.
+   * Saves the timeout ID to `slidingTimeout`. The `onSliding` and `onAfterSliding` events are executed here.
    */
   React.useEffect(() => {
     dispatch({
       type: 'set-delay-timeout',
       payload: setTimeout(() => {
-        if (controller?.onChange)
-          controller.onChange(state.activeSlide, state.prevActiveSlide);
+        if (controller?.onSliding)
+          controller.onSliding(state.activeSlide, state.prevActiveSlide);
       }, params.slidingDelay)
     });
 
@@ -265,8 +261,8 @@ function ControllerProvider({ children, controller }: ProviderProps) {
       payload: setTimeout(() => {
         dispatch({ type: 'finish-sliding' });
 
-        if (controller?.onAfterChange)
-          controller.onAfterChange(state.activeSlide, state.prevActiveSlide);
+        if (controller?.onAfterSliding)
+          controller.onAfterSliding(state.activeSlide, state.prevActiveSlide);
       }, getSlidingCycleDuration())
     });
 

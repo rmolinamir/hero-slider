@@ -15,6 +15,11 @@ export interface AccessabilityProps {
   shouldDisplayButtons?: boolean;
   shouldSlideOnArrowKeypress?: boolean;
   orientation?: `${AccessabilityOrientation}`;
+  /**
+   * Pixel threshold for the Slider to register a swiping command to change slides.
+   * @default 50
+   */
+  thresholdToSlide?: number;
 }
 
 type Action =
@@ -40,7 +45,8 @@ type ProviderProps = React.PropsWithChildren<{
 const defaultProps: Required<AccessabilityProps> = {
   shouldDisplayButtons: true,
   shouldSlideOnArrowKeypress: true,
-  orientation: AccessabilityOrientation.HORIZONTAL
+  orientation: AccessabilityOrientation.HORIZONTAL,
+  thresholdToSlide: 50
 };
 
 const AccessabilityStateContext = React.createContext<
@@ -94,7 +100,9 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
     shouldSlideOnArrowKeypress:
       accessability?.shouldSlideOnArrowKeypress ??
       defaultProps.shouldSlideOnArrowKeypress,
-    orientation: accessability?.orientation || defaultProps.orientation
+    orientation: accessability?.orientation || defaultProps.orientation,
+    thresholdToSlide:
+      accessability?.thresholdToSlide ?? defaultProps.thresholdToSlide
   };
 
   const [state, dispatch] = React.useReducer(accessabilityReducer, {
@@ -138,7 +146,6 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
    * Finally the touch state is set back to the initial state, where everything is undefined.
    */
   const onTouchEndHandler = () => {
-    const thresholdToSlide = 50; // TODO: Turn into a prop?
     const diffX = Number(state.initialX) - Number(state.currentX);
     const diffY = Number(state.initialY) - Number(state.currentY);
 
@@ -151,12 +158,15 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
     if (
       isSlidingHorizontally &&
       isSliderSetHorizontally &&
-      Math.abs(diffX) >= thresholdToSlide
+      Math.abs(diffX) >= params.thresholdToSlide
     ) {
       const isSwipingRight = diffX > 0;
       if (isSwipingRight) goToNextSlide();
       else goToPreviousSlide();
-    } else if (isSliderVertically && Math.abs(diffY) >= thresholdToSlide) {
+    } else if (
+      isSliderVertically &&
+      Math.abs(diffY) >= params.thresholdToSlide
+    ) {
       const isSwipingUp = diffY > 0;
       if (isSwipingUp) goToNextSlide();
       else goToPreviousSlide();

@@ -16,16 +16,16 @@ export default function BasicSlider() {
         initialSlide: 1,
         slidingDuration: 500,
         slidingDelay: 100,
-        onChange: (nextSlide: number) =>
-          console.debug('onChange(nextSlide): ', nextSlide),
-        onBeforeChange: (previousSlide: number, nextSlide: number) =>
+        onSliding: (nextSlide: number) =>
+          console.debug('onSliding(nextSlide): ', nextSlide),
+        onBeforeSliding: (previousSlide: number, nextSlide: number) =>
           console.debug(
-            'onBeforeChange(previousSlide, nextSlide): ',
+            'onBeforeSliding(previousSlide, nextSlide): ',
             previousSlide,
             nextSlide
           ),
-        onAfterChange: (nextSlide: number) =>
-          console.debug('onAfterChange(nextSlide): ', nextSlide)
+        onAfterSliding: (nextSlide: number) =>
+          console.debug('onAfterSliding(nextSlide): ', nextSlide)
       }}
     >
       <Overlay>

@@ -31,14 +31,15 @@ export function MenuNav(props: MenuNavProps) {
       transform: 'translateX(-50%)'
     },
     justifyContent,
-    mobileThreshold = 1024,
+    mobileThreshold: componentMobileThreshold,
     isNullAfterThreshold,
     extraButton,
     isExtraButtonRight = true
   } = props;
 
   const {
-    state: { width }
+    state: { width },
+    mobileThreshold
   } = useLayout();
 
   const {
@@ -50,7 +51,7 @@ export function MenuNav(props: MenuNavProps) {
     changeSlide
   } = useController();
 
-  if (Number(width) <= mobileThreshold) {
+  if (Number(width) <= (componentMobileThreshold ?? mobileThreshold)) {
     if (isNullAfterThreshold) return null;
     return <Nav {...props} />;
   }

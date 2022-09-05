@@ -1,6 +1,8 @@
 import React from 'react';
 import type CSS from 'csstype';
 
+const mobileThreshold = 1024;
+
 type Action = {
   type: 'update-slider-dimensions';
 };
@@ -10,9 +12,9 @@ type State = {
   height?: CSS.Properties['height'];
 };
 
-const LayoutStateContext = React.createContext<{ state: State } | undefined>(
-  undefined
-);
+const LayoutStateContext = React.createContext<
+  { state: State; mobileThreshold: number } | undefined
+>(undefined);
 
 function layoutReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -63,7 +65,7 @@ function LayoutProvider({ children }: React.PropsWithChildren) {
 
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state };
+  const value = { state, mobileThreshold };
 
   return (
     <LayoutStateContext.Provider value={value}>
@@ -72,14 +74,14 @@ function LayoutProvider({ children }: React.PropsWithChildren) {
   );
 }
 
-function useLayout(): { state: State } {
+function useLayout() {
   const context = React.useContext(LayoutStateContext);
 
   if (context === undefined) {
     throw new Error('useLayout must be used within a LayoutProvider');
   }
 
-  return { state: context.state };
+  return context;
 }
 
 export { LayoutProvider, useLayout };
