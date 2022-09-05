@@ -8,9 +8,9 @@ import { useManager } from '../../modules/Manager';
  * `SideNav` component props.
  */
 export interface SideNavProps extends NavProps {
-  right: string;
-  left: string;
-  isPositionedRight: boolean;
+  right?: string;
+  left?: string;
+  isPositionedRight?: boolean;
 }
 
 export function SideNav({
@@ -18,8 +18,14 @@ export function SideNav({
   activeColor,
   left,
   right,
-  position,
-  isPositionedRight = true
+  isPositionedRight = true,
+  position = {
+    bottom: undefined,
+    top: '50%',
+    left: !isPositionedRight ? left || '1rem' : undefined,
+    right: isPositionedRight ? right || '1rem' : undefined,
+    transform: 'translateY(-50%)'
+  }
 }: SideNavProps) {
   const {
     state: { slides, totalSlides }
@@ -72,12 +78,7 @@ export function SideNav({
   return (
     <ul
       style={{
-        bottom: position?.bottom,
-        top: position?.top || '50%',
-        left: position?.left || !isPositionedRight ? left || '1rem' : undefined,
-        right:
-          position?.right || isPositionedRight ? right || '1rem' : undefined,
-        transform: position?.transform || 'translateY(-50%)',
+        ...position,
         ...CSSVariables
       }}
       className={SideNavModuleCss.Wrapper}

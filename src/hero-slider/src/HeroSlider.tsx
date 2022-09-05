@@ -56,6 +56,7 @@ function Orchestrator({
 }: React.PropsWithChildren<
   Pick<HeroSliderProps, 'width' | 'height' | 'style'>
 >) {
+  const { shouldDisplayButtons } = useAccessability();
   const { sliderFadeInDuration, navbarFadeInDuration, navbarFadeInDelay } =
     useAnimations();
   const { state: layout } = useLayout();
@@ -106,7 +107,7 @@ function Orchestrator({
         }}
       >
         {children}
-        {settings.shouldDisplayButtons && <Buttons />}
+        {shouldDisplayButtons && <Buttons />}
       </div>
     </div>
   );

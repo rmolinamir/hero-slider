@@ -31,7 +31,10 @@ export default function BasicSlider() {
       <Overlay>
         <Wrapper>
           <Title>Basic Slider</Title>
-          <Subtitle>Slides&apos; background attachment set to fixed</Subtitle>
+          <Subtitle>
+            The <code>backgroundAttachment</code> prop of the <code>Slide</code>{' '}
+            components set to <code>fixed</code>.
+          </Subtitle>
         </Wrapper>
       </Overlay>
 

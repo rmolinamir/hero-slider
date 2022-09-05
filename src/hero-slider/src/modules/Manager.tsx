@@ -95,7 +95,7 @@ function managerReducer(state: State, action: Action): State {
 
 function ManagerProvider({ children, manager }: ProviderProps) {
   const [state, dispatch] = React.useReducer(managerReducer, {
-    isMobile: manager?.isMobile || defaultProps.isMobile,
+    isMobile: manager?.isMobile ?? defaultProps.isMobile,
     slides: new Map(),
     totalSlides: 0
   } as State);

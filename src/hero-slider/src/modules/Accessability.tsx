@@ -46,6 +46,7 @@ const defaultProps: Required<AccessabilityProps> = {
 const AccessabilityStateContext = React.createContext<
   | {
       state: State;
+      shouldDisplayButtons: boolean;
       orientation: AccessabilityOrientation;
       onTouchStartHandler: (event: React.TouchEvent<HTMLDivElement>) => void;
       onTouchMoveHandler: (event: React.TouchEvent<HTMLDivElement>) => void;
@@ -89,9 +90,9 @@ function accessabilityReducer(state: State, action: Action): State {
 function AccessabilityProvider({ children, accessability }: ProviderProps) {
   const params: Required<AccessabilityProps> = {
     shouldDisplayButtons:
-      accessability?.shouldDisplayButtons || defaultProps.shouldDisplayButtons,
+      accessability?.shouldDisplayButtons ?? defaultProps.shouldDisplayButtons,
     shouldSlideOnArrowKeypress:
-      accessability?.shouldSlideOnArrowKeypress ||
+      accessability?.shouldSlideOnArrowKeypress ??
       defaultProps.shouldSlideOnArrowKeypress,
     orientation: accessability?.orientation || defaultProps.orientation
   };
@@ -208,6 +209,7 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
   // Learn more in http://kcd.im/optimize-context
   const value = {
     state,
+    shouldDisplayButtons: params.shouldDisplayButtons,
     orientation: params.orientation as AccessabilityOrientation,
     onTouchStartHandler,
     onTouchMoveHandler,

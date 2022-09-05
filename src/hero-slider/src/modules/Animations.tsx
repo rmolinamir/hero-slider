@@ -65,12 +65,14 @@ function AnimationsProvider({ children, animations }: ProviderProps) {
     slidingAnimation:
       animations?.slidingAnimation || defaultProps.slidingAnimation,
     sliderFadeInDuration:
-      animations?.sliderFadeInDuration || defaultProps.sliderFadeInDuration,
+      animations?.sliderFadeInDuration ?? defaultProps.sliderFadeInDuration,
     navbarFadeInDuration:
-      animations?.navbarFadeInDuration || defaultProps.navbarFadeInDuration,
+      animations?.navbarFadeInDuration ?? defaultProps.navbarFadeInDuration,
     navbarFadeInDelay:
-      animations?.navbarFadeInDelay || defaultProps.navbarFadeInDelay,
-    shouldManageAnimationSequence: true
+      animations?.navbarFadeInDelay ?? defaultProps.navbarFadeInDelay,
+    shouldManageAnimationSequence:
+      animations?.shouldManageAnimationSequence ??
+      defaultProps.shouldManageAnimationSequence
   };
 
   const getSlidingAnimationCssClass: GetSlidingAnimationCssClass = (

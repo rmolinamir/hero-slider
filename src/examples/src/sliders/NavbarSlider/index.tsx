@@ -13,6 +13,7 @@ export default function NavbarSlider() {
     <HeroSlider
       height="100vh"
       accessability={{
+        shouldDisplayButtons: false,
         orientation: 'vertical'
       }}
       autoplay
@@ -22,9 +23,6 @@ export default function NavbarSlider() {
       }}
       style={{
         backgroundColor: '#000'
-      }}
-      settings={{
-        shouldDisplayButtons: false
       }}
     >
       <Overlay>

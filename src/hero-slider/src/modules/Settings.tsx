@@ -6,7 +6,6 @@ export interface SettingsProps {
    * Next and previous buttons rendering.
    * @default true
    */
-  shouldDisplayButtons?: boolean;
   sliderColor?: CSS.Properties['color'];
   sliderStyle?: Omit<CSS.Properties, 'width' | 'height'>;
   navbarStyle?: {
@@ -16,7 +15,6 @@ export interface SettingsProps {
 }
 
 const defaultProps: Required<SettingsProps> = {
-  shouldDisplayButtons: true,
   sliderColor: 'inherit',
   sliderStyle: {},
   navbarStyle: {
@@ -33,8 +31,6 @@ const SettingsStateContext = React.createContext<
 
 function SettingsProvider({ children, settings }: ProviderProps) {
   const params: Required<SettingsProps> = {
-    shouldDisplayButtons:
-      settings?.shouldDisplayButtons ?? defaultProps.shouldDisplayButtons,
     sliderColor: settings?.sliderColor || defaultProps.sliderColor,
     sliderStyle: settings?.sliderStyle || defaultProps.sliderStyle,
     navbarStyle: settings?.navbarStyle || defaultProps.navbarStyle

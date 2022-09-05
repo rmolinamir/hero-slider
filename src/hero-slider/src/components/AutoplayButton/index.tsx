@@ -32,7 +32,14 @@ class AutoplaySvg {
 }
 
 export function AutoplayButton(props: AutoplayButtonProps) {
-  const { className, style, position } = props;
+  const {
+    className,
+    style,
+    position = {
+      bottom: '0',
+      left: '0'
+    }
+  } = props;
 
   const {
     state: { isPausedByUser },
@@ -66,8 +73,6 @@ export function AutoplayButton(props: AutoplayButtonProps) {
       className={[AutoplayButtonModuleCss.Button, className].join(' ')}
       onClick={onClickHandler}
       style={{
-        bottom: !position ? '0' : undefined,
-        left: !position ? '0' : undefined,
         ...position,
         ...style
       }}

@@ -19,7 +19,11 @@ export function ButtonsNav(props: ButtonsNavProps) {
     color,
     activeColor,
     backgroundColor,
-    position,
+    position = {
+      bottom: '0',
+      left: '50%',
+      transform: 'translateX(-50%)'
+    },
     justifyContent,
     alignItems,
     mobileThreshold = 1024, // TODO: This magic variable should be centralized. Other components use the same threshold.
@@ -49,11 +53,6 @@ export function ButtonsNav(props: ButtonsNavProps) {
     '--nav-background-color': backgroundColor,
     '--nav-active-color': activeColor
   };
-
-  console.log(
-    'Number(width) <= mobileThreshold: ',
-    Number(width) <= mobileThreshold
-  );
 
   if (Number(width) <= mobileThreshold) {
     if (isNullAfterThreshold) return null;
@@ -91,9 +90,6 @@ export function ButtonsNav(props: ButtonsNavProps) {
   return (
     <div
       style={{
-        bottom: !position ? '0' : undefined,
-        left: !position ? '50%' : undefined,
-        transform: !position ? 'translateX(-50%)' : undefined,
         ...position,
         ...CSSVariables
       }}
@@ -110,7 +106,7 @@ export function ButtonsNav(props: ButtonsNavProps) {
            */
           alignItems:
             alignItems ||
-            (position && position.top !== undefined ? 'flex-start' : 'flex-end')
+            (position.top !== undefined ? 'flex-start' : 'flex-end')
         }}
         className={ButtonsNavModuleCss.Container}
       >

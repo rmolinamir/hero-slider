@@ -1,44 +1,6 @@
 import React from 'react';
 import { useManager } from './Manager';
 
-export interface ControllerProps {
-  slidingDuration?: number;
-  slidingDelay?: number;
-  initialSlide?: number;
-  onBeforeChange?(activeSlide: number, nextSlide: number): void; // TODO: Rename to onBeforeSliding
-  onChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onSliding
-  onAfterChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onAfterSliding
-  /**
-   * Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the `goToNextSlide` handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component.
-   */
-  goToNextSlidePointer?: React.MutableRefObject<any>;
-  /**
-   * Similar to `nextSlide`, this sets the `object` to be equal to the `goToPreviousSlide` handler within the HeroSlider component.
-   */
-  goToPreviousSlidePointer?: React.MutableRefObject<any>;
-}
-
-type Action =
-  | {
-      type: 'start-sliding';
-      payload: {
-        nextSlide: State['activeSlide'];
-        slidingDirection?: Required<State['slidingDirection']>;
-      };
-    }
-  | { type: 'finish-sliding' }
-  | { type: 'set-delay-timeout'; payload: State['delayTimeout'] }
-  | { type: 'set-sliding-timeout'; payload: State['slidingTimeout'] };
-interface State {
-  activeSlide: number;
-  prevActiveSlide: number;
-  isSliding: boolean;
-  slidingDirection: 'forward' | 'backward' | undefined;
-  delayTimeout?: NodeJS.Timeout;
-  slidingTimeout?: NodeJS.Timeout;
-}
-type ProviderProps = React.PropsWithChildren<{ controller?: ControllerProps }>;
-
 interface GetNextSlide {
   (aSlide?: number): number;
 }
@@ -62,6 +24,46 @@ interface GoToPreviousSlide {
 interface GetSlidingCycleDuration {
   (): number;
 }
+
+export interface ControllerProps {
+  slidingDuration?: number;
+  slidingDelay?: number;
+  initialSlide?: number;
+  onBeforeChange?(activeSlide: number, nextSlide: number): void; // TODO: Rename to onBeforeSliding
+  onChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onSliding
+  onAfterChange?(activeSlide: number, prevSlide: number): void; // TODO: Rename to onAfterSliding
+  /**
+   * Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the `goToNextSlide` handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component.
+   */
+  goToNextSlidePointer?: React.MutableRefObject<GoToNextSlide | undefined>;
+  /**
+   * Similar to `nextSlide`, this sets the `object` to be equal to the `goToPreviousSlide` handler within the HeroSlider component.
+   */
+  goToPreviousSlidePointer?: React.MutableRefObject<
+    GoToPreviousSlide | undefined
+  >;
+}
+
+type Action =
+  | {
+      type: 'start-sliding';
+      payload: {
+        nextSlide: State['activeSlide'];
+        slidingDirection?: Required<State['slidingDirection']>;
+      };
+    }
+  | { type: 'finish-sliding' }
+  | { type: 'set-delay-timeout'; payload: State['delayTimeout'] }
+  | { type: 'set-sliding-timeout'; payload: State['slidingTimeout'] };
+interface State {
+  activeSlide: number;
+  prevActiveSlide: number;
+  isSliding: boolean;
+  slidingDirection: 'forward' | 'backward' | undefined;
+  delayTimeout?: NodeJS.Timeout;
+  slidingTimeout?: NodeJS.Timeout;
+}
+type ProviderProps = React.PropsWithChildren<{ controller?: ControllerProps }>;
 
 const defaultProps: Pick<
   Required<ControllerProps>,
@@ -130,8 +132,8 @@ function ControllerProvider({ children, controller }: ProviderProps) {
     'slidingDuration' | 'slidingDelay' | 'initialSlide'
   > = {
     slidingDuration:
-      controller?.slidingDuration || defaultProps.slidingDuration,
-    slidingDelay: controller?.slidingDelay || defaultProps.slidingDelay,
+      controller?.slidingDuration ?? defaultProps.slidingDuration,
+    slidingDelay: controller?.slidingDelay ?? defaultProps.slidingDelay,
     initialSlide: controller?.initialSlide || defaultProps.initialSlide
   };
 
@@ -229,6 +231,10 @@ function ControllerProvider({ children, controller }: ProviderProps) {
    * Sets up the `goToNextSlide` pointer if it exists.
    */
   React.useEffect(() => {
+    console.log(
+      'controller?.goToNextSlidePointer: ',
+      controller?.goToNextSlidePointer
+    );
     if (controller?.goToNextSlidePointer)
       controller.goToNextSlidePointer.current = goToNextSlide;
   }, [controller?.goToNextSlidePointer, goToNextSlide]);

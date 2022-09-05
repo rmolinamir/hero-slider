@@ -8,11 +8,11 @@ import { useManager } from '../../modules/Manager';
  * through inline CSS styles.
  */
 export interface NavPosition {
-  top: string;
-  left: string;
-  bottom: string;
-  right: string;
-  transform: string;
+  top?: React.CSSProperties['top'];
+  left?: React.CSSProperties['left'];
+  bottom?: React.CSSProperties['bottom'];
+  right?: React.CSSProperties['right'];
+  transform?: React.CSSProperties['transform'];
 }
 
 /**
@@ -24,7 +24,15 @@ export interface NavProps {
   activeColor?: string;
 }
 
-export function Nav({ color, activeColor, position }: NavProps) {
+export function Nav({
+  color,
+  activeColor,
+  position = {
+    bottom: '1.5rem',
+    left: '50%',
+    transform: 'translateX(-50%)'
+  }
+}: NavProps) {
   const {
     state: { slides, totalSlides }
   } = useManager();
@@ -68,11 +76,7 @@ export function Nav({ color, activeColor, position }: NavProps) {
   return (
     <ul
       style={{
-        top: position?.top,
-        right: position?.right,
-        bottom: position?.bottom || '1.5rem',
-        left: position?.left || '50%',
-        transform: position?.transform || 'translateX(-50%)',
+        ...position,
         ...CSSVariables
       }}
       className={NavModuleCss.Wrapper}

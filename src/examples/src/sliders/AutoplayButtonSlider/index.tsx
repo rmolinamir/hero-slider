@@ -2,7 +2,6 @@ import HeroSlider, { Slide, Overlay, Nav, AutoplayButton } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 
-// Images
 const kyoto = 'https://i.imgur.com/xw5Abku.jpg';
 const tenryuJiTemple = 'https://i.imgur.com/g5JNdYL.jpg';
 const hakone = 'https://i.imgur.com/Iq6XtFR.jpg';
@@ -22,9 +21,6 @@ export default function AutoplayButtonSlider() {
       }}
       style={{
         backgroundColor: '#000'
-      }}
-      settings={{
-        shouldDisplayButtons: false
       }}
     >
       <Overlay>

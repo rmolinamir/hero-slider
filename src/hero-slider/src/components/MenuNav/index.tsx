@@ -25,7 +25,11 @@ export function MenuNav(props: MenuNavProps) {
   const {
     color,
     activeColor,
-    position,
+    position = {
+      bottom: '0',
+      left: '50%',
+      transform: 'translateX(-50%)'
+    },
     justifyContent,
     mobileThreshold = 1024,
     isNullAfterThreshold,
@@ -94,11 +98,7 @@ export function MenuNav(props: MenuNavProps) {
   return (
     <div
       style={{
-        top: position?.top,
-        right: position?.right,
-        bottom: position?.bottom || '0',
-        left: position?.left || '50%',
-        transform: position?.transform || 'translateX(-50%)',
+        ...position,
         ...CSSVariables,
         justifyContent: justifyContent || 'center'
       }}
