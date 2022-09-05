@@ -7,5 +7,4 @@ export { MenuNav } from './components/MenuNav';
 export { ButtonsNav } from './components/ButtonsNav';
 export { AutoplayButton } from './components/AutoplayButtons';
 
-export * as V2 from './index_v2';
 export default Slider;
