@@ -1,6 +1,4 @@
-import { TAnyFunction } from '../typings/definitions';
-
-export enum EState {
+export enum IntervalState {
   IDLE,
   RUNNING,
   PAUSED,
@@ -8,75 +6,81 @@ export enum EState {
 }
 
 /**
- * Based on **`[Pause and resume setInterval](https://stackoverflow.com/a/42240115/10246377)`**.
- * `IntervalTimer` is a class that handles logic for intervals, e.g. start
- * stop, reset, resume, pause & maximum amount of fires.
+ * `IntervalTimer` is a class that handles logic for intervals, e.g. start stop, reset, resume, pause & maximum amount of fires.
  */
 export default class IntervalTimer {
-  // Init
-  public callback: TAnyFunction = () => null;
-  public interval: number;
-  public maxFires?: number;
-  public state: EState;
-  public remaining: number;
-  public fires: number;
-  public pausedTime: number | Date;
+  /**
+   * The state to handle logic.
+   * - 0 means the interval is idle.
+   * - 1 means it's running.
+   * - 2 means it's paused
+   * - 3 will resume.
+   */
+  public state: IntervalState = IntervalState.IDLE;
+
+  /**
+   * Remaining time before the next interval.
+   */
+  public remaining: number = 0;
+
+  /**
+   * Amount of times fired.
+   */
+  public fires: number = 0;
+
+  /**
+   * Time passed after pausing,
+   */
+  public pausedTime: number | Date = 0;
+
   public lastTimeFired?: Date;
   public timerId?: NodeJS.Timeout;
   public resumeId?: NodeJS.Timeout;
   public lastPauseTime?: Date;
 
   private constructor(
-    callback: TAnyFunction,
-    interval: number,
-    maxFires: number | undefined = undefined
-  ) {
     /**
-     * Remaining time before the next interval.
+     * Called after every interval.
      */
-    this.remaining = 0;
+    public callback: () => void = () => {},
     /**
-     * The state to handle logic.
-     * - 0 means the interval is idle.
-     * - 1 means it's running.
-     * - 2 means it's paused
-     * - 3 will resume.
+     * Time between intervals, in milliseconds.
      */
-    this.state = EState.IDLE;
-
-    this.interval = interval; // In milliseconds.
-    this.callback = callback;
+    public interval: number,
     /**
      * Maximum amount of fires.
      */
-    this.maxFires = maxFires;
-    /**
-     * Time passed after pausing,
-     */
-    this.pausedTime = 0;
-
-    this.fires = 0;
-  }
+    public maxFires: number | undefined = undefined
+  ) {}
 
   /**
-   * `proxyCallback` handles the callback execution, the amount
-   * of fires, & the times when fired.
-   * If `this.maxFires` is **not** null, and it's bigger than
-   * `this.fires` and if `this.fires` exists, meaning if it the
-   * interval was at least started once before, then never fire again.
+   * Handles the callback execution, the amount of fires, & the times when fired.
+   * If `this.maxFires` is **not** null, and it's bigger than `this.fires` and if `this.fires` exists, meaning if it the interval was at least started once before, then never fire again.
    */
-  private proxyCallback = () => {
+  private intervalHandler = () => {
     if (
       this.maxFires != null &&
       this.fires !== 0 &&
       this.fires >= this.maxFires
     ) {
       this.stop();
-      return;
+    } else {
+      this.lastTimeFired = new Date();
+      this.fires += 1;
+      this.callback();
     }
-    this.lastTimeFired = new Date();
-    this.fires += 1;
-    this.callback();
+  };
+
+  /**
+   * `timeoutHandler` is executed by `resume`. `timeoutHandler` is the callback of a new `setTimeout` executed by `resume` to mimic a resume function.
+   * The callback is executed by running `intervalHandler`, and then `start` is executed to run a new interval.
+   */
+  private timeoutHandler = () => {
+    if (this.state !== IntervalState.RESUME) return;
+
+    this.pausedTime = 0;
+    this.intervalHandler();
+    this.start();
   };
 
   /**
@@ -85,9 +89,9 @@ export default class IntervalTimer {
    * is finally set as running.
    */
   public start = () => {
-    this.timerId = setInterval(() => this.proxyCallback(), this.interval);
+    this.timerId = setInterval(this.intervalHandler, this.interval);
     this.lastTimeFired = new Date();
-    this.state = EState.RUNNING;
+    this.state = IntervalState.RUNNING;
   };
 
   /**
@@ -98,7 +102,7 @@ export default class IntervalTimer {
 
     clearInterval(this.timerId);
     clearTimeout(this.resumeId);
-    this.state = EState.IDLE;
+    this.state = IntervalState.IDLE;
   };
 
   /**
@@ -115,7 +119,11 @@ export default class IntervalTimer {
    * state.
    */
   public pause = () => {
-    if (this.state !== EState.RUNNING && this.state !== EState.RESUME) return;
+    if (
+      this.state !== IntervalState.RUNNING &&
+      this.state !== IntervalState.RESUME
+    )
+      return;
 
     this.remaining =
       +this.interval -
@@ -124,7 +132,7 @@ export default class IntervalTimer {
     this.lastPauseTime = new Date();
     clearInterval(this.timerId);
     clearTimeout(this.resumeId);
-    this.state = EState.PAUSED;
+    this.state = IntervalState.PAUSED;
   };
 
   /**
@@ -133,27 +141,12 @@ export default class IntervalTimer {
    * as the timeout delay.
    */
   public resume = () => {
-    if (this.state !== EState.PAUSED) return;
+    if (this.state !== IntervalState.PAUSED) return;
     const currentDate = new Date();
     this.pausedTime =
       +this.pausedTime + +currentDate - +(this.lastPauseTime || 0);
-    this.state = EState.RESUME;
-    this.resumeId = setTimeout(() => this.timeoutCallback(), this.remaining);
-  };
-
-  /**
-   * `timeoutCallback` is executed by `resume`. `timeoutCallback` is the
-   * callback of a new `setTimeout` executed by `resume` to mimic a resume
-   * function.
-   * We execute the callback by running `proxyCallback`, and then `start`
-   * is executed to run a new interval.
-   */
-  private timeoutCallback = () => {
-    if (this.state !== EState.RESUME) return;
-
-    this.pausedTime = 0;
-    this.proxyCallback();
-    this.start();
+    this.state = IntervalState.RESUME;
+    this.resumeId = setTimeout(this.timeoutHandler, this.remaining);
   };
 
   /**
@@ -184,7 +177,7 @@ export default class IntervalTimer {
   private static instance: IntervalTimer | undefined;
 
   public static new(
-    callback: TAnyFunction,
+    callback: () => void,
     interval: number,
     maxFires: number | undefined = undefined
   ) {
@@ -192,6 +185,7 @@ export default class IntervalTimer {
       this.instance = new IntervalTimer(callback, interval, maxFires);
     else {
       this.instance.callback = callback;
+      this.instance.interval = interval;
     }
     return this.instance;
   }

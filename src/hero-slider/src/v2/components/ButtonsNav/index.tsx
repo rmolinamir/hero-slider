@@ -1,13 +1,20 @@
 import React from 'react';
-import { ButtonsNavProps } from './typings';
-import ButtonsNavModuleCss from './ButtonsNav.module.css';
+import ButtonsNavModuleCss from './index.module.css';
 import { Nav } from '../Nav';
-import { SliderContext } from '../../Context';
+import { MenuNavProps } from '../MenuNav';
+import { useManager } from '../../modules/Manager';
+import { useController } from '../../modules/Controller';
+import { useLayout } from '../../modules/Layout';
 
-const SliderNav = (props: ButtonsNavProps) => {
-  /**
-   * Deconstructing ButtonNavSettings to set it up.
-   */
+/**
+ * `ButtonsNav` component props.
+ */
+export interface ButtonsNavProps extends MenuNavProps {
+  backgroundColor?: string;
+  alignItems?: string;
+}
+
+export function ButtonsNav(props: ButtonsNavProps) {
   const {
     color,
     activeColor,
@@ -15,14 +22,24 @@ const SliderNav = (props: ButtonsNavProps) => {
     position,
     justifyContent,
     alignItems,
-    sliderWidth = window.innerWidth,
-    mobileThreshold = 1024,
-    isNullAfterThreshold,
+    mobileThreshold = 1024, // TODO: This magic variable should be centralized. Other components use the same threshold.
+    isNullAfterThreshold = false,
     extraButton,
     isExtraButtonRight
   } = props;
 
-  const { navProps, slidesArray } = React.useContext(SliderContext);
+  const {
+    state: { width }
+  } = useLayout();
+
+  const {
+    state: { slides, totalSlides }
+  } = useManager();
+
+  const {
+    state: { activeSlide },
+    changeSlide
+  } = useController();
 
   /**
    * CSS variables for the transitions.
@@ -33,27 +50,34 @@ const SliderNav = (props: ButtonsNavProps) => {
     '--nav-active-color': activeColor
   };
 
-  const ButtonNavButtons = React.useMemo(() => {
-    if (!navProps || !slidesArray.length) return [];
-    const { changeSlide, activeSlide } = navProps;
-    const changeSlideHandler = (ButtonNavButtonIndex: number) => {
-      const nextSlide = ButtonNavButtonIndex + 1;
-      if (nextSlide !== activeSlide) {
-        changeSlide(nextSlide);
-      }
+  console.log(
+    'Number(width) <= mobileThreshold: ',
+    Number(width) <= mobileThreshold
+  );
+
+  if (Number(width) <= mobileThreshold) {
+    if (isNullAfterThreshold) return null;
+    return <Nav {...props} />;
+  }
+
+  function renderButtons() {
+    if (!totalSlides) return [];
+
+    const onClickHandler = (slideNumber: number) => {
+      if (slideNumber !== activeSlide) changeSlide(slideNumber);
     };
-    return slidesArray.map(({ navDescription }, index) => {
-      const description = navDescription;
-      const respectiveSlide = index + 1;
+
+    return Array.from(slides.values()).map(({ number, label }) => {
+      const description = label;
       return (
         // TODO: Deal with the disabled linting later:
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
-          key={index}
-          onClick={() => changeSlideHandler(index)}
+          key={number}
+          onClick={() => onClickHandler(number)}
           className={[
             ButtonsNavModuleCss.Button,
-            activeSlide === respectiveSlide && ButtonsNavModuleCss.Active
+            activeSlide === number && ButtonsNavModuleCss.Active
           ].join(' ')}
         >
           <div className={ButtonsNavModuleCss.Description}>
@@ -62,15 +86,6 @@ const SliderNav = (props: ButtonsNavProps) => {
         </li>
       );
     });
-  }, [navProps, slidesArray]);
-
-  console.log(
-    'sliderWidth <= mobileThreshold: ',
-    sliderWidth <= mobileThreshold
-  );
-  if (sliderWidth <= mobileThreshold) {
-    if (isNullAfterThreshold) return null;
-    return <Nav {...props} />;
   }
 
   return (
@@ -99,7 +114,7 @@ const SliderNav = (props: ButtonsNavProps) => {
         }}
         className={ButtonsNavModuleCss.Container}
       >
-        {ButtonNavButtons}
+        {renderButtons()}
         {extraButton && (
           <div
             style={{
@@ -113,10 +128,6 @@ const SliderNav = (props: ButtonsNavProps) => {
       </ul>
     </div>
   );
-};
-
-export const ButtonsNav = (props: ButtonsNavProps): JSX.Element => (
-  <SliderNav {...props} />
-);
+}
 
 (ButtonsNav as React.FunctionComponent).displayName = 'hero-slider/buttons-nav';

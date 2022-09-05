@@ -1,9 +1,17 @@
 import React from 'react';
-import { MaskProps } from './typings';
-import MaskModuleCss from './Mask.module.css';
+import MaskModuleCss from './index.module.css';
+import { BackgroundProps } from '../Background';
+import { useController } from '../../../modules/Controller';
 
-const Mask = (props: MaskProps) => {
-  const { background } = props;
+export interface MaskProps {
+  background?: Partial<BackgroundProps>;
+  isActive?: boolean;
+}
+
+export default function Mask({ background, isActive }: MaskProps) {
+  const {
+    state: { isSliding }
+  } = useController();
 
   const [className, setClassName] = React.useState(MaskModuleCss.Loading);
 
@@ -11,17 +19,11 @@ const Mask = (props: MaskProps) => {
     setClassName(MaskModuleCss.Loaded);
   };
 
-  const style: React.CSSProperties = React.useMemo(() => {
-    return {
-      backgroundColor: background?.backgroundColor,
-      backgroundBlendMode: background?.maskBackgroundBlendMode,
-      backgroundImage: `url('${background?.backgroundImage}')`
-    } as React.CSSProperties;
-  }, [
-    background?.backgroundColor,
-    background?.backgroundImage,
-    background?.maskBackgroundBlendMode
-  ]);
+  const style: React.CSSProperties = {
+    backgroundColor: background?.backgroundColor,
+    backgroundBlendMode: background?.maskBackgroundBlendMode,
+    backgroundImage: `url('${background?.backgroundImage}')`
+  };
 
   const isLoaded = className === MaskModuleCss.Loaded;
 
@@ -29,9 +31,7 @@ const Mask = (props: MaskProps) => {
     <div
       className={[
         MaskModuleCss.Mask,
-        props.isActive && props.isDoneSliding
-          ? MaskModuleCss.Active
-          : MaskModuleCss.Inactive
+        isActive && !isSliding ? MaskModuleCss.Active : MaskModuleCss.Inactive
       ].join(' ')}
     >
       <img
@@ -47,12 +47,10 @@ const Mask = (props: MaskProps) => {
           className={[
             className,
             isLoaded && MaskModuleCss.Inner,
-            isLoaded && !props.isDoneSliding && MaskModuleCss.Sliding
+            isLoaded && isSliding && MaskModuleCss.Sliding
           ].join(' ')}
         />
       )}
     </div>
   );
-};
-
-export default Mask;
+}

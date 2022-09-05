@@ -1,25 +1,65 @@
 import React from 'react';
-import { SliderContext } from '../../Context';
-import SideNavModuleCss from './SideNav.module.css';
-import { SideNavProps } from './typings';
+import SideNavModuleCss from './index.module.css';
+import { NavProps } from '../Nav';
+import { useController } from '../../modules/Controller';
+import { useManager } from '../../modules/Manager';
 
-const SliderNav = (props: SideNavProps) => {
-  /**
-   * Deconstructing navSettings to set it up.
-   */
+/**
+ * `SideNav` component props.
+ */
+export interface SideNavProps extends NavProps {
+  right: string;
+  left: string;
+  isPositionedRight: boolean;
+}
+
+export function SideNav({
+  color,
+  activeColor,
+  left,
+  right,
+  position,
+  isPositionedRight = true
+}: SideNavProps) {
   const {
-    color,
-    activeColor,
-    // totalSlides,
-    // activeSlide,
-    // changeSlide,
-    left,
-    right,
-    position,
-    isPositionedRight = true
-  } = props;
+    state: { slides, totalSlides }
+  } = useManager();
 
-  const { navProps, slidesArray } = React.useContext(SliderContext);
+  const {
+    state: { activeSlide },
+    changeSlide
+  } = useController();
+
+  function renderButtons() {
+    if (!totalSlides) return [];
+
+    const onClickHandler = (slideNumber: number) => {
+      if (slideNumber !== activeSlide) changeSlide(slideNumber);
+    };
+
+    return Array.from(slides.values()).map(({ number }) => {
+      return (
+        // TODO: Deal with the disabled linting later:
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+        <li
+          key={number}
+          onClick={() => onClickHandler(number)}
+          className={[
+            SideNavModuleCss.Button,
+            activeSlide === number && SideNavModuleCss.Active
+          ].join(' ')}
+          style={{
+            justifyContent: isPositionedRight ? 'flex-end' : 'flex-start'
+          }}
+        >
+          <span className={SideNavModuleCss.Line} />
+          <span className={SideNavModuleCss.Number}>
+            {number.toLocaleString()}
+          </span>
+        </li>
+      );
+    });
+  }
 
   /**
    * CSS variables for the transitions.
@@ -28,38 +68,6 @@ const SliderNav = (props: SideNavProps) => {
     '--nav-color': color,
     '--nav-active-color': activeColor
   };
-
-  const navButtons = React.useMemo(() => {
-    if (!navProps || !slidesArray.length) return [];
-    const { changeSlide, activeSlide } = navProps;
-    const changeSlideHandler = (navButtonIndex: number) => {
-      const nextSlide = navButtonIndex + 1;
-      if (nextSlide !== activeSlide) {
-        changeSlide(nextSlide);
-      }
-    };
-    return slidesArray.map((_, index) => {
-      const respectiveSlide = index + 1;
-      return (
-        // TODO: Deal with the disabled linting later:
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
-        <li
-          onClick={() => changeSlideHandler(index)}
-          key={index}
-          className={[
-            SideNavModuleCss.Button,
-            activeSlide === respectiveSlide && SideNavModuleCss.Active
-          ].join(' ')}
-          style={{
-            justifyContent: isPositionedRight ? 'flex-end' : 'flex-start'
-          }}
-        >
-          <span className={SideNavModuleCss.Line} />
-          <span className={SideNavModuleCss.Number}>{respectiveSlide}</span>
-        </li>
-      );
-    });
-  }, [navProps, slidesArray, isPositionedRight]);
 
   return (
     <ul
@@ -74,13 +82,9 @@ const SliderNav = (props: SideNavProps) => {
       }}
       className={SideNavModuleCss.Wrapper}
     >
-      {navButtons}
+      {renderButtons()}
     </ul>
   );
-};
-
-export const SideNav = (props: SideNavProps): JSX.Element => (
-  <SliderNav {...props} />
-);
+}
 
 (SideNav as React.FunctionComponent).displayName = 'hero-slider/nav';

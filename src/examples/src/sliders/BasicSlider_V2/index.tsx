@@ -1,4 +1,3 @@
-import React from 'react';
 import { V2 } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
@@ -11,30 +10,34 @@ import giauPass from './backgrounds/Giau Pass - Italy.jpg';
 const { Slider, Slide, Container, Nav } = V2;
 
 export default function BasicSlider() {
-  const nextSlideHandler = React.useRef();
-  const previousSlideHandler = React.useRef();
-
   return (
     <Slider
-      nextSlide={nextSlideHandler}
-      previousSlide={previousSlideHandler}
-      slidingAnimation="left_to_right"
-      orientation="horizontal"
-      initialSlide={1}
-      // onBeforeChange={(previousSlide, nextSlide) => console.log('onBeforeChange', previousSlide, nextSlide)}
-      onChange={(nextSlide) => console.debug('onChange', nextSlide)}
-      // onAfterChange={(nextSlide) => console.log('onAfterChange', nextSlide)}
+      height={'100vh'}
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.33)'
       }}
-      settings={{
+      animations={{
+        initialSlidingAnimation: 'left_to_right'
+      }}
+      accessability={{
+        orientation: 'horizontal'
+      }}
+      autoplay={{
+        autoplayDuration: 5000
+      }}
+      controller={{
+        initialSlide: 1,
         slidingDuration: 250,
         slidingDelay: 100,
+        onChange: (nextSlide) => console.debug('onChange', nextSlide),
+        onBeforeChange: (previousSlide, nextSlide) =>
+          console.log('onBeforeChange', previousSlide, nextSlide),
+        onAfterChange: (nextSlide) => console.log('onAfterChange', nextSlide)
+      }}
+      settings={{
         shouldAutoplay: true,
         shouldDisplayButtons: true,
-        shouldSlideOnArrowKeypress: true,
-        autoplayDuration: 5000,
-        height: '100vh'
+        shouldSlideOnArrowKeypress: true
       }}
     >
       <Container>
@@ -48,7 +51,7 @@ export default function BasicSlider() {
         console.debug('This is a Slide rendered by a HOC.');
         return (
           <Slide
-            navDescription="Giau Pass - Italy"
+            label="Giau Pass - Italy"
             background={{
               backgroundImage: giauPass,
               backgroundAttachment: 'fixed'
@@ -58,7 +61,7 @@ export default function BasicSlider() {
       })()}
 
       <Slide
-        navDescription="Bogliasco - Italy"
+        label="Bogliasco - Italy"
         background={{
           backgroundImage: bogliasco,
           backgroundAttachment: 'fixed'
@@ -66,7 +69,7 @@ export default function BasicSlider() {
       />
 
       <Slide
-        navDescription="County Clare - Ireland"
+        label="County Clare - Ireland"
         background={{
           backgroundImage: countyClare,
           backgroundAttachment: 'fixed'
@@ -74,7 +77,7 @@ export default function BasicSlider() {
       />
 
       <Slide
-        navDescription="Crater Rock, OR - United States"
+        label="Crater Rock, OR - United States"
         background={{
           backgroundImage: craterRock,
           backgroundAttachment: 'fixed'

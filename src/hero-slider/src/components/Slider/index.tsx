@@ -104,17 +104,9 @@ const Slider = (props: SliderProps) => {
    */
   const [isManuallyPaused, setIsManuallyPaused] = React.useState(false);
 
-  /**
-   * `autoplay` is the callback sent to the autoplay instance.
-   */
-  const autoplay = (): void => {
+  const autoplayInstance = IntervalTimer.new((): void => {
     changeSlide(getNextSlide(activeSlide));
-  };
-
-  const autoplayInstance = IntervalTimer.new(
-    autoplay,
-    settings.autoplayDuration + slidingTimeoutDuration
-  );
+  }, settings.autoplayDuration + slidingTimeoutDuration);
 
   /**
    * `autoplayHandler` will pause the autoplay timer whenever the mouse

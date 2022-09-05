@@ -1,5 +1,4 @@
 import React from 'react';
-import { PartiallyRequired } from '../utils/PartiallyRequired';
 import { useManager } from './Manager';
 
 export interface ControllerProps {
@@ -19,15 +18,18 @@ export interface ControllerProps {
   goToPreviousSlidePointer?: React.MutableRefObject<any>;
 }
 
-interface ControllerState
-  extends PartiallyRequired<
-    ControllerProps,
-    | 'onBeforeChange'
-    | 'onChange'
-    | 'onAfterChange'
-    | 'goToNextSlidePointer'
-    | 'goToPreviousSlidePointer'
-  > {
+type Action =
+  | {
+      type: 'start-sliding';
+      payload: {
+        nextSlide: State['activeSlide'];
+        slidingDirection?: Required<State['slidingDirection']>;
+      };
+    }
+  | { type: 'finish-sliding' }
+  | { type: 'set-delay-timeout'; payload: State['delayTimeout'] }
+  | { type: 'set-sliding-timeout'; payload: State['slidingTimeout'] };
+interface State {
   activeSlide: number;
   prevActiveSlide: number;
   isSliding: boolean;
@@ -35,30 +37,55 @@ interface ControllerState
   delayTimeout?: NodeJS.Timeout;
   slidingTimeout?: NodeJS.Timeout;
 }
+type ProviderProps = React.PropsWithChildren<{ controller?: ControllerProps }>;
 
-const defaultProps: Pick<ControllerState, keyof ControllerProps> = {
+interface GetNextSlide {
+  (aSlide?: number): number;
+}
+
+interface GetPreviousSlide {
+  (aSlide?: number): number;
+}
+
+interface ChangeSlide {
+  (nextSlide: number, slidingDirection?: 'forward' | 'backward'): void;
+}
+
+interface GoToNextSlide {
+  (): void;
+}
+
+interface GoToPreviousSlide {
+  (): void;
+}
+
+interface GetSlidingCycleDuration {
+  (): number;
+}
+
+const defaultProps: Pick<
+  Required<ControllerProps>,
+  'slidingDuration' | 'slidingDelay' | 'initialSlide'
+> = {
   slidingDuration: 500,
   slidingDelay: 200,
   initialSlide: 1
 };
 
-type Action =
-  | {
-      type: 'start-sliding';
-      payload: {
-        nextSlide: ControllerState['activeSlide'];
-        slidingDirection?: Required<ControllerState['slidingDirection']>;
-      };
-    }
-  | { type: 'finish-sliding' }
-  | { type: 'set-delay-timeout'; payload: ControllerState['delayTimeout'] }
-  | { type: 'set-sliding-timeout'; payload: ControllerState['slidingTimeout'] };
-type Dispatch = (action: Action) => void;
-type State = ControllerState;
-type Props = React.PropsWithChildren<{ controller: ControllerProps }>;
-
 const ControllerStateContext = React.createContext<
-  { state: State; dispatch: Dispatch } | undefined | undefined
+  | {
+      state: State;
+      slidingDuration: number;
+      slidingDelay: number;
+      getNextSlide: GetNextSlide;
+      getPreviousSlide: GetPreviousSlide;
+      getSlidingCycleDuration: GetSlidingCycleDuration;
+      changeSlide: ChangeSlide;
+      goToNextSlide: GoToNextSlide;
+      goToPreviousSlide: GoToPreviousSlide;
+    }
+  | undefined
+  | undefined
 >(undefined);
 
 function settingsReducer(state: State, action: Action): State {
@@ -96,105 +123,25 @@ function settingsReducer(state: State, action: Action): State {
   }
 }
 
-function ControllerProvider({ children, controller }: Props) {
+function ControllerProvider({ children, controller }: ProviderProps) {
+  const params: Pick<
+    Required<ControllerProps>,
+    'slidingDuration' | 'slidingDelay' | 'initialSlide'
+  > = {
+    slidingDuration:
+      controller?.slidingDuration || defaultProps.slidingDuration,
+    slidingDelay: controller?.slidingDelay || defaultProps.slidingDelay,
+    initialSlide: controller?.initialSlide || defaultProps.initialSlide
+  };
+
   const [state, dispatch] = React.useReducer(settingsReducer, {
-    onBeforeChange: controller.onBeforeChange,
-    onChange: controller.onChange,
-    onAfterChange: controller.onAfterChange,
-    slidingDuration: defaultProps.slidingDuration,
-    slidingDelay: defaultProps.slidingDelay,
-    activeSlide: controller.initialSlide || defaultProps.initialSlide,
+    activeSlide: params.initialSlide,
     prevActiveSlide: 0,
     isSliding: false,
     slidingDirection: undefined,
     delayTimeout: undefined,
     slidingTimeout: undefined
-  } as ControllerState);
-
-  // NOTE: you *might* need to memoize this value
-  // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
-
-  /**
-   * `slidingTimeoutDuration` is the total time it takes for the transition of each slide. It's the sum of the duration of the slide, plus any delay of the animation.
-   */
-  const slidingTimeoutDuration =
-    (state.slidingDuration + state.slidingDelay) * 1.1; // 110% safety factor.
-
-  /**
-   * Starts a `setTimeout` that will set `isSliding` as `false` after the time it takes for the slide to change passes.
-   * Saves the timeout ID to `slidingTimeout`. The `onChange` and `onAfterChange` events are executed here.
-   */
-  React.useEffect(() => {
-    dispatch({
-      type: 'set-delay-timeout',
-      payload: setTimeout(() => {
-        if (state.onChange)
-          state.onChange(state.activeSlide, state.prevActiveSlide);
-      }, state.slidingDelay)
-    });
-
-    dispatch({
-      type: 'set-sliding-timeout',
-      payload: setTimeout(() => {
-        dispatch({ type: 'finish-sliding' });
-
-        if (state.onAfterChange)
-          state.onAfterChange(state.activeSlide, state.prevActiveSlide);
-      }, slidingTimeoutDuration)
-    });
-
-    /**
-     * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
-     */
-    return () => {
-      if (state.delayTimeout) clearTimeout(state.delayTimeout);
-      if (state.slidingTimeout) clearTimeout(state.slidingTimeout);
-    };
-  }, [state.activeSlide]);
-
-  return (
-    <ControllerStateContext.Provider value={value}>
-      {children}
-    </ControllerStateContext.Provider>
-  );
-}
-
-interface GetNextSlide {
-  (aSlide?: number): number;
-}
-
-interface GetPreviousSlide {
-  (aSlide?: number): number;
-}
-
-interface ChangeSlide {
-  (nextSlide: number, slidingDirection?: 'forward' | 'backward'): void;
-}
-
-interface GoToNextSlide {
-  (): void;
-}
-
-interface GoToPreviousSlide {
-  (): void;
-}
-
-function useController(): {
-  state: State;
-  getNextSlide: GetNextSlide;
-  getPreviousSlide: GetPreviousSlide;
-  changeSlide: ChangeSlide;
-  goToNextSlide: GoToNextSlide;
-  goToPreviousSlide: GoToPreviousSlide;
-} {
-  const context = React.useContext(ControllerStateContext);
-
-  if (context === undefined) {
-    throw new Error('useController must be used within a ControllerProvider');
-  }
-
-  const { state, dispatch } = context;
+  } as State);
 
   const { state: manager } = useManager();
 
@@ -231,6 +178,14 @@ function useController(): {
   };
 
   /**
+   * Returns the total time it takes for the transition of each slide. It's the sum of the duration of the slide, plus the sliding delay of the animation. A safety factor of 1.1 is also used.
+   * e.g.: `(slidingDuration + slidingDelay) * 1.1`
+   */
+  const getSlidingCycleDuration: GetSlidingCycleDuration = () => {
+    return (params.slidingDuration + params.slidingDelay) * 1.1; // 110% safety factor.
+  };
+
+  /**
    * `changeSlide` sets a new slide then executes `onSlidingHandler` to handle
    * the smooth transition and set `isDoneSlidingWatcher.current` (like a pointer)
    * as true. While `isDoneSliding` is true, no the slides won't change.
@@ -245,8 +200,10 @@ function useController(): {
     console.log('[changeSlide] nextSlide: ', nextSlide);
     console.log('[changeSlide] slidingDirection: ', slidingDirection);
 
-    if (state.onBeforeChange)
-      state.onBeforeChange(state.activeSlide, nextSlide);
+    if (state.isSliding) return;
+
+    if (controller?.onBeforeChange)
+      controller.onBeforeChange(state.activeSlide, nextSlide);
 
     dispatch({
       type: 'start-sliding',
@@ -275,26 +232,79 @@ function useController(): {
    * Sets up the `goToNextSlide` pointer if it exists.
    */
   React.useEffect(() => {
-    if (state.goToNextSlidePointer)
-      state.goToNextSlidePointer.current = goToNextSlide;
+    if (controller?.goToNextSlidePointer)
+      controller.goToNextSlidePointer.current = goToNextSlide;
   }, [goToNextSlide]);
 
   /**
    * Sets up the `previousSlide` reference object if they exist.
    */
   React.useEffect(() => {
-    if (state.goToPreviousSlidePointer)
-      state.goToPreviousSlidePointer.current = goToPreviousSlide;
+    if (controller?.goToPreviousSlidePointer)
+      controller.goToPreviousSlidePointer.current = goToPreviousSlide;
   }, [goToNextSlide]);
 
-  return {
+  /**
+   * Starts a `setTimeout` that will set `isSliding` as `false` after the time it takes for the slide to change passes.
+   * Saves the timeout ID to `slidingTimeout`. The `onChange` and `onAfterChange` events are executed here.
+   */
+  React.useEffect(() => {
+    dispatch({
+      type: 'set-delay-timeout',
+      payload: setTimeout(() => {
+        if (controller?.onChange)
+          controller.onChange(state.activeSlide, state.prevActiveSlide);
+      }, params.slidingDelay)
+    });
+
+    dispatch({
+      type: 'set-sliding-timeout',
+      payload: setTimeout(() => {
+        dispatch({ type: 'finish-sliding' });
+
+        if (controller?.onAfterChange)
+          controller.onAfterChange(state.activeSlide, state.prevActiveSlide);
+      }, getSlidingCycleDuration())
+    });
+
+    /**
+     * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
+     */
+    return () => {
+      if (state.delayTimeout) clearTimeout(state.delayTimeout);
+      if (state.slidingTimeout) clearTimeout(state.slidingTimeout);
+    };
+  }, [state.activeSlide]);
+
+  // NOTE: you *might* need to memoize this value
+  // Learn more in http://kcd.im/optimize-context
+  const value = {
     state,
+    slidingDuration: params.slidingDuration,
+    slidingDelay: params.slidingDelay,
     getNextSlide,
     getPreviousSlide,
+    getSlidingCycleDuration,
     changeSlide,
     goToNextSlide,
     goToPreviousSlide
   };
+
+  return (
+    <ControllerStateContext.Provider value={value}>
+      {children}
+    </ControllerStateContext.Provider>
+  );
+}
+
+function useController() {
+  const context = React.useContext(ControllerStateContext);
+
+  if (context === undefined) {
+    throw new Error('useController must be used within a ControllerProvider');
+  }
+
+  return context;
 }
 
 export { ControllerProvider, useController };

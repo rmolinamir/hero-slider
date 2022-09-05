@@ -1,8 +1,59 @@
 import React from 'react';
-import { EBackgroundAnimations, BackgroundProps } from './typings';
-import BackgroundModuleCss from './Background.module.css';
+import type CSS from 'csstype';
+import BackgroundModuleCss from './index.module.css';
 
-const Background = (props: BackgroundProps) => {
+/**
+ * Type definition for `BackgroundProps.backgroundAnimation`.
+ */
+export enum BackgroundAnimation {
+  FADE = 'fade',
+  ZOOM = 'zoom'
+}
+
+/**
+ * `BackgroundProps` interface for the `Background` JSX
+ * component's props used inside the `Slide` components.
+ * The `Slide` components `background` prop is also defined
+ * by `BackgroundProps`.
+ */
+export interface BackgroundProps {
+  shouldLazyLoad?: boolean;
+  backdropFilter?: CSS.Properties['backdropFilter'];
+  backfaceVisibility?: CSS.Properties['backfaceVisibility'];
+  background?: CSS.Properties['background'];
+  backgroundAttachment?: CSS.Properties['backgroundAttachment'];
+  backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
+  backgroundClip?: CSS.Properties['backgroundClip'];
+  backgroundColor?: CSS.Properties['backgroundColor'];
+  backgroundImage?: CSS.Properties['backgroundImage'];
+  backgroundOrigin?: CSS.Properties['backgroundOrigin'];
+  backgroundPosition?: CSS.Properties['backgroundPosition'];
+  backgroundPositionX?: CSS.Properties['backgroundPositionX'];
+  backgroundPositionY?: CSS.Properties['backgroundPositionY'];
+  backgroundRepeat?: CSS.Properties['backgroundRepeat'];
+  backgroundSize?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
+  backgroundAnimation?: `${BackgroundAnimation}`;
+  maskBackgroundBlendMode?:
+    | 'normal'
+    | 'multiply'
+    | 'screen'
+    | 'overlay'
+    | 'darken'
+    | 'lighten'
+    | 'color-dodge'
+    | 'saturation'
+    | 'color'
+    | 'luminosity';
+  width?: CSS.Properties['width'];
+  height?: CSS.Properties['height'];
+  alt?: string;
+  src?: string;
+  onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+}
+
+export default function Background(props: BackgroundProps) {
   const {
     shouldLazyLoad = true,
     width,
@@ -31,10 +82,10 @@ const Background = (props: BackgroundProps) => {
     const className = [BackgroundModuleCss.Loaded];
 
     switch (backgroundAnimation) {
-      case EBackgroundAnimations.ZOOM:
+      case BackgroundAnimation.ZOOM:
         className.push(BackgroundModuleCss.ZoomOut);
         break;
-      case EBackgroundAnimations.FADE:
+      case BackgroundAnimation.FADE:
       default:
         className.push(BackgroundModuleCss.FadeIn);
         break;
@@ -43,19 +94,17 @@ const Background = (props: BackgroundProps) => {
     setClassName(className.join(' '));
   };
 
-  const style: React.CSSProperties = React.useMemo(() => {
-    return {
-      backgroundPosition: 'center top',
-      backgroundSize: 'cover',
-      width: width || '100%',
-      height: height || '100%',
-      ...background,
-      backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined
-    };
-  }, [background, backgroundImage, height, width]);
+  const style: React.CSSProperties = {
+    backgroundPosition: 'center top',
+    backgroundSize: 'cover',
+    width: width || '100%',
+    height: height || '100%',
+    ...background,
+    backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined
+  };
 
   const content = (
-    <React.Fragment>
+    <>
       {backgroundImage && (
         <img
           className={BackgroundModuleCss.Loader}
@@ -66,10 +115,8 @@ const Background = (props: BackgroundProps) => {
         />
       )}
       <div style={style} className={className} />
-    </React.Fragment>
+    </>
   );
 
   return shouldLazyLoad ? <div>{content}</div> : content;
-};
-
-export default Background;
+}

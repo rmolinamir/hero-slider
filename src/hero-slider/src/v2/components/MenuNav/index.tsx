@@ -1,54 +1,81 @@
 import React from 'react';
-import { MenuNavProps } from './typings';
-import { SliderContext } from '../../Context';
-import MenuNavModuleCss from './MenuNav.module.css';
-import { Nav } from '../Nav';
+import MenuNavModuleCss from './index.module.css';
+import { Nav, NavProps } from '../Nav';
+import { useLayout } from '../../modules/Layout';
+import { useManager } from '../../modules/Manager';
+import { useController } from '../../modules/Controller';
 
-const SliderNav = (props: MenuNavProps) => {
+/**
+ * `MenuNav` component props.
+ */
+export interface MenuNavProps extends NavProps {
+  navDescriptions?: string[];
+  justifyContent?: string;
+  mobileThreshold?: number;
   /**
-   * Deconstructing MenuNavSettings to set it up.
+   * Determines if the nav should render `null` or a basic Nav component after the threshold is reached.
+   * @default false
    */
+  isNullAfterThreshold?: boolean;
+  extraButton?: React.ReactNode;
+  isExtraButtonRight?: boolean;
+}
+
+export function MenuNav(props: MenuNavProps) {
   const {
     color,
     activeColor,
     position,
     justifyContent,
-    // navDescriptions,
-    sliderWidth = window.innerWidth,
+    // labels,
+    // sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
     extraButton,
     isExtraButtonRight = true
   } = props;
 
-  const { navProps, slidesArray } = React.useContext(SliderContext);
+  const {
+    state: { width }
+  } = useLayout();
 
-  const MenuNavButtons = React.useMemo(() => {
-    if (!navProps || !slidesArray.length) return [];
-    const { changeSlide, activeSlide } = navProps;
-    const changeSlideHandler = (MenuNavButtonIndex: number) => {
-      const nextSlide = MenuNavButtonIndex + 1;
-      if (nextSlide !== activeSlide) {
-        changeSlide(nextSlide);
-      }
+  const {
+    state: { slides, totalSlides }
+  } = useManager();
+
+  const {
+    state: { activeSlide },
+    changeSlide
+  } = useController();
+
+  if (Number(width) <= mobileThreshold) {
+    if (isNullAfterThreshold) return null;
+    return <Nav {...props} />;
+  }
+
+  function renderButtons() {
+    if (!totalSlides) return [];
+
+    const onClickHandler = (slideNumber: number) => {
+      if (slideNumber !== activeSlide) changeSlide(slideNumber);
     };
-    return slidesArray.map(({ navDescription }, index) => {
-      const description = navDescription;
-      const respectiveSlide = index + 1;
+
+    return Array.from(slides.values()).map(({ label, number }, index) => {
+      const description = label;
       return (
         // TODO: Deal with the disabled linting later:
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
-          onClick={() => changeSlideHandler(index)}
           key={index}
+          onClick={() => onClickHandler(number)}
           className={[
             MenuNavModuleCss.Button,
-            activeSlide === respectiveSlide && MenuNavModuleCss.Active
+            activeSlide === number && MenuNavModuleCss.Active
           ].join(' ')}
         >
           <div className={MenuNavModuleCss.Description}>
             <div className={MenuNavModuleCss.Number}>
-              {respectiveSlide}
+              {number}
               <span className={MenuNavModuleCss.Square} />
             </div>
             <div className={MenuNavModuleCss.Text}>{description}</div>
@@ -56,16 +83,7 @@ const SliderNav = (props: MenuNavProps) => {
         </li>
       );
     });
-  }, [navProps, slidesArray]);
-
-  if (sliderWidth <= mobileThreshold) {
-    if (isNullAfterThreshold) return null;
-    return <Nav {...props} />;
   }
-
-  if (!navProps) return null;
-
-  const { activeSlide, totalSlides } = navProps;
 
   /**
    * CSS variables for the transitions.
@@ -111,7 +129,7 @@ const SliderNav = (props: MenuNavProps) => {
         </div>
       )}
       <ul className={MenuNavModuleCss.Container}>
-        {MenuNavButtons}
+        {renderButtons()}
         <span
           style={{
             width: `${100 / totalSlides}%`,
@@ -122,10 +140,6 @@ const SliderNav = (props: MenuNavProps) => {
       </ul>
     </div>
   );
-};
-
-export const MenuNav = (props: MenuNavProps): JSX.Element => (
-  <SliderNav {...props} />
-);
+}
 
 (MenuNav as React.FunctionComponent).displayName = 'hero-slider/menu-nav';

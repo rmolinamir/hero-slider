@@ -1,16 +1,6 @@
 import React from 'react';
 import type CSS from 'csstype';
 
-export interface LayoutProps {}
-
-interface LayoutState extends Partial<LayoutProps> {
-  slider: React.RefObject<HTMLDivElement>;
-  width?: CSS.Properties['width'];
-  height?: CSS.Properties['height'];
-}
-
-// const defaultProps: Pick<LayoutState, keyof LayoutProps> = {};
-
 type Action = {
   type: 'set-slider-dimensions';
   payload: {
@@ -18,13 +8,15 @@ type Action = {
     height?: CSS.Properties['height'];
   };
 };
-type Dispatch = (action: Action) => void;
-type State = LayoutState;
-type Props = React.PropsWithChildren<{ layout: LayoutProps }>;
+type State = {
+  slider: React.RefObject<HTMLDivElement>;
+  width?: CSS.Properties['width'];
+  height?: CSS.Properties['height'];
+};
 
-const LayoutStateContext = React.createContext<
-  { state: State; dispatch: Dispatch } | undefined
->(undefined);
+const LayoutStateContext = React.createContext<{ state: State } | undefined>(
+  undefined
+);
 
 function layoutReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -37,16 +29,12 @@ function layoutReducer(state: State, action: Action): State {
   }
 }
 
-function LayoutProvider({ children }: Props) {
+function LayoutProvider({ children }: React.PropsWithChildren) {
   const [state, dispatch] = React.useReducer(layoutReducer, {
     slider: React.useRef<HTMLElement>(null),
     width: undefined,
     height: undefined
-  } as LayoutState);
-
-  // NOTE: you *might* need to memoize this value
-  // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  } as State);
 
   /**
    * After mounting, similar to `componentDidMount`, set up the window event listeners.
@@ -78,6 +66,10 @@ function LayoutProvider({ children }: Props) {
       );
     };
   }, [state.slider.current]);
+
+  // NOTE: you *might* need to memoize this value
+  // Learn more in http://kcd.im/optimize-context
+  const value = { state };
 
   return (
     <LayoutStateContext.Provider value={value}>

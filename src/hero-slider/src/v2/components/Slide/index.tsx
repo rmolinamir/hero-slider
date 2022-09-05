@@ -1,91 +1,70 @@
 import React from 'react';
-import { SlideProps } from './typings';
-import { SliderContext } from '../../Context';
-import { EActionTypes } from '../../Context/typings';
-import SlideModuleCss from './Slide.module.css';
-import Background from './Background';
+import SlideModuleCss from './index.module.css';
+import Background, { BackgroundProps } from './Background';
 import Mask from './Mask';
+import { useManager } from '../../modules/Manager';
+import { useController } from '../../modules/Controller';
+import { useAnimations } from '../../modules/Animations';
 
-const HeroSlide = (props: SlideProps) => {
+/**
+ * `Slide` component props.
+ */
+export interface SlideProps {
+  shouldRenderMask?: boolean;
+  background?: Partial<BackgroundProps>;
+  label?: string;
+  style?: React.CSSProperties;
+  onBackgroundLoad?: BackgroundProps['onLoad'];
+}
+
+export function Slide(props: React.PropsWithChildren<SlideProps>) {
   const {
     shouldRenderMask,
     style,
     background,
     onBackgroundLoad,
     children,
-    navDescription
+    label
   } = props;
 
-  const {
-    dispatchProps,
-    slidesArray,
-    slideProps, // will be gone
-    generateNewSlideId,
-    removeSlideId
-  } = React.useContext(SliderContext); // manager
+  const { getSlide, registerSlide, removeSlide } = useManager();
 
-  const [slideNumber, setSlideNumber] = React.useState<number>(
-    slidesArray.length
-  );
+  const slideRef = React.useRef<HTMLDivElement>(null);
 
-  const currentSlideData = slidesArray.find(
-    ({ slideNumber: number }) => number === slideNumber
-  );
+  const slide = getSlide(slideRef);
 
   React.useEffect(() => {
-    if (dispatchProps && !currentSlideData) {
-      const newSlideNumber = generateNewSlideId();
-      dispatchProps({
-        type: EActionTypes.SET_SLIDE_DATA,
-        payload: {
-          navDescription,
-          slideNumber: newSlideNumber
-        }
-      });
-      setSlideNumber(newSlideNumber);
-    }
-  }, [
-    dispatchProps,
-    currentSlideData,
-    slideNumber,
-    slidesArray,
-    navDescription,
-    generateNewSlideId
-  ]);
-
-  // When unmounting, remove the slideNumber.
-  React.useEffect(() => {
+    if (slideRef) registerSlide(slideRef, label);
     return () => {
-      if (slideNumber) removeSlideId(slideNumber);
+      if (slideRef) removeSlide(slideRef);
     };
-  }, [slideNumber, removeSlideId]);
+  }, []);
+
+  if (!slide) return null;
 
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = React.useMemo(() => {
-    return background
-      ? {
-          '--background-animation-duration':
-            background.backgroundAnimationDuration
-              ? `${background.backgroundAnimationDuration}ms`
-              : null,
-          '--background-animation-delay': background.backgroundAnimationDelay
-            ? `${background.backgroundAnimationDelay}ms`
-            : null
-        }
-      : background;
-  }, [background]);
+  const CSSVariables = {
+    '--background-animation-duration': background?.backgroundAnimationDuration
+      ? `${background.backgroundAnimationDuration}ms`
+      : null,
+    '--background-animation-delay': background?.backgroundAnimationDelay
+      ? `${background.backgroundAnimationDelay}ms`
+      : null
+  };
 
-  if (!currentSlideData || !slideProps) return null;
+  const {
+    state: { activeSlide, isSliding }
+  } = useController(); // controller
 
-  const { activeSlide, isDoneSliding, slidingAnimation } = slideProps; // controller
+  const { geSlidingAnimationCssClass } = useAnimations();
 
-  const currentSlide = slidesArray.indexOf(currentSlideData) + 1;
-  const isActive = activeSlide === currentSlide;
+  const isActive = activeSlide === slide.number;
 
   return (
     <div
+      ref={slideRef}
       style={{
         ...style,
         ...CSSVariables
@@ -93,25 +72,22 @@ const HeroSlide = (props: SlideProps) => {
       className={[
         SlideModuleCss.Slide,
         isActive && SlideModuleCss.Active,
-        isActive && isDoneSliding && SlideModuleCss.Sliding,
-        isActive && !isDoneSliding && slidingAnimation
+        isActive && !isSliding && SlideModuleCss.Sliding,
+        isActive && isSliding && geSlidingAnimationCssClass()
       ].join(' ')}
     >
       <Background {...background} onLoad={onBackgroundLoad} />
       <div className={SlideModuleCss.Wrapper}>
-        {/* Inner Mask */}
+        {/* Mask */}
         {shouldRenderMask ? (
-          <Mask
-            background={background}
-            isActive={isActive}
-            isDoneSliding={isDoneSliding}
-          />
+          <Mask background={background} isActive={isActive} />
         ) : null}
+
         {/* Container */}
         <div
           className={[
             SlideModuleCss.Container,
-            isActive && isDoneSliding && SlideModuleCss.Active
+            isActive && !isSliding && SlideModuleCss.Active
           ].join(' ')}
         >
           {children}
@@ -119,10 +95,6 @@ const HeroSlide = (props: SlideProps) => {
       </div>
     </div>
   );
-};
-
-export const Slide = (props: SlideProps): JSX.Element => (
-  <HeroSlide {...props} />
-);
+}
 
 (Slide as React.FunctionComponent).displayName = 'hero-slider/slide';

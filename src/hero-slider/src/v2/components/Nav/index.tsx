@@ -1,42 +1,61 @@
 import React from 'react';
-import { NavProps } from './typings';
-import { SliderContext } from '../../Context';
-import NavModuleCss from './Nav.module.css';
+import NavModuleCss from './index.module.css';
+import { useController } from '../../modules/Controller';
+import { useManager } from '../../modules/Manager';
 
-const SliderNav = (props: NavProps) => {
-  /**
-   * Deconstructing navSettings to set it up.
-   */
-  const { color, activeColor, position } = props;
+/**
+ * `NavPosition` define a position object used to position the nav components
+ * through inline CSS styles.
+ */
+export interface NavPosition {
+  top: string;
+  left: string;
+  bottom: string;
+  right: string;
+  transform: string;
+}
 
-  const { navProps, slidesArray } = React.useContext(SliderContext);
+/**
+ * `Nav` component props.
+ */
+export interface NavProps {
+  position?: NavPosition;
+  color?: string;
+  activeColor?: string;
+}
 
-  const navButtons = React.useMemo(() => {
-    if (!navProps || !slidesArray.length) return [];
-    const { changeSlide, activeSlide } = navProps;
-    const changeSlideHandler = (navButtonIndex: number) => {
-      const nextSlide = navButtonIndex + 1;
-      if (nextSlide !== activeSlide) {
-        changeSlide(nextSlide);
-      }
+export function Nav({ color, activeColor, position }: NavProps) {
+  const {
+    state: { slides, totalSlides }
+  } = useManager();
+
+  const {
+    state: { activeSlide },
+    changeSlide
+  } = useController();
+
+  function renderButtons() {
+    if (!totalSlides) return [];
+
+    const onClickHandler = (slideNumber: number) => {
+      if (slideNumber !== activeSlide) changeSlide(slideNumber);
     };
-    return slidesArray.map((_, index) => {
+
+    return Array.from(slides.values()).map(({ number }) => {
       return (
         // TODO: Deal with the disabled linting later:
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
-          onClick={() => changeSlideHandler(index)}
-          key={index}
+          key={number}
+          onClick={() => onClickHandler(number)}
           className={[
             NavModuleCss.Button,
-            activeSlide === index + 1 && NavModuleCss.Active
+            activeSlide === number && NavModuleCss.Active
           ].join(' ')}
         />
       );
     });
-  }, [navProps, slidesArray]);
-
-  if (!navProps) return null;
+  }
 
   /**
    * CSS variables for the transitions.
@@ -58,11 +77,9 @@ const SliderNav = (props: NavProps) => {
       }}
       className={NavModuleCss.Wrapper}
     >
-      {navButtons}
+      {renderButtons()}
     </ul>
   );
-};
-
-export const Nav = (props: NavProps): JSX.Element => <SliderNav {...props} />;
+}
 
 (Nav as React.FunctionComponent).displayName = 'hero-slider/nav';
