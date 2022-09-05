@@ -3,6 +3,7 @@ import AutoplayButtonModuleCss from './index.module.css';
 import { NavPosition } from '../Nav';
 import { useAutoplay } from '../../modules/Autoplay';
 import { IntervalState } from '../../modules/IntervalTimer';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 enum ButtonType {
   PLAY = 'play',
@@ -70,7 +71,11 @@ export function AutoplayButton(props: AutoplayButtonProps) {
 
   return (
     <button
-      className={[AutoplayButtonModuleCss.Button, className].join(' ')}
+      className={composeCssClasses(
+        'hero-slider-autoplay-button',
+        AutoplayButtonModuleCss.Button,
+        className
+      )}
       onClick={onClickHandler}
       style={{
         ...position,

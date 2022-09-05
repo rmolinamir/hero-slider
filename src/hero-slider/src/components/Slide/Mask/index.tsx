@@ -2,6 +2,7 @@ import React from 'react';
 import MaskModuleCss from './index.module.css';
 import { BackgroundProps } from '../Background';
 import { useController } from '../../../modules/Controller';
+import { composeCssClasses } from '../../../utils/composeCssClasses';
 
 export interface MaskProps {
   background?: Partial<BackgroundProps>;
@@ -29,10 +30,12 @@ export default function Mask({ background, isActive }: MaskProps) {
 
   return (
     <div
-      className={[
+      className={composeCssClasses(
+        'hero-slider-slide-mask',
         MaskModuleCss.Mask,
-        isActive && !isSliding ? MaskModuleCss.Active : MaskModuleCss.Inactive
-      ].join(' ')}
+        { className: MaskModuleCss.Active, useIf: isActive && !isSliding },
+        { className: MaskModuleCss.Inactive, useIf: !(isActive && !isSliding) }
+      )}
     >
       <img
         alt={background?.alt || ''}
@@ -43,12 +46,13 @@ export default function Mask({ background, isActive }: MaskProps) {
       />
       {isLoaded && (
         <div
-          style={style}
-          className={[
+          className={composeCssClasses(
+            'hero-slider-slide-mask-inner',
             className,
-            isLoaded && MaskModuleCss.Inner,
-            isLoaded && isSliding && MaskModuleCss.Sliding
-          ].join(' ')}
+            MaskModuleCss.Inner,
+            { className: MaskModuleCss.Sliding, useIf: isSliding }
+          )}
+          style={style}
         />
       )}
     </div>

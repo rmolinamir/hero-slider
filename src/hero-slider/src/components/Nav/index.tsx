@@ -2,6 +2,7 @@ import React from 'react';
 import NavModuleCss from './index.module.css';
 import { useController } from '../../modules/Controller';
 import { useManager } from '../../modules/Manager';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 /**
  * `NavPosition` define a position object used to position the nav components
@@ -55,11 +56,12 @@ export function Nav({
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
           key={number}
-          onClick={() => onClickHandler(number)}
-          className={[
+          className={composeCssClasses(
+            'hero-slider-nav-button',
             NavModuleCss.Button,
-            activeSlide === number && NavModuleCss.Active
-          ].join(' ')}
+            { className: NavModuleCss.Active, useIf: activeSlide === number }
+          )}
+          onClick={() => onClickHandler(number)}
         />
       );
     });
@@ -75,11 +77,14 @@ export function Nav({
 
   return (
     <ul
+      className={composeCssClasses(
+        'hero-slider-nav-wrapper',
+        NavModuleCss.Wrapper
+      )}
       style={{
         ...position,
         ...CSSVariables
       }}
-      className={NavModuleCss.Wrapper}
     >
       {renderButtons()}
     </ul>

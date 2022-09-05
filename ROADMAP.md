@@ -11,8 +11,8 @@
   - [x] The weird thing is that this **only** seems to happen when changing **sliding directions**. Not sure why...
 - [x] Currently in the modules, there is a shitty pattern that mixes the props with the state, and that forces too much data replication to update state if props change, this should be fixed. A solution is to simply update the first generic of the `React.createContext` function and add the props that should be exposed and proxied in there.
 - [x] Deal with TODOs.
-- [ ] Add classes to `hero-slider` such as `.Slider`, `.Slide`, etc. The goal is to allow other developers to target my components through CSS and customize their styling.
-- [ ] The space of the next/prev slide arrows of the slider on where the user can click does not match their actual rendered image.
+- [x] Add classes to `hero-slider` such as `.Slider`, `.Slide`, etc. The goal is to allow other developers to target my components through CSS and customize their styling.
+- [ ] The space of the next/prev slide arrows of the slider on where the user can click does not match their actual rendered svg.
 - [ ] Address the open issues of v2.x.
 - [ ] Optimize the `hero-slider` if it's worth it, optimize for performance but **only when and where** it makes sense. COFL. Code First, Optimize Later.
   - [ ] Implement a Logger singleton to easily hide telemetry, this will help to analyze re-render chain to improve performance.

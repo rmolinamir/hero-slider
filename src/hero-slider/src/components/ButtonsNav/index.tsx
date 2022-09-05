@@ -5,6 +5,7 @@ import { MenuNavProps } from '../MenuNav';
 import { useManager } from '../../modules/Manager';
 import { useController } from '../../modules/Controller';
 import { useLayout } from '../../modules/Layout';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 /**
  * `ButtonsNav` component props.
@@ -74,14 +75,30 @@ export function ButtonsNav(props: ButtonsNavProps) {
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
           key={number}
-          onClick={() => onClickHandler(number)}
-          className={[
+          className={composeCssClasses(
+            'hero-slider-buttons-nav-button',
             ButtonsNavModuleCss.Button,
-            activeSlide === number && ButtonsNavModuleCss.Active
-          ].join(' ')}
+            {
+              className: ButtonsNavModuleCss.Active,
+              useIf: activeSlide === number
+            }
+          )}
+          onClick={() => onClickHandler(number)}
         >
-          <div className={ButtonsNavModuleCss.Description}>
-            <div className={ButtonsNavModuleCss.Text}>{description}</div>
+          <div
+            className={composeCssClasses(
+              'hero-slider-buttons-nav-button-description',
+              ButtonsNavModuleCss.Description
+            )}
+          >
+            <div
+              className={composeCssClasses(
+                'hero-slider-buttons-nav-button-text',
+                ButtonsNavModuleCss.Text
+              )}
+            >
+              {description}
+            </div>
           </div>
         </li>
       );
@@ -90,13 +107,20 @@ export function ButtonsNav(props: ButtonsNavProps) {
 
   return (
     <div
+      className={composeCssClasses(
+        'hero-slider-buttons-nav-wrapper',
+        ButtonsNavModuleCss.Wrapper
+      )}
       style={{
         ...position,
         ...CSSVariables
       }}
-      className={ButtonsNavModuleCss.Wrapper}
     >
       <ul
+        className={composeCssClasses(
+          'hero-slider-buttons-nav-container',
+          ButtonsNavModuleCss.Container
+        )}
         style={{
           justifyContent: justifyContent || 'center',
           /**
@@ -109,15 +133,17 @@ export function ButtonsNav(props: ButtonsNavProps) {
             alignItems ||
             (position.top !== undefined ? 'flex-start' : 'flex-end')
         }}
-        className={ButtonsNavModuleCss.Container}
       >
         {renderButtons()}
         {extraButton && (
           <div
+            className={composeCssClasses(
+              'hero-slider-buttons-nav-extra-button',
+              ButtonsNavModuleCss.ExtraButton
+            )}
             style={{
               order: isExtraButtonRight ? 1 : 0
             }}
-            className={ButtonsNavModuleCss.ExtraButton}
           >
             {extraButton}
           </div>

@@ -3,6 +3,7 @@ import SideNavModuleCss from './index.module.css';
 import { NavProps } from '../Nav';
 import { useController } from '../../modules/Controller';
 import { useManager } from '../../modules/Manager';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 /**
  * `SideNav` component props.
@@ -49,17 +50,31 @@ export function SideNav({
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
         <li
           key={number}
-          onClick={() => onClickHandler(number)}
-          className={[
+          className={composeCssClasses(
+            'hero-slider-side-nav-button',
             SideNavModuleCss.Button,
-            activeSlide === number && SideNavModuleCss.Active
-          ].join(' ')}
+            {
+              className: SideNavModuleCss.Active,
+              useIf: activeSlide === number
+            }
+          )}
+          onClick={() => onClickHandler(number)}
           style={{
             justifyContent: isPositionedRight ? 'flex-end' : 'flex-start'
           }}
         >
-          <span className={SideNavModuleCss.Line} />
-          <span className={SideNavModuleCss.Number}>
+          <span
+            className={composeCssClasses(
+              'hero-slider-side-nav-button-line',
+              SideNavModuleCss.Line
+            )}
+          />
+          <span
+            className={composeCssClasses(
+              'hero-slider-side-nav-button-number',
+              SideNavModuleCss.Number
+            )}
+          >
             {number.toLocaleString()}
           </span>
         </li>
@@ -77,11 +92,14 @@ export function SideNav({
 
   return (
     <ul
+      className={composeCssClasses(
+        'hero-slider-side-nav-wrapper',
+        SideNavModuleCss.Wrapper
+      )}
       style={{
         ...position,
         ...CSSVariables
       }}
-      className={SideNavModuleCss.Wrapper}
     >
       {renderButtons()}
     </ul>

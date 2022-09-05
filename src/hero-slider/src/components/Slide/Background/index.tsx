@@ -1,6 +1,7 @@
 import React from 'react';
 import type CSS from 'csstype';
 import BackgroundModuleCss from './index.module.css';
+import { composeCssClasses } from '../../../utils/composeCssClasses';
 
 /**
  * Type definition for `BackgroundProps.backgroundAnimation`.
@@ -107,14 +108,20 @@ export default function Background(props: BackgroundProps) {
     <>
       {backgroundImage && (
         <img
-          className={BackgroundModuleCss.Loader}
+          className={composeCssClasses(
+            'hero-slider-slide-background-loader',
+            BackgroundModuleCss.Loader
+          )}
           onLoad={onLoadHandler}
           alt={alt}
           loading={shouldLazyLoad ? 'lazy' : 'eager'}
           src={backgroundImage}
         />
       )}
-      <div style={style} className={className} />
+      <div
+        style={style}
+        className={composeCssClasses('hero-slider-slide-background', className)}
+      />
     </>
   );
 

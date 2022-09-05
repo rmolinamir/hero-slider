@@ -4,6 +4,7 @@ import { Nav, NavProps } from '../Nav';
 import { useLayout } from '../../modules/Layout';
 import { useManager } from '../../modules/Manager';
 import { useController } from '../../modules/Controller';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 /**
  * `MenuNav` component props.
@@ -70,18 +71,44 @@ export function MenuNav(props: MenuNavProps) {
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <li
           key={index}
-          onClick={() => onClickHandler(number)}
-          className={[
+          className={composeCssClasses(
+            'hero-slider-menu-nav-button',
             MenuNavModuleCss.Button,
-            activeSlide === number && MenuNavModuleCss.Active
-          ].join(' ')}
+            {
+              className: MenuNavModuleCss.Active,
+              useIf: activeSlide === number
+            }
+          )}
+          onClick={() => onClickHandler(number)}
         >
-          <div className={MenuNavModuleCss.Description}>
-            <div className={MenuNavModuleCss.Number}>
+          <div
+            className={composeCssClasses(
+              'hero-slider-menu-nav-button-description',
+              MenuNavModuleCss.Description
+            )}
+          >
+            <div
+              className={composeCssClasses(
+                'hero-slider-menu-nav-button-number',
+                MenuNavModuleCss.Number
+              )}
+            >
               {number}
-              <span className={MenuNavModuleCss.Square} />
+              <span
+                className={composeCssClasses(
+                  'hero-slider-menu-nav-button-square',
+                  MenuNavModuleCss.Square
+                )}
+              />
             </div>
-            <div className={MenuNavModuleCss.Text}>{description}</div>
+            <div
+              className={composeCssClasses(
+                'hero-slider-menu-nav-button-text',
+                MenuNavModuleCss.Text
+              )}
+            >
+              {description}
+            </div>
           </div>
         </li>
       );
@@ -98,21 +125,31 @@ export function MenuNav(props: MenuNavProps) {
 
   return (
     <div
+      className={composeCssClasses(
+        'hero-slider-menu-nav-wrapper',
+        MenuNavModuleCss.Wrapper
+      )}
       style={{
         ...position,
         ...CSSVariables,
         justifyContent: justifyContent || 'center'
       }}
-      className={MenuNavModuleCss.Wrapper}
     >
       {extraButton && (
         <div
+          className={composeCssClasses(
+            'hero-slider-menu-nav-extra',
+            MenuNavModuleCss.Extra
+          )}
           style={{
             order: isExtraButtonRight ? 1 : 0
           }}
-          className={MenuNavModuleCss.Extra}
         >
           <span
+            className={composeCssClasses(
+              'hero-slider-menu-nav-extra-button',
+              MenuNavModuleCss.ExtraButton
+            )}
             style={{
               borderLeft: isExtraButtonRight
                 ? '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))'
@@ -121,20 +158,27 @@ export function MenuNav(props: MenuNavProps) {
                 ? '1px solid var(--nav-color, rgba(215, 225, 235, 0.6))'
                 : undefined
             }}
-            className={MenuNavModuleCss.ExtraButton}
           >
             {extraButton}
           </span>
         </div>
       )}
-      <ul className={MenuNavModuleCss.Container}>
+      <ul
+        className={composeCssClasses(
+          'hero-slider-menu-nav-container',
+          MenuNavModuleCss.Container
+        )}
+      >
         {renderButtons()}
         <span
+          className={composeCssClasses(
+            'hero-slider-menu-nav-bar',
+            MenuNavModuleCss.Bar
+          )}
           style={{
             width: `${100 / totalSlides}%`,
             transform: `translate3d(${activeSlide - 1}00%, 0, 0)`
           }}
-          className={MenuNavModuleCss.Bar}
         />
       </ul>
     </div>

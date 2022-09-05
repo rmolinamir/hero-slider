@@ -41,7 +41,7 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
   const slide = getSlide(slideRef);
 
   const [classNames, setClassNames] = React.useState(
-    composeCssClasses(SlideModuleCss.Slide)
+    composeCssClasses('hero-slider-slide', SlideModuleCss.Slide)
   );
 
   const isActive = activeSlide === slide?.number;
@@ -50,6 +50,7 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
     if (slide) {
       setClassNames(
         composeCssClasses(
+          'hero-slider-slide',
           SlideModuleCss.Slide,
           { className: SlideModuleCss.Active, useIf: isActive },
           { className: SlideModuleCss.Sliding, useIf: isActive && !isSliding },
@@ -97,7 +98,12 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
       }}
     >
       <Background {...background} onLoad={onBackgroundLoad} />
-      <div className={SlideModuleCss.Wrapper}>
+      <div
+        className={composeCssClasses(
+          'hero-slider-slide-wrapper',
+          SlideModuleCss.Wrapper
+        )}
+      >
         {/* Mask */}
         {shouldRenderMask ? (
           <Mask background={background} isActive={isActive} />
@@ -105,10 +111,11 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
 
         {/* Container */}
         <div
-          className={[
+          className={composeCssClasses(
+            'hero-slider-slide-container',
             SlideModuleCss.Container,
-            isActive && !isSliding && SlideModuleCss.Active
-          ].join(' ')}
+            { className: SlideModuleCss.Active, useIf: isActive && !isSliding }
+          )}
         >
           {children}
         </div>

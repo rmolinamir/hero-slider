@@ -7,6 +7,7 @@ import {
   useAccessability
 } from '../../modules/Accessability';
 import { useController } from '../../modules/Controller';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 function ArrowSvg() {
   return (
@@ -41,16 +42,26 @@ export default function Buttons() {
     <>
       {/* Previous */}
       <div
-        className={[
-          ButtonsModuleCss.Wrapper,
+        className={composeCssClasses(
+          'hero-slider-previous',
           ButtonsModuleCss.Previous,
-          isHorizontal ? ButtonsModuleCss.Horizontal : ButtonsModuleCss.Vertical
-        ].join(' ')}
+          ButtonsModuleCss.Wrapper,
+          { className: ButtonsModuleCss.Horizontal, useIf: isHorizontal },
+          { className: ButtonsModuleCss.Vertical, useIf: !isHorizontal }
+        )}
       >
-        <div className={ButtonsModuleCss.Container}>
+        <div
+          className={composeCssClasses(
+            'hero-slider-previous-container',
+            ButtonsModuleCss.Container
+          )}
+        >
           <button
+            className={composeCssClasses(
+              'hero-slider-previous-button',
+              ButtonsModuleCss.Button
+            )}
             onClick={goToPreviousSlide}
-            className={ButtonsModuleCss.Button}
           >
             <ArrowSvg />
           </button>
@@ -58,14 +69,27 @@ export default function Buttons() {
       </div>
       {/* Next */}
       <div
-        className={[
-          ButtonsModuleCss.Wrapper,
+        className={composeCssClasses(
+          'hero-slider-next',
           ButtonsModuleCss.Next,
-          isHorizontal ? ButtonsModuleCss.Horizontal : ButtonsModuleCss.Vertical
-        ].join(' ')}
+          ButtonsModuleCss.Wrapper,
+          { className: ButtonsModuleCss.Horizontal, useIf: isHorizontal },
+          { className: ButtonsModuleCss.Vertical, useIf: !isHorizontal }
+        )}
       >
-        <div className={ButtonsModuleCss.Container}>
-          <button onClick={goToNextSlide} className={ButtonsModuleCss.Button}>
+        <div
+          className={composeCssClasses(
+            'hero-slider-next-container',
+            ButtonsModuleCss.Container
+          )}
+        >
+          <button
+            className={composeCssClasses(
+              'hero-slider-next-button',
+              ButtonsModuleCss.Button
+            )}
+            onClick={goToNextSlide}
+          >
             <ArrowSvg />
           </button>
         </div>

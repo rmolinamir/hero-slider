@@ -32,6 +32,7 @@ import {
   IntersectionObserverProvider,
   useIntersectionObserver
 } from './modules/IntersectionObserver';
+import { composeCssClasses } from './utils/composeCssClasses';
 
 /**
  * `HeroSlider` props.
@@ -91,10 +92,13 @@ function Orchestrator({
   };
 
   return (
-    <div className="hero-slider" ref={elementObservedRef}>
+    <div className="hero-slider-root" ref={elementObservedRef}>
       <div
         ref={layout.slider}
-        className={HeroSliderModuleCss.Wrapper}
+        className={composeCssClasses(
+          'hero-slider-wrapper',
+          HeroSliderModuleCss.Wrapper
+        )}
         onTouchStart={onTouchStartHandler}
         onTouchMove={onTouchMoveHandler}
         onTouchEnd={onTouchEndHandler}
