@@ -1,5 +1,3 @@
-import * as legacy from './legacy';
-
 export { default } from './HeroSlider';
 export { AutoplayButton } from './components/AutoplayButton';
 export { ButtonsNav } from './components/ButtonsNav';
@@ -8,5 +6,3 @@ export { Nav } from './components/Nav';
 export { Overlay } from './components/Overlay';
 export { SideNav } from './components/SideNav';
 export { Slide } from './components/Slide';
-
-export { legacy };
