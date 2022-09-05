@@ -1,6 +1,8 @@
-import HeroSlider, { Slide, Nav, AutoplayButton, Container } from 'hero-slider';
+import { legacy } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
+
+const { default: HeroSlider, Slide, Nav, AutoplayButton, Container } = legacy;
 
 // Images
 const kyoto = 'https://i.imgur.com/xw5Abku.jpg';

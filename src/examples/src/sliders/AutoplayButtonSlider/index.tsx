@@ -1,4 +1,4 @@
-import { V2 } from 'hero-slider';
+import HeroSlider, { Slide, Container, Nav, AutoplayButton } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 
@@ -8,11 +8,9 @@ const tenryuJiTemple = 'https://i.imgur.com/g5JNdYL.jpg';
 const hakone = 'https://i.imgur.com/Iq6XtFR.jpg';
 const byodoInTemple = 'https://i.imgur.com/le9OeEC.jpg';
 
-const { Slider, Slide, Container, Nav, AutoplayButton } = V2;
-
 export default function AutoplayButtonSlider() {
   return (
-    <Slider
+    <HeroSlider
       height="100vh"
       controller={{
         initialSlide: 1,
@@ -77,6 +75,6 @@ export default function AutoplayButtonSlider() {
       />
 
       <Nav />
-    </Slider>
+    </HeroSlider>
   );
 }

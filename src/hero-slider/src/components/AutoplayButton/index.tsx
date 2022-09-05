@@ -2,7 +2,7 @@ import React from 'react';
 import AutoplayButtonModuleCss from './index.module.css';
 import { NavPosition } from '../Nav';
 import { useAutoplay } from '../../modules/Autoplay';
-import { IntervalState } from '../../dependencies/IntervalTimer';
+import { IntervalState } from '../../modules/IntervalTimer';
 
 enum ButtonType {
   PLAY = 'play',

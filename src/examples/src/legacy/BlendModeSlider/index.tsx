@@ -1,5 +1,5 @@
 import React from 'react';
-import HeroSlider, { Slide, SideNav, ButtonsNav, Container } from 'hero-slider';
+import { legacy } from 'hero-slider';
 import rockyWaterfall from './backgrounds/Rocky Waterfall.jpg';
 import palauPacificOcean from './backgrounds/Palau - Pacific Ocean.jpg';
 import queposCostaRica from './backgrounds/Quepos - Costa Rica.jpg';
@@ -7,6 +7,8 @@ import mountainView from './backgrounds/MountainView.jpg';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
+
+const { default: HeroSlider, Slide, ButtonsNav, Container, SideNav } = legacy;
 
 const app = () => {
   const nextSlideHandler = React.useRef();

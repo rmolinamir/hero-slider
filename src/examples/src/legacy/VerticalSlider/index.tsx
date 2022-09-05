@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider, { Slide, SideNav, Nav, Container } from 'hero-slider';
+import { legacy } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
@@ -7,6 +7,8 @@ import salta from './backgrounds/Salta - Argentina.jpg';
 import scharbeutz from './backgrounds/Scharbeutz - Germany.jpg';
 import selvaDiValGardena from './backgrounds/Selva Di Val Gardena - Italy.jpg';
 import seoraksanMountains from './backgrounds/Seoraksan Mountains - South Korea.jpg';
+
+const { default: Slider, Slide, Container, Nav, SideNav } = legacy;
 
 export default function VerticalSlider() {
   const nextSlideHandler = React.useRef();

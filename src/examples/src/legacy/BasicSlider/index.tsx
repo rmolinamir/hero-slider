@@ -1,5 +1,5 @@
+import { legacy } from 'hero-slider';
 import React from 'react';
-import Slider, { Slide, Container, Nav } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
@@ -7,6 +7,8 @@ import bogliasco from './backgrounds/Bogliasco - Italy.jpg';
 import countyClare from './backgrounds/County Clare - Ireland.jpg';
 import craterRock from './backgrounds/Crater Rock - United States.jpg';
 import giauPass from './backgrounds/Giau Pass - Italy.jpg';
+
+const { default: Slider, Slide, Nav, Container } = legacy;
 
 export default function BasicSlider() {
   const nextSlideHandler = React.useRef();

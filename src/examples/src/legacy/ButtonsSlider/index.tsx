@@ -1,5 +1,5 @@
 import React from 'react';
-import HeroSlider, { Slide, Nav, Container } from 'hero-slider';
+import { legacy } from 'hero-slider';
 import { Button } from '../../ui/Button';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
@@ -10,6 +10,8 @@ const bogliasco = 'https://i.imgur.com/Gu5Cznz.jpg';
 const countyClare = 'https://i.imgur.com/idjXzVQ.jpg';
 const craterRock = 'https://i.imgur.com/8DYumaY.jpg';
 const giauPass = 'https://i.imgur.com/8IuucQZ.jpg';
+
+const { default: HeroSlider, Slide, Nav, Container } = legacy;
 
 const app = () => {
   const nextSlideHandler = React.useRef<() => void>();

@@ -1,4 +1,4 @@
-import { V2 } from 'hero-slider';
+import HeroSlider, { Slide, Container, Nav } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
@@ -7,11 +7,9 @@ import countyClare from './backgrounds/County Clare - Ireland.jpg';
 import craterRock from './backgrounds/Crater Rock - United States.jpg';
 import giauPass from './backgrounds/Giau Pass - Italy.jpg';
 
-const { Slider, Slide, Container, Nav } = V2;
-
 export default function BasicSlider() {
   return (
-    <Slider
+    <HeroSlider
       height={'100vh'}
       autoplay
       controller={{
@@ -70,6 +68,6 @@ export default function BasicSlider() {
       />
 
       <Nav />
-    </Slider>
+    </HeroSlider>
   );
 }

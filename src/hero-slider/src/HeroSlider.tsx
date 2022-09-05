@@ -1,5 +1,5 @@
 import React from 'react';
-import HeroSliderModuleCss from './index.module.css';
+import HeroSliderModuleCss from './HeroSlider.module.css';
 import Buttons from './components/Buttons';
 import {
   SettingsProps,

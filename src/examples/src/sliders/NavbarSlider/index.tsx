@@ -1,4 +1,4 @@
-import { V2 } from 'hero-slider';
+import HeroSlider, { Slide, Container, MenuNav } from 'hero-slider';
 import Navbar from '../../ui/Navbar';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
@@ -8,11 +8,9 @@ import tenryuJiTemple from './backgrounds/Tenryu-ji Temple - Kyōto-shi - Japan.
 import hakone from './backgrounds/Hakone - Japan.jpg';
 import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United States.jpg';
 
-const { Slider, Slide, Container, MenuNav } = V2;
-
 export default function NavbarSlider() {
   return (
-    <Slider
+    <HeroSlider
       height="100vh"
       accessability={{
         orientation: 'vertical'
@@ -74,6 +72,6 @@ export default function NavbarSlider() {
       />
 
       <MenuNav />
-    </Slider>
+    </HeroSlider>
   );
 }

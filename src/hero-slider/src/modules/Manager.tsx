@@ -1,5 +1,4 @@
 import React from 'react';
-import { isMobile } from '../dependencies/isMobile';
 
 type Slide = {
   ref: React.RefObject<HTMLElement>;
@@ -41,6 +40,19 @@ interface State extends Required<ManagerProps> {
   totalSlides: number;
 }
 type ProviderProps = React.PropsWithChildren<{ manager?: ManagerProps }>;
+
+/**
+ * Detecs if on a mobile device.
+ */
+function isMobile(): boolean {
+  // But first, detect if running on the browser in case of SSR:
+  const isBrowser = typeof window !== 'undefined';
+  if (isBrowser) {
+    if (navigator && /Mobi|Android/i.test(navigator.userAgent)) return true;
+    else return false;
+  }
+  return false;
+}
 
 const defaultProps: Pick<State, keyof ManagerProps> = {
   isMobile: isMobile()

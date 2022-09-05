@@ -1,5 +1,5 @@
 import React from 'react';
-import IntervalTimer, { IntervalState } from '../dependencies/IntervalTimer';
+import IntervalTimer, { IntervalState } from './IntervalTimer';
 import { useController } from './Controller';
 import { useIntersectionObserver } from './IntersectionObserver';
 
