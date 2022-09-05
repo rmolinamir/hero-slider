@@ -1,4 +1,5 @@
-import { V2 } from 'hero-slider';
+import React from 'react';
+import Slider, { Slide, Container, Nav } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
@@ -7,37 +8,31 @@ import countyClare from './backgrounds/County Clare - Ireland.jpg';
 import craterRock from './backgrounds/Crater Rock - United States.jpg';
 import giauPass from './backgrounds/Giau Pass - Italy.jpg';
 
-const { Slider, Slide, Container, Nav } = V2;
-
 export default function BasicSlider() {
+  const nextSlideHandler = React.useRef();
+  const previousSlideHandler = React.useRef();
+
   return (
     <Slider
-      height={'100vh'}
+      nextSlide={nextSlideHandler}
+      previousSlide={previousSlideHandler}
+      slidingAnimation="left_to_right"
+      orientation="horizontal"
+      initialSlide={1}
+      // onBeforeChange={(previousSlide, nextSlide) => console.log('onBeforeChange', previousSlide, nextSlide)}
+      onChange={(nextSlide: number) => console.debug('onChange', nextSlide)}
+      // onAfterChange={(nextSlide) => console.log('onAfterChange', nextSlide)}
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.33)'
       }}
-      animations={{
-        initialSlidingAnimation: 'left_to_right'
-      }}
-      accessability={{
-        orientation: 'horizontal'
-      }}
-      autoplay={{
-        autoplayDuration: 5000
-      }}
-      controller={{
-        initialSlide: 1,
+      settings={{
         slidingDuration: 250,
         slidingDelay: 100,
-        onChange: (nextSlide) => console.debug('onChange', nextSlide),
-        onBeforeChange: (previousSlide, nextSlide) =>
-          console.log('onBeforeChange', previousSlide, nextSlide),
-        onAfterChange: (nextSlide) => console.log('onAfterChange', nextSlide)
-      }}
-      settings={{
         shouldAutoplay: true,
         shouldDisplayButtons: true,
-        shouldSlideOnArrowKeypress: true
+        shouldSlideOnArrowKeypress: true,
+        autoplayDuration: 5000,
+        height: '100vh'
       }}
     >
       <Container>
@@ -51,7 +46,7 @@ export default function BasicSlider() {
         console.debug('This is a Slide rendered by a HOC.');
         return (
           <Slide
-            label="Giau Pass - Italy"
+            navDescription="Giau Pass - Italy"
             background={{
               backgroundImage: giauPass,
               backgroundAttachment: 'fixed'
@@ -61,7 +56,7 @@ export default function BasicSlider() {
       })()}
 
       <Slide
-        label="Bogliasco - Italy"
+        navDescription="Bogliasco - Italy"
         background={{
           backgroundImage: bogliasco,
           backgroundAttachment: 'fixed'
@@ -69,7 +64,7 @@ export default function BasicSlider() {
       />
 
       <Slide
-        label="County Clare - Ireland"
+        navDescription="County Clare - Ireland"
         background={{
           backgroundImage: countyClare,
           backgroundAttachment: 'fixed'
@@ -77,7 +72,7 @@ export default function BasicSlider() {
       />
 
       <Slide
-        label="Crater Rock, OR - United States"
+        navDescription="Crater Rock, OR - United States"
         background={{
           backgroundImage: craterRock,
           backgroundAttachment: 'fixed'

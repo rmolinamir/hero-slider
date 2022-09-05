@@ -2,11 +2,7 @@ import React from 'react';
 import type CSS from 'csstype';
 
 type Action = {
-  type: 'set-slider-dimensions';
-  payload: {
-    width?: CSS.Properties['width'];
-    height?: CSS.Properties['height'];
-  };
+  type: 'update-slider-dimensions';
 };
 type State = {
   slider: React.RefObject<HTMLDivElement>;
@@ -20,8 +16,12 @@ const LayoutStateContext = React.createContext<{ state: State } | undefined>(
 
 function layoutReducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'set-slider-dimensions': {
-      return { slider: state.slider, width: state.width, height: state.height };
+    case 'update-slider-dimensions': {
+      return {
+        slider: state.slider,
+        width: state.slider.current?.clientWidth as CSS.Properties['width'],
+        height: state.slider.current?.clientHeight as CSS.Properties['height']
+      };
     }
     default: {
       throw new Error(`Unhandled action: [${JSON.stringify(action, null, 2)}]`);
@@ -37,20 +37,14 @@ function LayoutProvider({ children }: React.PropsWithChildren) {
   } as State);
 
   /**
-   * After mounting, similar to `componentDidMount`, set up the window event listeners.
+   * After mounting, similar to `componentDidMount`, set up the window event listeners and update dimensions.
    */
   React.useEffect(() => {
     function updateSliderDimensions() {
-      if (state.slider.current)
-        dispatch({
-          type: 'set-slider-dimensions',
-          payload: {
-            width: state.slider.current.clientWidth as CSS.Properties['width'],
-            height: state.slider.current
-              .clientHeight as CSS.Properties['height']
-          }
-        });
+      if (state.slider.current) dispatch({ type: 'update-slider-dimensions' });
     }
+
+    updateSliderDimensions();
 
     window.addEventListener(
       'resize',

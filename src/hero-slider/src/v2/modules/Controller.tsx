@@ -93,6 +93,7 @@ function settingsReducer(state: State, action: Action): State {
     case 'start-sliding': {
       return {
         ...state,
+        isSliding: true,
         activeSlide: action.payload.nextSlide,
         prevActiveSlide: state.activeSlide,
         slidingDirection: action.payload.slidingDirection
@@ -196,10 +197,6 @@ function ControllerProvider({ children, controller }: ProviderProps) {
     nextSlide: number,
     slidingDirection?: 'forward' | 'backward'
   ): void => {
-    console.log('[changeSlide] state.activeSlide: ', state.activeSlide);
-    console.log('[changeSlide] nextSlide: ', nextSlide);
-    console.log('[changeSlide] slidingDirection: ', slidingDirection);
-
     if (state.isSliding) return;
 
     if (controller?.onBeforeChange)
@@ -234,7 +231,7 @@ function ControllerProvider({ children, controller }: ProviderProps) {
   React.useEffect(() => {
     if (controller?.goToNextSlidePointer)
       controller.goToNextSlidePointer.current = goToNextSlide;
-  }, [goToNextSlide]);
+  }, [controller?.goToNextSlidePointer, goToNextSlide]);
 
   /**
    * Sets up the `previousSlide` reference object if they exist.
@@ -242,7 +239,7 @@ function ControllerProvider({ children, controller }: ProviderProps) {
   React.useEffect(() => {
     if (controller?.goToPreviousSlidePointer)
       controller.goToPreviousSlidePointer.current = goToPreviousSlide;
-  }, [goToNextSlide]);
+  }, [controller?.goToPreviousSlidePointer, goToNextSlide]);
 
   /**
    * Starts a `setTimeout` that will set `isSliding` as `false` after the time it takes for the slide to change passes.

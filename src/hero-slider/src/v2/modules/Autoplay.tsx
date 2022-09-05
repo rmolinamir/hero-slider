@@ -3,18 +3,23 @@ import IntervalTimer, { IntervalState } from '../dependencies/IntervalTimer';
 import { useController } from './Controller';
 import { useIntersectionObserver } from './IntersectionObserver';
 
-export interface AutoplayProps {
+interface Props {
   /**
-   * Autoplay duration, interval or duration betweens executions to change slides, in milliseconds.
-   * Defaults to 8000.
+   * Autoplay duration, interval or duration betweens slide transitions, in milliseconds.
+   * If it's lower than the sliding cycle duration (sliding duration + sliding delay), then the sliding cycle duration will be used instead.
+   * @default 8000
    */
   autoplayDuration?: number;
   /**
-   * Time (in milliseconds) in which the autoplay will be disabled if the user interacts with the slider. The autoplay resumes if the user stops interacting. Set as 0 to disable this feature.
-   * Defaults to 4000.
+   * Time (in milliseconds) in which the autoplay will be debounced if the user interacts with the slider.
+   * The autoplay resumes if the user stops interacting after this duration.
+   * Set as 0 to disable this feature.
+   * @default 4000
    */
   autoplayDebounce?: number;
 }
+
+export type AutoplayProps = Props | boolean;
 
 type Action =
   | { type: 'pause' }
@@ -24,9 +29,11 @@ interface State {
   isPausedByUser: boolean;
   debounceTimeout?: NodeJS.Timeout;
 }
-type ProviderProps = React.PropsWithChildren<{ autoplay?: AutoplayProps }>;
+type ProviderProps = React.PropsWithChildren<{
+  autoplay?: AutoplayProps;
+}>;
 
-const defaultProps: Required<AutoplayProps> = {
+const defaultProps: Required<Props> = {
   autoplayDuration: 8000,
   autoplayDebounce: 4000
 };
@@ -60,20 +67,19 @@ function autoplayReducer(state: State, action: Action): State {
 }
 
 function AutoplayProvider({ children, autoplay }: ProviderProps) {
-  const params: Required<AutoplayProps> = {
+  const params: Required<Props> = {
     autoplayDuration:
-      autoplay?.autoplayDuration || defaultProps.autoplayDuration,
+      (typeof autoplay === 'object' && autoplay?.autoplayDuration) ||
+      defaultProps.autoplayDuration,
     autoplayDebounce:
-      autoplay?.autoplayDebounce || defaultProps.autoplayDebounce
+      (typeof autoplay === 'object' && autoplay?.autoplayDebounce) ||
+      defaultProps.autoplayDebounce
   };
 
   const [state, dispatch] = React.useReducer(autoplayReducer, {
     isPausedByUser: false,
     debounceTimeout: undefined
   } as State);
-
-  // const [debounceTimeout, setAutoplayDebounceTimeout] =
-  //   React.useState<NodeJS.Timeout>();
 
   const {
     state: controller,
@@ -82,24 +88,16 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
     getSlidingCycleDuration
   } = useController();
 
+  const slidingCycleDuration = Math.max(
+    getSlidingCycleDuration(),
+    params.autoplayDuration
+  );
+
   const autoplayInstance = IntervalTimer.new((): void => {
     changeSlide(getNextSlide(controller.activeSlide));
-  }, getSlidingCycleDuration() + params.autoplayDuration); // TODO: Is the SlidingCycleDuration needed as part of the interval duration?
+  }, slidingCycleDuration);
 
   const { isInView } = useIntersectionObserver();
-
-  // // TODO: Might not be necessary
-  // /**
-  //  * Resets the intervals after the slide is over.
-  //  */
-  // React.useEffect(() => {
-  //   console.log('isSliding', controller.isSliding);
-  //   // if (!controller.isSliding && settings.shouldAutoplay && !state.isPausedByUser) {
-  //   if (!controller.isSliding && autoplay && !state.isPausedByUser) {
-  //     console.log('RESETTING');
-  //     autoplayInstance.reset();
-  //   }
-  // }, [controller.isSliding, autoplayInstance, state.isPausedByUser]);
 
   /**
    * Debounces the autoplay interval whene called.
@@ -145,9 +143,10 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
   }, [state.isPausedByUser]);
 
   /**
-   * Subscribe to changes in `inView`.
-   * If the slider goes out of the viewport, then pause the slider autoplay instance if it's running.
-   * If it comes back into viewport, resume the autoplay instance.
+   * Subscribe to changes in `autoplay` and `isInView`.
+   * If the slider goes out of the viewport, then pause the slider autoplay instance if it's not idle.
+   * If it comes back into viewport and its idle, start or resume the autoplay instance.
+   * If the autoplay is disabled, then stop.
    */
   React.useLayoutEffect(() => {
     if (autoplay) {
@@ -155,7 +154,7 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
         case state.isPausedByUser:
           break;
         // When not in view, stop the autoplay.
-        case !isInView:
+        case !isInView && autoplayInstance.state !== IntervalState.IDLE:
           console.log('STOPPPING');
           autoplayInstance.stop();
           break;
@@ -172,25 +171,16 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
           break;
         }
       }
+    } else if (autoplayInstance.state !== IntervalState.IDLE) {
+      console.log('STOPPPING');
+      autoplayInstance.stop();
     }
-  }, [isInView]);
+  }, [autoplay, isInView]);
 
   /**
-   * After mounting, similar to `componentDidMount`, start the autoplay.
-   * TODO: Might not be necessary? I think `IntersectionObserver` will do this.
+   * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
    */
   React.useEffect(() => {
-    /**
-     * Turn on autoplay if `props.shouldAutoplay` is true.
-     * TODO: This seems to be in the IntersectionObserver module right now.
-     */
-    // if (settings.shouldAutoplay) {
-    //   autoplayInstance.start();
-    // }
-    /**
-    /**
-     * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
-     */
     return () => {
       clearTimeout(state.debounceTimeout);
       autoplayInstance.stop();

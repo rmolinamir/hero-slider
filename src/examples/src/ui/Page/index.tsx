@@ -83,6 +83,66 @@ export const Page: React.FC = () => {
           </svg>
           Viewports addon in the toolbar
         </div>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
+          ultrices nec lacus eu faucibus. Quisque imperdiet feugiat felis, vel
+          dapibus velit consectetur a. Ut auctor lectus non ipsum facilisis
+          scelerisque. Fusce vel sapien eget nulla pulvinar mollis eget quis
+          ante. Nam sit amet vulputate augue. Integer nec nunc mauris. Curabitur
+          ligula diam, laoreet sit amet odio eu, convallis gravida odio.
+          Vestibulum metus metus, rutrum et odio sed, mollis mollis leo.
+          Pellentesque habitant morbi tristique senectus et netus et malesuada
+          fames ac turpis egestas. Aliquam a lorem sit amet purus finibus
+          venenatis. Aliquam sagittis pretium odio, ut sodales ipsum sagittis
+          et. Cras vulputate mauris sed nulla volutpat, ac vehicula ante
+          lobortis. In facilisis euismod sapien, eget suscipit magna malesuada
+          eu. Cras eu congue magna.
+        </p>
+        <p>
+          Nunc iaculis commodo mauris, sed mollis augue fermentum in. Phasellus
+          semper lorem in est suscipit, ut fermentum elit rutrum. Donec vehicula
+          turpis sit amet neque aliquam convallis. Proin sem quam, congue ac
+          quam vitae, aliquam dapibus ex. Fusce in interdum nulla. Suspendisse
+          suscipit orci felis, nec feugiat augue posuere et. Suspendisse at
+          convallis est.
+        </p>
+        <p>
+          Nam vitae urna at mauris maximus congue ut in orci. Morbi eu felis a
+          urna sagittis viverra eu vel lorem. Class aptent taciti sociosqu ad
+          litora torquent per conubia nostra, per inceptos himenaeos. Donec
+          sodales ut mauris a vestibulum. Nullam varius vulputate sem, vitae
+          tincidunt ligula. Maecenas eleifend tempor tempor. Aenean nec est
+          dolor. Phasellus imperdiet elit ac lectus pretium, ac sodales ligula
+          finibus. Etiam dignissim metus ac sapien posuere, at tristique dolor
+          suscipit. In ultricies nunc quis sem venenatis volutpat. Praesent
+          vitae sapien tortor. Aliquam consequat ultrices diam, id vehicula
+          lectus molestie eu. Aliquam lobortis enim eu maximus ornare. Nam sit
+          amet sodales lacus. Orci varius natoque penatibus et magnis dis
+          parturient montes, nascetur ridiculus mus.
+        </p>
+        <p>
+          Donec eget efficitur lectus, faucibus aliquet metus. Etiam
+          pellentesque fermentum lectus eu posuere. In eu aliquet leo. Vivamus
+          consequat rhoncus ex non pharetra. Aliquam sit amet blandit libero.
+          Suspendisse potenti. Morbi magna felis, aliquam a lectus id, vehicula
+          volutpat nisi. In hendrerit vel sapien et finibus. Pellentesque
+          habitant morbi tristique senectus et netus et malesuada fames ac
+          turpis egestas. Vestibulum eget pellentesque lacus. Proin sed laoreet
+          ipsum. Nam fringilla nisl a mollis laoreet. Curabitur mollis dolor
+          purus. Ut ac fermentum purus.
+        </p>
+        <p>
+          Morbi eu cursus massa. Ut dictum varius maximus. Sed eu dolor ut magna
+          ornare placerat. Aliquam sed malesuada justo. Sed ac malesuada purus,
+          accumsan finibus metus. Pellentesque dui nunc, molestie consectetur
+          diam eu, faucibus semper justo. Pellentesque convallis iaculis odio, a
+          rhoncus purus sodales ut. Cras nec accumsan quam, sit amet ornare
+          nisi. Nulla eu iaculis nulla, ut convallis tortor. Duis ac rutrum
+          ipsum. Cras sed sodales dui.
+        </p>
+        <p>
+          <b>Generated 5 paragraphs, 443 words, 2959 bytes of Lorem Ipsum.</b>
+        </p>
       </section>
     </>
   );

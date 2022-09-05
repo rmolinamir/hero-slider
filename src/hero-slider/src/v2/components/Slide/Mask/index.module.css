@@ -46,7 +46,7 @@
     max-width: 50% !important;
   }
   .Inner {
-    width: calc(var(--slider-height, 100vw) * 0.66);
+    width: calc(var(--slider-width, 100vw) * 0.66);
     height: calc(var(--slider-height, 100vh) * 0.66);
   }
 }

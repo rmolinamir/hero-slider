@@ -156,7 +156,7 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
       if (isSwipingRight) goToNextSlide();
       else goToPreviousSlide();
     } else if (isSliderVertically && Math.abs(diffY) >= thresholdToSlide) {
-      const isSwipingUp = diffX > 0;
+      const isSwipingUp = diffY > 0;
       if (isSwipingUp) goToNextSlide();
       else goToPreviousSlide();
     }
@@ -164,37 +164,37 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
     dispatch({ type: 'end-motion' });
   };
 
+  const onArrowKeypressHandler = (e: KeyboardEvent): void => {
+    if (!params.shouldSlideOnArrowKeypress) return;
+
+    const isHorizontal =
+      params.orientation === AccessabilityOrientation.HORIZONTAL;
+
+    switch (true) {
+      // Left keypress.
+      case isHorizontal && e.keyCode === 37:
+        goToPreviousSlide();
+        break;
+      // Right keypress.
+      case isHorizontal && e.keyCode === 39:
+        goToNextSlide();
+        break;
+      // Up keypress.
+      case !isHorizontal && e.keyCode === 38:
+        goToPreviousSlide();
+        break;
+      // Down keypress.
+      case !isHorizontal && e.keyCode === 40:
+        goToNextSlide();
+        break;
+      default: // Do nothing.
+    }
+  };
+
   /**
    * After mounting, similar to `componentDidMount`, setup the window event listeners for keydowns. The event handlers will be changing the slides if enabled to do so.
    */
   React.useEffect(() => {
-    const onArrowKeypressHandler = (e: KeyboardEvent): void => {
-      if (!accessability?.shouldSlideOnArrowKeypress) return;
-
-      const isHorizontal =
-        params.orientation === AccessabilityOrientation.HORIZONTAL;
-
-      switch (true) {
-        // Left keypress.
-        case isHorizontal && e.keyCode === 37:
-          goToPreviousSlide();
-          break;
-        // Right keypress.
-        case isHorizontal && e.keyCode === 39:
-          goToNextSlide();
-          break;
-        // Up keypress.
-        case !isHorizontal && e.keyCode === 38:
-          goToPreviousSlide();
-          break;
-        // Down keypress.
-        case !isHorizontal && e.keyCode === 40:
-          goToNextSlide();
-          break;
-        default: // Do nothing.
-      }
-    };
-
     window.addEventListener('keydown', onArrowKeypressHandler);
     /**
      * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
@@ -202,7 +202,7 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
     return () => {
       window.removeEventListener('keydown', onArrowKeypressHandler);
     };
-  }, []);
+  }, [onArrowKeypressHandler]);
 
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context

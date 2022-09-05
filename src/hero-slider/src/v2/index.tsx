@@ -50,18 +50,14 @@ export interface HeroSliderProps {
 
 function Orchestrator({
   width = '100%',
-  height = '100%',
+  height = '100vh',
   style,
   children
 }: React.PropsWithChildren<
   Pick<HeroSliderProps, 'width' | 'height' | 'style'>
 >) {
-  const {
-    sliderFadeInDuration,
-    navbarFadeInDuration,
-    navbarFadeInDelay,
-    geSlidingAnimationCssClass
-  } = useAnimations();
+  const { sliderFadeInDuration, navbarFadeInDuration, navbarFadeInDelay } =
+    useAnimations();
   const { state: layout } = useLayout();
   const { slidingDuration, slidingDelay, getSlidingCycleDuration } =
     useController();
@@ -77,7 +73,6 @@ function Orchestrator({
   const CSSVariables = {
     '--sliding-duration': `${slidingDuration}ms`,
     '--sliding-delay': `${slidingDelay}ms`,
-    '--sliding-animation': geSlidingAnimationCssClass(),
     '--slide-transition-delay': `${getSlidingCycleDuration()}ms`,
     '--slider-width': layout.width ? `${layout.width}px` : undefined,
     '--slider-height': layout.height ? `${layout.height}px` : undefined,

@@ -22,7 +22,7 @@
 
 .FadeIn {
   opacity: 0;
-  animation: fade-in var(--background-animation-duration, 1500ms) ease-in-out var(--background-animation-delay, 100ms) forwards;
+  animation: fade-in var(--background-animation-duration, 200ms) ease-in-out var(--background-animation-delay, 100ms) forwards;
 }
 
 @keyframes fade-in {

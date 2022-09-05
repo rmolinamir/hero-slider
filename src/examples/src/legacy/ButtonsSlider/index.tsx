@@ -1,5 +1,4 @@
 import React from 'react';
-// Components
 import HeroSlider, { Slide, Nav, Container } from 'hero-slider';
 import { Button } from '../../ui/Button';
 import Wrapper from '../../ui/Wrapper';

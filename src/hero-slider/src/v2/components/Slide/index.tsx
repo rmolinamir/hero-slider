@@ -5,6 +5,7 @@ import Mask from './Mask';
 import { useManager } from '../../modules/Manager';
 import { useController } from '../../modules/Controller';
 import { useAnimations } from '../../modules/Animations';
+import { composeCssClasses } from '../../utils/composeCssClasses';
 
 /**
  * `Slide` component props.
@@ -29,9 +30,41 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
 
   const { getSlide, registerSlide, removeSlide } = useManager();
 
+  const {
+    state: { activeSlide, isSliding, prevActiveSlide, slidingDirection }
+  } = useController(); // controller
+
+  const { getSlidingAnimationCssClass } = useAnimations();
+
   const slideRef = React.useRef<HTMLDivElement>(null);
 
   const slide = getSlide(slideRef);
+
+  const [classNames, setClassNames] = React.useState(
+    composeCssClasses(SlideModuleCss.Slide)
+  );
+
+  const isActive = activeSlide === slide?.number;
+
+  React.useEffect(() => {
+    if (slide) {
+      setClassNames(
+        composeCssClasses(
+          SlideModuleCss.Slide,
+          { className: SlideModuleCss.Active, useIf: isActive },
+          { className: SlideModuleCss.Sliding, useIf: isActive && !isSliding },
+          {
+            className: getSlidingAnimationCssClass(
+              slide.number,
+              prevActiveSlide,
+              slidingDirection
+            ),
+            useIf: isActive && isSliding
+          }
+        )
+      );
+    }
+  }, [isActive, isSliding]);
 
   React.useEffect(() => {
     if (slideRef) registerSlide(slideRef, label);
@@ -54,27 +87,14 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
       : null
   };
 
-  const {
-    state: { activeSlide, isSliding }
-  } = useController(); // controller
-
-  const { geSlidingAnimationCssClass } = useAnimations();
-
-  const isActive = activeSlide === slide.number;
-
   return (
     <div
       ref={slideRef}
+      className={classNames}
       style={{
         ...style,
         ...CSSVariables
       }}
-      className={[
-        SlideModuleCss.Slide,
-        isActive && SlideModuleCss.Active,
-        isActive && !isSliding && SlideModuleCss.Sliding,
-        isActive && isSliding && geSlidingAnimationCssClass()
-      ].join(' ')}
     >
       <Background {...background} onLoad={onBackgroundLoad} />
       <div className={SlideModuleCss.Wrapper}>

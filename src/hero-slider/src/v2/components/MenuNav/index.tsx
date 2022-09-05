@@ -27,8 +27,6 @@ export function MenuNav(props: MenuNavProps) {
     activeColor,
     position,
     justifyContent,
-    // labels,
-    // sliderWidth = window.innerWidth,
     mobileThreshold = 1024,
     isNullAfterThreshold,
     extraButton,

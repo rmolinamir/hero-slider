@@ -1,6 +1,6 @@
 import React from 'react';
 import HeroSliderModuleCss from '../index.module.css';
-import { useController } from './Controller';
+import { AccessabilityOrientation, useAccessability } from './Accessability';
 
 enum SlidingAnimation {
   TOP_TO_BOTTOM = 'top_to_bottom',
@@ -11,7 +11,7 @@ enum SlidingAnimation {
 }
 
 export interface AnimationsProps {
-  initialSlidingAnimation?: `${SlidingAnimation}`;
+  slidingAnimation?: 'fade' | 'wipe';
   sliderFadeInDuration?: number;
   navbarFadeInDuration?: number;
   navbarFadeInDelay?: number;
@@ -22,36 +22,26 @@ export interface AnimationsProps {
   shouldManageAnimationSequence?: boolean;
 }
 
-const getSlidingAnimationCssClass = (
-  animation?: `${SlidingAnimation}`
-): string => {
-  switch (animation) {
-    case SlidingAnimation.FADE:
-      return HeroSliderModuleCss.Sliding_Fade_In;
-    // Top to bottom.
-    case SlidingAnimation.TOP_TO_BOTTOM:
-      return HeroSliderModuleCss.Sliding_Top_To_Bottom;
-    // Bottom to top.
-    case SlidingAnimation.BOTTOM_TO_TOP:
-      return HeroSliderModuleCss.Sliding_Bottom_To_Top;
-    // Left to right.
-    case SlidingAnimation.LEFT_TO_RIGHT:
-      return HeroSliderModuleCss.Sliding_Left_To_Right;
-    // Right to left, by default.
-    case SlidingAnimation.RIGHT_TO_LEFT:
-    default:
-      return HeroSliderModuleCss.Sliding_Right_To_Left;
-  }
-};
-
-type Action = { type: 'set-animation'; payload: SlidingAnimation };
-type State = {
-  activeSlidingAnimation: SlidingAnimation;
-};
 type ProviderProps = React.PropsWithChildren<{ animations?: AnimationsProps }>;
 
+interface GetSlidingAnimationCssClass {
+  (
+    activeSlide: number,
+    prevActiveSlide: number,
+    slidingDirection?: 'forward' | 'backward'
+  ): string;
+}
+
+const SlidingAnimationCssClassMap: Record<SlidingAnimation, string> = {
+  [SlidingAnimation.FADE]: HeroSliderModuleCss.Sliding_Fade_In,
+  [SlidingAnimation.TOP_TO_BOTTOM]: HeroSliderModuleCss.Sliding_Top_To_Bottom,
+  [SlidingAnimation.BOTTOM_TO_TOP]: HeroSliderModuleCss.Sliding_Bottom_To_Top,
+  [SlidingAnimation.LEFT_TO_RIGHT]: HeroSliderModuleCss.Sliding_Left_To_Right,
+  [SlidingAnimation.RIGHT_TO_LEFT]: HeroSliderModuleCss.Sliding_Right_To_Left
+};
+
 const defaultProps: Required<AnimationsProps> = {
-  initialSlidingAnimation: SlidingAnimation.RIGHT_TO_LEFT,
+  slidingAnimation: 'wipe',
   sliderFadeInDuration: 100,
   navbarFadeInDuration: 1000,
   navbarFadeInDelay: 500,
@@ -59,125 +49,75 @@ const defaultProps: Required<AnimationsProps> = {
 };
 
 const AnimationsStateContext = React.createContext<
-  | (Omit<
-      Required<AnimationsProps>,
-      'initialSlidingAnimation' | 'shouldManageAnimationSequence'
-    > & {
-      state: State;
-      geSlidingAnimationCssClass(): string;
-    })
+  | {
+      sliderFadeInDuration: number;
+      navbarFadeInDuration: number;
+      navbarFadeInDelay: number;
+      getSlidingAnimationCssClass: GetSlidingAnimationCssClass;
+    }
   | undefined
 >(undefined);
 
-function animationsReducer(state: State, action: Action): State {
-  switch (action.type) {
-    case 'set-animation': {
-      return { ...state, activeSlidingAnimation: action.payload };
-    }
-    default: {
-      throw new Error(`Unhandled action: [${JSON.stringify(action, null, 2)}]`);
-    }
-  }
-}
-
 function AnimationsProvider({ children, animations }: ProviderProps) {
-  const [state, dispatch] = React.useReducer(animationsReducer, {
-    // TODO: This definitely depends on the `Orientation` module.
-    activeSlidingAnimation:
-      animations?.initialSlidingAnimation ||
-      defaultProps.initialSlidingAnimation
-  } as State);
+  const { orientation } = useAccessability();
 
-  const { state: controller } = useController();
-
-  /**
-   * Sets the next animation depending on the current animation and a few other factors from the `Controller` module.
-   * TODO: Get the `orientation` later from the Accessbilitiy module and then return the respective animations (horizontal/vertical).
-   */
-  const setNextAnimation = (): void => {
-    switch (state.activeSlidingAnimation) {
-      case SlidingAnimation.FADE:
-        return;
-      case SlidingAnimation.TOP_TO_BOTTOM:
-      case SlidingAnimation.BOTTOM_TO_TOP:
-        if (controller.slidingDirection === 'forward')
-          dispatch({
-            type: 'set-animation',
-            payload: SlidingAnimation.BOTTOM_TO_TOP
-          });
-        else if (controller.slidingDirection === 'backward')
-          dispatch({
-            type: 'set-animation',
-            payload: SlidingAnimation.TOP_TO_BOTTOM
-          });
-        else {
-          const isSlidingForward =
-            controller.activeSlide > controller.prevActiveSlide;
-          if (isSlidingForward)
-            dispatch({
-              type: 'set-animation',
-              payload: SlidingAnimation.BOTTOM_TO_TOP
-            });
-          else
-            dispatch({
-              type: 'set-animation',
-              payload: SlidingAnimation.TOP_TO_BOTTOM
-            });
-        }
-        break;
-      case SlidingAnimation.RIGHT_TO_LEFT:
-      case SlidingAnimation.LEFT_TO_RIGHT:
-        if (controller.slidingDirection === 'forward')
-          dispatch({
-            type: 'set-animation',
-            payload: SlidingAnimation.RIGHT_TO_LEFT
-          });
-        else if (controller.slidingDirection === 'backward')
-          dispatch({
-            type: 'set-animation',
-            payload: SlidingAnimation.LEFT_TO_RIGHT
-          });
-        else {
-          const isSlidingForward =
-            controller.activeSlide > controller.prevActiveSlide;
-          if (isSlidingForward)
-            dispatch({
-              type: 'set-animation',
-              payload: SlidingAnimation.RIGHT_TO_LEFT
-            });
-          else
-            dispatch({
-              type: 'set-animation',
-              payload: SlidingAnimation.LEFT_TO_RIGHT
-            });
-        }
-        break;
-    }
-  };
-
-  /**
-   * Sets the next respective animation.
-   */
-  React.useEffect(() => {
-    if (animations?.shouldManageAnimationSequence) setNextAnimation();
-    return () => {};
-  }, [controller.activeSlide]);
-
-  const geSlidingAnimationCssClass = (): string => {
-    return getSlidingAnimationCssClass(state.activeSlidingAnimation);
-  };
-
-  // NOTE: you *might* need to memoize this value
-  // Learn more in http://kcd.im/optimize-context
-  const value = {
-    state,
+  const params: Required<AnimationsProps> = {
+    slidingAnimation:
+      animations?.slidingAnimation || defaultProps.slidingAnimation,
     sliderFadeInDuration:
       animations?.sliderFadeInDuration || defaultProps.sliderFadeInDuration,
     navbarFadeInDuration:
       animations?.navbarFadeInDuration || defaultProps.navbarFadeInDuration,
     navbarFadeInDelay:
       animations?.navbarFadeInDelay || defaultProps.navbarFadeInDelay,
-    geSlidingAnimationCssClass
+    shouldManageAnimationSequence: true
+  };
+
+  const getSlidingAnimationCssClass: GetSlidingAnimationCssClass = (
+    activeSlide,
+    prevActiveSlide,
+    slidingDirection
+  ): string => {
+    const getSlidingAnimation = (): SlidingAnimation => {
+      switch (params.slidingAnimation) {
+        case 'fade':
+          return SlidingAnimation.FADE;
+        case 'wipe': {
+          let direction: 'forward' | 'backward';
+
+          if (slidingDirection) direction = slidingDirection;
+          else {
+            const isSlidingForward = activeSlide > prevActiveSlide;
+            direction = isSlidingForward ? 'forward' : 'backward';
+          }
+
+          if (direction === 'forward')
+            return orientation === AccessabilityOrientation.HORIZONTAL
+              ? SlidingAnimation.RIGHT_TO_LEFT
+              : SlidingAnimation.BOTTOM_TO_TOP;
+          else
+            return orientation === AccessabilityOrientation.HORIZONTAL
+              ? SlidingAnimation.LEFT_TO_RIGHT
+              : SlidingAnimation.TOP_TO_BOTTOM;
+        }
+        default: {
+          throw new Error(
+            `Unhandled sliding animation: [${params.slidingAnimation}]`
+          );
+        }
+      }
+    };
+
+    return SlidingAnimationCssClassMap[getSlidingAnimation()];
+  };
+
+  // NOTE: you *might* need to memoize this value
+  // Learn more in http://kcd.im/optimize-context
+  const value = {
+    sliderFadeInDuration: params.sliderFadeInDuration,
+    navbarFadeInDuration: params.sliderFadeInDuration,
+    navbarFadeInDelay: params.sliderFadeInDuration,
+    getSlidingAnimationCssClass
   };
 
   return (

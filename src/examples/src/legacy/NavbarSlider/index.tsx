@@ -1,4 +1,3 @@
-import { V2 } from 'hero-slider';
 import Navbar from '../../ui/Navbar';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
@@ -7,26 +6,34 @@ import kyoto from './backgrounds/Kyoto - Japan.jpg';
 import tenryuJiTemple from './backgrounds/Tenryu-ji Temple - Kyōto-shi - Japan.jpg';
 import hakone from './backgrounds/Hakone - Japan.jpg';
 import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United States.jpg';
+import HeroSlider, { Slide, MenuNav, Container } from 'hero-slider';
 
-const { Slider, Slide, Container, MenuNav } = V2;
+const app = () => {
+  // const nextSlideHandler = React.useRef();
+  // const previousSlideHandler = React.useRef();
 
-export default function NavbarSlider() {
   return (
-    <Slider
-      height="100vh"
-      accessability={{
-        orientation: 'vertical'
-      }}
-      autoplay
-      controller={{
-        slidingDuration: 400,
-        slidingDelay: 100
-      }}
+    <HeroSlider
+      slidingAnimation="top_to_bottom"
+      orientation="vertical"
+      initialSlide={1}
+      onBeforeChange={(previousSlide: number, nextSlide: number) =>
+        console.log('onBeforeChange', previousSlide, nextSlide)
+      }
+      onChange={(nextSlide: number) => console.log('onChange', nextSlide)}
+      onAfterChange={(nextSlide: number) =>
+        console.log('onAfterChange', nextSlide)
+      }
       style={{
         backgroundColor: '#000'
       }}
       settings={{
-        shouldDisplayButtons: false
+        slidingDuration: 400,
+        slidingDelay: 100,
+        shouldAutoplay: true,
+        shouldDisplayButtons: false,
+        autoplayDuration: 800000000,
+        height: '100vh'
       }}
     >
       <Container>
@@ -39,7 +46,7 @@ export default function NavbarSlider() {
 
       <Slide
         shouldRenderMask
-        label="Kyoto - Japan"
+        navDescription="Kyoto - Japan"
         background={{
           backgroundColor: '#6D9B98',
           backgroundImage: kyoto
@@ -48,7 +55,7 @@ export default function NavbarSlider() {
 
       <Slide
         shouldRenderMask
-        label="Tenryu-ji Temple - KyÅto-shi - Japan"
+        navDescription="Tenryu-ji Temple - KyÅto-shi - Japan"
         background={{
           backgroundColor: '#8A8A8A',
           backgroundImage: tenryuJiTemple
@@ -57,7 +64,7 @@ export default function NavbarSlider() {
 
       <Slide
         shouldRenderMask
-        label="Hakone - Japan"
+        navDescription="Hakone - Japan"
         background={{
           backgroundColor: '#EA2329',
           backgroundImage: hakone
@@ -66,7 +73,7 @@ export default function NavbarSlider() {
 
       <Slide
         shouldRenderMask
-        label="Byodo-In Temple - Kaneohe - United States"
+        navDescription="Byodo-In Temple - Kaneohe - United States"
         background={{
           backgroundColor: '#2D7791',
           backgroundImage: byodoInTemple
@@ -74,6 +81,8 @@ export default function NavbarSlider() {
       />
 
       <MenuNav />
-    </Slider>
+    </HeroSlider>
   );
-}
+};
+
+export default app;

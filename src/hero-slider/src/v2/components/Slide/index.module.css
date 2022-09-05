@@ -28,10 +28,10 @@
 }
 
 .Slide:not(.Active) {
-  user-select: none;
   z-index: 1;
   transform: translate3d(100%, 0, 0);
   transition-delay: var(--slide-transition-delay, 600ms);
+  user-select: none;
 }
 
 .Container {

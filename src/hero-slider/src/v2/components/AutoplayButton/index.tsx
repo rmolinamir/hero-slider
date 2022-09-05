@@ -2,6 +2,7 @@ import React from 'react';
 import AutoplayButtonModuleCss from './index.module.css';
 import { NavPosition } from '../Nav';
 import { useAutoplay } from '../../modules/Autoplay';
+import { IntervalState } from '../../dependencies/IntervalTimer';
 
 enum ButtonType {
   PLAY = 'play',
@@ -24,7 +25,7 @@ class AutoplaySvg {
   public static pausePath =
     'M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z' as const;
 
-  public static setPath(buttonType: ButtonType): string {
+  public static getPath(buttonType: ButtonType): string {
     if (buttonType === ButtonType.PAUSE) return AutoplaySvg.pausePath;
     else return AutoplaySvg.playPath;
   }
@@ -35,17 +36,14 @@ export function AutoplayButton(props: AutoplayButtonProps) {
 
   const {
     state: { isPausedByUser },
+    autoplayState,
     resume,
     pause
   } = useAutoplay();
 
   const [buttonType, setButtonType] = React.useState<ButtonType>(
-    ButtonType.PAUSE
+    autoplayState !== IntervalState.IDLE ? ButtonType.PAUSE : ButtonType.PLAY
   );
-
-  // TODO: Should I protect developers from themselves by not rendering this component if
-  // autoplay is disabled?
-  // if (!shouldAutoplay) return null;
 
   const onClickHandler = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -56,9 +54,12 @@ export function AutoplayButton(props: AutoplayButtonProps) {
   };
 
   React.useEffect(() => {
-    if (isPausedByUser) setButtonType(ButtonType.PAUSE);
-    else setButtonType(ButtonType.PLAY);
-  }, [isPausedByUser]);
+    if (isPausedByUser && autoplayState === IntervalState.IDLE)
+      setButtonType(ButtonType.PLAY);
+    else if (isPausedByUser && autoplayState === IntervalState.PAUSED)
+      setButtonType(ButtonType.PLAY);
+    else setButtonType(ButtonType.PAUSE);
+  }, [isPausedByUser, autoplayState]);
 
   return (
     <button
@@ -72,7 +73,7 @@ export function AutoplayButton(props: AutoplayButtonProps) {
       }}
     >
       <svg fill="currentColor" height="100%" width="100%" viewBox="0 0 36 36">
-        <path d={AutoplaySvg.setPath(buttonType)} />
+        <path d={AutoplaySvg.getPath(buttonType)} />
       </svg>
     </button>
   );

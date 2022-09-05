@@ -33,16 +33,16 @@ export default class IntervalTimer {
    */
   public pausedTime: number | Date = 0;
 
-  public lastTimeFired?: Date;
-  public timerId?: NodeJS.Timeout;
-  public resumeId?: NodeJS.Timeout;
-  public lastPauseTime?: Date;
+  private lastTimeFired?: Date;
+  private timerId?: NodeJS.Timeout;
+  private resumeId?: NodeJS.Timeout;
+  private lastPauseTime?: Date;
 
   private constructor(
     /**
      * Called after every interval.
      */
-    public callback: () => void = () => {},
+    public callback: () => void,
     /**
      * Time between intervals, in milliseconds.
      */
@@ -50,7 +50,7 @@ export default class IntervalTimer {
     /**
      * Maximum amount of fires.
      */
-    public maxFires: number | undefined = undefined
+    public maxFires?: number
   ) {}
 
   /**
@@ -186,6 +186,7 @@ export default class IntervalTimer {
     else {
       this.instance.callback = callback;
       this.instance.interval = interval;
+      this.instance.maxFires = maxFires;
     }
     return this.instance;
   }

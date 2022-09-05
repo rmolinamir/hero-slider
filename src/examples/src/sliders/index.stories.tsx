@@ -2,13 +2,9 @@ import HeroSlider from 'hero-slider';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import '../index.css';
 import { Page } from '../ui/Page';
-import BasicSliderV2 from './BasicSlider_V2';
 import BasicSlider from './BasicSlider';
-import VerticalSlider from './VerticalSlider';
-import NavbarSlider from './NavbarSlider';
-import BlendModeSlider from './BlendModeSlider';
 import AutoplayButtonSlider from './AutoplayButtonSlider';
-import ButtonsSlider from './ButtonsSlider';
+import NavbarSlider from './NavbarSlider';
 
 export default {
   title: 'Example/hero-slider',
@@ -19,37 +15,9 @@ export default {
   }
 } as ComponentMeta<typeof Page>;
 
-export const BasicVersion2: ComponentStory<typeof Page> = (args) => (
-  <main>
-    <BasicSliderV2 {...args} />
-    <Page />
-  </main>
-);
-
 export const Basic: ComponentStory<typeof Page> = (args) => (
   <main>
     <BasicSlider {...args} />
-    <Page />
-  </main>
-);
-
-export const Vertical: ComponentStory<typeof Page> = (args) => (
-  <main>
-    <VerticalSlider {...args} />
-    <Page />
-  </main>
-);
-
-export const Navbar: ComponentStory<typeof Page> = (args) => (
-  <main>
-    <NavbarSlider {...args} />
-    <Page />
-  </main>
-);
-
-export const BlendMode: ComponentStory<typeof Page> = (args) => (
-  <main>
-    <BlendModeSlider {...args} />
     <Page />
   </main>
 );
@@ -61,9 +29,8 @@ export const AutoplayButton: ComponentStory<typeof Page> = (args) => (
   </main>
 );
 
-export const Buttons: ComponentStory<typeof Page> = (args) => (
+export const Navbar: ComponentStory<typeof Page> = (args) => (
   <main>
-    <ButtonsSlider {...args} />
-    <Page />
+    <NavbarSlider {...args} />
   </main>
 );

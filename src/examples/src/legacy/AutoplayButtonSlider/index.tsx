@@ -1,4 +1,4 @@
-import { V2 } from 'hero-slider';
+import HeroSlider, { Slide, Nav, AutoplayButton, Container } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
 
@@ -8,25 +8,22 @@ const tenryuJiTemple = 'https://i.imgur.com/g5JNdYL.jpg';
 const hakone = 'https://i.imgur.com/Iq6XtFR.jpg';
 const byodoInTemple = 'https://i.imgur.com/le9OeEC.jpg';
 
-const { Slider, Slide, Container, Nav, AutoplayButton } = V2;
-
-export default function AutoplayButtonSlider() {
+const app = () => {
   return (
-    <Slider
-      height="100vh"
-      controller={{
-        initialSlide: 1,
-        slidingDuration: 500,
-        slidingDelay: 100
-      }}
-      autoplay={{
-        autoplayDuration: 2000
-      }}
+    <HeroSlider
+      slidingAnimation="left_to_right"
+      orientation="horizontal"
+      initialSlide={1}
       style={{
         backgroundColor: '#000'
       }}
       settings={{
-        shouldDisplayButtons: false
+        slidingDuration: 500,
+        slidingDelay: 100,
+        shouldAutoplay: true,
+        shouldDisplayButtons: false,
+        autoplayDuration: 2000,
+        height: '100vh'
       }}
     >
       <Container>
@@ -77,6 +74,8 @@ export default function AutoplayButtonSlider() {
       />
 
       <Nav />
-    </Slider>
+    </HeroSlider>
   );
-}
+};
+
+export default app;
