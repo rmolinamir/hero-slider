@@ -1,6 +1,6 @@
 import React from 'react';
 import SideNavModuleCss from './index.module.css';
-import { NavProps } from '../Nav';
+import { NavPosition, NavProps } from '../Nav';
 import { useController } from '../../modules/Controller';
 import { useManager } from '../../modules/Manager';
 import { composeCssClasses } from '../../utils/composeCssClasses';
@@ -9,9 +9,32 @@ import { composeCssClasses } from '../../utils/composeCssClasses';
  * `SideNav` component props.
  */
 export interface SideNavProps extends NavProps {
-  right?: string;
-  left?: string;
+  /**
+   * Defines the inline CSS property `right` of the component.
+   */
+  right?: React.CSSProperties['right'];
+  /**
+   * Defines the inline CSS property `left` of the component.
+   */
+  left?: React.CSSProperties['left'];
+  /**
+   * Defines the position. If you set it to the left, set this to false to disable any existing `right` CSS properties and avoid any conflicts.
+   * @default true
+   */
   isPositionedRight?: boolean;
+  /**
+   * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
+   * Aside from the former, you can also set the CSS `transform` property to help you center the element.
+   * @default
+   * {
+   *    bottom: undefined,
+   *    top: '50%',
+   *    left: !isPositionedRight ? left || '1rem' : undefined,
+   *    right: isPositionedRight ? right || '1rem' : undefined,
+   *    transform: 'translateY(-50%)'
+   * }
+   */
+  position?: NavPosition;
 }
 
 export function SideNav({

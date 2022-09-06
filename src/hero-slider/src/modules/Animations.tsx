@@ -11,9 +11,25 @@ enum SlidingAnimation {
 }
 
 export interface AnimationsProps {
+  /**
+   * The sliding animations during transitions.
+   * @default 'wipe'
+   */
   slidingAnimation?: 'fade' | 'wipe';
+  /**
+   * Fade in duration of the slider during mount, in milliseconds.
+   * @default 100
+   */
   sliderFadeInDuration?: number;
+  /**
+   * Navbars fade in duration, in milliseconds.
+   * @default 1000
+   */
   navbarFadeInDuration?: number;
+  /**
+   * Navbars fade in delay, in milliseconds.
+   * @default 500
+   */
   navbarFadeInDelay?: number;
   /**
    * When `true`, the `hero-slider` will know which animation should be set next.

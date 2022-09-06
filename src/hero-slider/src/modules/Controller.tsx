@@ -26,11 +26,42 @@ interface GetSlidingCycleDuration {
 }
 
 export interface ControllerProps {
+  /**
+   * Sliding duration, in milliseconds.
+   * @default 500
+   */
   slidingDuration?: number;
+  /**
+   * Sliding delay, in milliseconds.
+   * @default 200
+   */
   slidingDelay?: number;
+  /**
+   * The initial slide can also be set, but the slider starts at the first slide by default.
+   * @default 1
+   */
   initialSlide?: number;
+  /**
+   * Callback executed before sliding begins.
+   * The previous and next slide numbers are received as arguments, since the sliding event can be delayed, this is useful to handle state changes from the outside (e.g. fire custom animations inside the active slide).
+   * @param activeSlide
+   * @param nextSlide
+   * @default undefined
+   */
   onBeforeSliding?(activeSlide: number, nextSlide: number): void;
+  /**
+   * Callback executed after the sliding ends similar to `onBeforeSliding`.
+   * @param activeSlide
+   * @param prevSlide
+   * @default undefined
+   */
   onSliding?(activeSlide: number, prevSlide: number): void;
+  /**
+   * Callback executed after the sliding ends similar to `onBeforeChange`.
+   * @param activeSlide
+   * @param prevSlide
+   * @default undefined
+   */
   onAfterSliding?(activeSlide: number, prevSlide: number): void;
   /**
    * Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the `goToNextSlide` handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component.

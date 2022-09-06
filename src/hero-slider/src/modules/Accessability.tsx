@@ -12,8 +12,24 @@ export enum AccessabilityOrientation {
 }
 
 export interface AccessabilityProps {
+  /**
+   * Controls render of the next and previous buttons.
+   * @default true
+   */
   shouldDisplayButtons?: boolean;
+  /**
+   * When an arrow key is pressed, the active slide will change respectively to the pressed arrow.
+   * The left and down arrows will set the previous slide, and the right and up arrows will set the next slide.
+   * The left and right will only work if the slider is horizontal, and the up and down arrows will only work if the slider is vertical.
+   * @default true
+   */
   shouldSlideOnArrowKeypress?: boolean;
+  /**
+   * The slider orientation can either set to be `horizontal` or `vertical`.
+   * The orientation sets the slide buttons respective to the orientation (e.g. if vertical, the buttons will be at the top and at the bottom).
+   * Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides).
+   * @default 'horizontal'
+   */
   orientation?: `${AccessabilityOrientation}`;
   /**
    * Pixel threshold for the Slider to register a swiping command to change slides.

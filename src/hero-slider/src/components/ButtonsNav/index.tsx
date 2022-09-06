@@ -11,8 +11,14 @@ import { composeCssClasses } from '../../utils/composeCssClasses';
  * `ButtonsNav` component props.
  */
 export interface ButtonsNavProps extends MenuNavProps {
-  backgroundColor?: string;
-  alignItems?: string;
+  /**
+   * CSS background color property for the nav buttons.
+   */
+  backgroundColor?: React.CSSProperties['backgroundColor'];
+  /**
+   * Aligns the nav items to the center, top, or bottom of its container working exactly as how the CSS flex-box `align-items` property works.
+   */
+  alignItems?: React.CSSProperties['alignItems'];
 }
 
 export function ButtonsNav(props: ButtonsNavProps) {

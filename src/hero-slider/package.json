@@ -2,7 +2,7 @@
   "name": "hero-slider",
   "version": "3.0.0-alpha",
   "private": false,
-  "description": "",
+  "description": "This package contains multiple components with a fair range of options to help developers quickly set up a hero slider.",
   "author": "rmolinamir",
   "license": "MIT",
   "repository": "rmolinamir/hero-slider",

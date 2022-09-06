@@ -41,9 +41,22 @@ const logger = ConsoleLogger.new();
  * `HeroSlider` props.
  */
 export interface HeroSliderProps {
+  // Styling
+  /**
+   * CSS property. Defines the width of the slider.
+   * @default '100%'
+   */
   width?: React.CSSProperties['width'];
+  /**
+   * CSS property. Defines the height of the slider.
+   * @default '100vh'
+   */
   height?: React.CSSProperties['height'];
+  /**
+   * Inline CSS styling.
+   */
   style?: Omit<React.CSSProperties, 'width' | 'height'>;
+  // Modules
   manager?: ManagerProps;
   settings?: SettingsProps;
   controller?: ControllerProps;

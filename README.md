@@ -1,6 +1,6 @@
 # hero-slider
 
-> A hero slider component inline with how you would expect most React components to work. Includes autoplay, lazy loaded backgrounds, support for touch swiping and direction to change slides, multiple navs, settings, memoization, event callbacks, among other features.
+> This package contains multiple components with a fair range of options to help developers quickly set up a hero slider.
 
 [![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-11.6kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
 
@@ -8,23 +8,15 @@
 
 ## Introduction
 
-This package contains multiple components with a fair range of options to help developers quickly set up a hero slider. In short, it functions just how you would expect a package of React components. In short, all you have to do is import the Slider & Slide components. You can set the sliding animations, the background lazy loaded image animation, navs, buttons, callbacks, and even set your own buttons if you need to. The style and animations were inspired by different sliders from websites such as Lamborghini's, Lonely Planet, Kreativa Studio.
+This package contains multiple components with a fair range of options to help developers quickly set up a hero slider. You can set the sliding animations, the background lazy loaded image animation, navs, buttons, callbacks, and even set your own buttons if you need to.
 
----
-
-## Install
-
-```bash
-npm install --save hero-slider
-```
+The idea behind the configurability was to set up clear boundaries between *modules* and *components*. The modules will control the behavior of the `hero-slider`, while the components themselves are self explanatory and mostly relevant to styling. The documentation will be divided in two main sections, `Module`, and `Components`.
 
 ---
 
 ## [Showcase](https://www.robertmolina.dev/codelab/hero-slider)
 
 [![Edit Hero Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/z6kky9oy63?fontsize=14)
-
-### Hero Slider
 
 ![Navbar Slider](https://media.giphy.com/media/KeW8omQCSShZdNQMuy/giphy.gif)
 ![Basic Slider](https://media.giphy.com/media/WpNrWjYJxCrl4O8btw/giphy.gif)
@@ -33,251 +25,704 @@ npm install --save hero-slider
 
 ---
 
-## Instructions
+## Modules
 
-This package contains multiple exports, each used differently and some similarly. Below you will find instructions for each components and their respective `props`. Here's a list of all the possible components you may import:
+The modules are clear boundaries that define the overall behavior of the `HeroSlider` component. You can configure these behaviors by passing the respective props to the `HeroSlider`.
 
-```jsx
-import HeroSlider, {
-  Slide,
-  Nav,
-  SideNav,
-  MenuNav,
-  ButtonsNav,
-  AutoplayButton
-} from 'hero-slider'
+### Controller
+
+This module will define the behavior slide transitions. You can set up the duration of the transitions, delays before the transitions begin, the initial active slide, callbacks for the transition events, and pointers to methods that will slide to the previous or next slides relative to the active slide.
+
+```ts
+export interface ControllerProps {
+  /**
+   * Sliding duration, in milliseconds.
+   * @default 500
+   */
+  slidingDuration?: number;
+  /**
+   * Sliding delay, in milliseconds.
+   * @default 200
+   */
+  slidingDelay?: number;
+  /**
+   * The initial slide can also be set, but the slider starts at the first slide by default.
+   * @default 1
+   */
+  initialSlide?: number;
+  /**
+   * Callback executed before sliding begins.
+   * The previous and next slide numbers are received as arguments, since the sliding event can be delayed, this is useful to handle state changes from the outside (e.g. fire custom animations inside the active slide).
+   * @param activeSlide
+   * @param nextSlide
+   * @default undefined
+   */
+  onBeforeSliding?(activeSlide: number, nextSlide: number): void;
+  /**
+   * Callback executed after the sliding ends similar to `onBeforeSliding`.
+   * @param activeSlide
+   * @param prevSlide
+   * @default undefined
+   */
+  onSliding?(activeSlide: number, prevSlide: number): void;
+  /**
+   * Callback executed after the sliding ends similar to `onBeforeChange`.
+   * @param activeSlide
+   * @param prevSlide
+   * @default undefined
+   */
+  onAfterSliding?(activeSlide: number, prevSlide: number): void;
+  /**
+   * Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the `goToNextSlide` handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component.
+   */
+  goToNextSlidePointer?: React.MutableRefObject<GoToNextSlide | undefined>;
+  /**
+   * Similar to `nextSlide`, this sets the `object` to be equal to the `goToPreviousSlide` handler within the HeroSlider component.
+   */
+  goToPreviousSlidePointer?: React.MutableRefObject<
+    GoToPreviousSlide | undefined
+  >;
+}
 ```
 
-## HeroSlider
+### Animations
 
-The main component of the package. Also the default export. With this component, none of the other components will work as intended, so be sure to wrap them all inside, you can think of this component as the operations center.
+Defines which sliding animations will be used during slide transitions.
 
-HeroSlider accepts the following props:
+```ts
+export interface AnimationsProps {
+  /**
+   * The sliding animations during transitions.
+   * @default 'wipe'
+   */
+  slidingAnimation?: 'fade' | 'wipe';
+  /**
+   * Fade in duration of the slider during mount, in milliseconds.
+   * @default 100
+   */
+  sliderFadeInDuration?: number;
+  /**
+   * Navbars fade in duration, in milliseconds.
+   * @default 1000
+   */
+  navbarFadeInDuration?: number;
+  /**
+   * Navbars fade in delay, in milliseconds.
+   * @default 500
+   */
+  navbarFadeInDelay?: number;
+  /**
+   * When `true`, the `hero-slider` will know which animation should be set next.
+   * For example, if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide.
+   * The animations will essentially be the same, but moving to different directions (e.g. left or right, or right to left).
+   * @default true
+   */
+  shouldManageAnimationSequence?: boolean;
+}
+```
 
-| Prop | Type | Default | Definition |
-|:----------------:|:--------------------------------------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| settings | `object` | (Shown below) | The slider settings, features like autoplay, sliding duration and delay, color, animation durations, navbar animations, and others, can be configured. More detailed information below this table. |
-| orientation | `string` | `'horizontal'` | The slider orientation. It can either set to be `horizontal` or `vertical`. The orientation sets the slide buttons respective to the orientation (e.g. if vertical, the buttons will be at the top and at the bottom). Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides). |
-| slidingAnimation | `string` | Horizontal clip-path animations. | The sliding animations during changes. There are multiple possible types of animations, they can be hard-set through settings if `isSmartSliding` is `false`. Otherwise, depending on the initial animation, the rest of the animations will be the same except the origin will change respective to which slide is being selected (meaning after of previous to current slide). |
-| isSmartSliding | `boolean` | `true` | With smart sliding, the hero slider will know which animation should be set next, meaning if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide. The animations will essentially be the same, but with different origins (e.g. translate left or right). |
-| initialSlide | number | `1` | The initial slide can also be set, but the slider starts at the first slide by default, being 1 and **not 0**. |
-| nextSlide | React.MutableRefObject | `null` | Similar to pointers in C++, objects can work like pointers in JavaScript. React references are mutable objects that can be changed but will always point to an origin. If you declare an `object` and pass it as a reference, then the `current` property of the React reference `object` will be set to be equal to the nextSlide handler within the slider. This provides the developer with a way to change the slides "from the outside" of the bounds of the HeroSlider component. |
-| previousSlide | React.MutableRefObject | `null` | Similar to `nextSlide`, this sets the `object` to be equal to the previousSlide handler within the HeroSlider component. |
-| navbarSettings | `object` | (Shown below) | Aesthetics settings. You can configure the base color and the active color of all nav components within the HeroSlider. They can be set individually as well. |
-| style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
-| onBeforeChange | (previousSlide: number, nextSlide: number) => void | `null` | Callback executed before sliding begins. The previous and next slide numbers are received as arguments, since the sliding event can be delayed, this is useful to handle state changes from the outside (e.g. fire custom animations inside the active slide). |
-| onChange | (nextSlide: number) => void | `null` | Callback executed when the sliding begins similar to `onBeforeChange`. |
-| onAfterChange | (currentSlide: number) => void | `null` | Callback executed after the sliding ends similar to `onBeforeChange`. |
-| children | `any` | `null` | React children. If the children are not Nav or Slide components, they will be rendered inside the HeroSlider overlapping all of the other components. Think of them like having a higher `z-index` property. |
+### Autoplay
 
-### HeroSlider animations
+Autoplay is a feature that the Slider will support if enabled, it is disabled by default. The autoplay will activate a slide transition periodically after a certain duration, and a debounce will happen every time the user interacts with the Slider. The debounce duration can also be configured.
 
-Here are the possible `slidingAnimation` options:
+```ts
+interface Props {
+  /**
+   * Autoplay duration, interval or duration betweens slide transitions, in milliseconds.
+   * If it's lower than the sliding cycle duration (sliding duration + sliding delay), then the sliding cycle duration will be used instead.
+   * @default 8000
+   */
+  autoplayDuration?: number;
+  /**
+   * Time (in milliseconds) in which the autoplay will be debounced if the user interacts with the slider.
+   * The autoplay resumes if the user stops interacting after this duration.
+   * Set as 0 to disable this feature.
+   * @default 4000
+   */
+  autoplayDebounce?: number;
+}
 
-| Sliding animation | Prop |
-|:-----------------:|:-------------:|
-| Top to bottom | `'top_to_bottom'` |
-| Bottom to top | `'bottom_to_top'` |
-| Left to right | `'left_to_right'` |
-| Right to left | `'right_to_left'` |
-| Fade | `'fade'` |
+export type AutoplayProps = Props | boolean;
+```
 
-Make sure that the passed prop matches the ones in the table above, for them to be set properly. The default animation are any of the horizontally oriented ones, since `smartSliding` is `true`.
+### Accessability
 
-### HeroSlider settings
+Handles accessability behaviors such as the orientation of the Slider (which affects the swipe motions used to command slide transtisions), and whether to render next and previous buttons.
 
-Through the settings props, you can configure multiple features of the slider. These settings/features are:
+```ts
+/**
+ * `AccessabilityOrientation` definition used for the `SliderProps.orientation` prop.
+ * Used to define which swipes (depending on directions) will change the slides,
+ * and where and how will the buttons render, if set to render.
+ */
+export enum AccessabilityOrientation {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal'
+}
 
-| Setting | Type | Definition |
-|:----------------------:|:---------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| slidingDuration | `number` | Sliding duration, in milliseconds. |
-| slidingDelay | `number` | Sliding delay, in milliseconds. |
-| sliderColor | `string` | Sliding color, the CSS color property. |
-| sliderFadeInDuration | `number` | Fade in duration of the slider during mount, in milliseconds. |
-| navbarFadeInDuration | `number` | Navbars fade in duration, in milliseconds. |
-| navbarFadeInDelay | `number` | Navbars fade in delay, in milliseconds. |
-| isSmartSliding | `boolean` | Smart sliding. |
-| shouldDisplayButtons | `boolean` | Next and previous buttons rendering. |
-| shouldAutoplay | `boolean` | Autoplay. |
-| shouldSlideOnArrowKeypress | `boolean` | When an arrow key is pressed, the active slide will change respectively to the pressed arrow. The left and down arrows will set the previous slide, and the right and up arrows will set the next slide. The left and right will only work if the slider is horizontal, and the up and down arrows will only work if the slider is vertical. |
-| autoplayDuration | `number` | Autoplay duration, interval or duration betweens executions to change slides, in milliseconds. |
-| autoplayHandlerTimeout | `number` | Time (in milliseconds) in which the autoplay will be disabled if the user interacts with the slider. The autoplay resumes if the user stops interacting. Set as 0 to disable this feature. |
-| width | `string` | CSS inline width of the div element wrapper. |
-| height | `string` | CSS inline height of the div element wrapper. |
+export interface AccessabilityProps {
+  /**
+   * Controls render of the next and previous buttons.
+   * @default true
+   */
+  shouldDisplayButtons?: boolean;
+  /**
+   * When an arrow key is pressed, the active slide will change respectively to the pressed arrow.
+   * The left and down arrows will set the previous slide, and the right and up arrows will set the next slide.
+   * The left and right will only work if the slider is horizontal, and the up and down arrows will only work if the slider is vertical.
+   * @default true
+   */
+  shouldSlideOnArrowKeypress?: boolean;
+  /**
+   * The slider orientation can either set to be `horizontal` or `vertical`.
+   * The orientation sets the slide buttons respective to the orientation (e.g. if vertical, the buttons will be at the top and at the bottom).
+   * Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides).
+   * @default 'horizontal'
+   */
+  orientation?: `${AccessabilityOrientation}`;
+  /**
+   * Pixel threshold for the Slider to register a swiping command to change slides.
+   * @default 50
+   */
+  thresholdToSlide?: number;
+}
+```
 
-**The following are the default settings:**
+### Settings
+
+The settings will allow you to set up CSS variables that will be available to HTML elements inside the slider, as well as debugging levels in case you are running into problems.
+
+```ts
+export interface SettingsProps {
+  /**
+   * Sets up the `--slider-color` CSS variable.
+   * @default 'inherit'
+   */
+  sliderColor?: CSS.Properties['color'];
+  /**
+   * Inline CSS styling for the wrapper div element of the component.
+   * @default {}
+   */
+  sliderStyle?: Omit<CSS.Properties, 'width' | 'height'>;
+  /**
+   * Aesthetics settings. You can configure the base color and the active color of all nav components within the `HeroSlider`. They can be set individually as well.
+   * @default
+   * {
+   *    color: undefined,
+   *    activeColor: undefined
+   * }
+   */
+  navbarStyle?: {
+    color?: CSS.Properties['color'];
+    activeColor?: CSS.Properties['color'];
+  };
+  /**
+   * Debugger logs level. Only useful if you need insights.
+   * @default
+   * {
+   *    verbose: false,
+   *    info: false,
+   *    debug: false,
+   *    warnings: true,
+   *    errors: true
+   * }
+   */
+  debug?: LoggerLevels | undefined;
+}
+```
+
+### Manager
+
+The `Manager` will juggle the `Slide` components and from other processes behind the scenes. You can optionally set up whether the user is on a mobile device, but this will default to a standard navigator validation.
+
+```ts
+export interface ManagerProps {
+  /**
+   * Determines if on a mobile device. If true, the control buttons at the sides of the slider won't render.
+   * @default /Mobi|Android/i.test(navigator.userAgent)
+   */
+  isMobile?: boolean;
+}
+```
+
+---
+
+## Components
+
+This package offers multiple components. Below you will find instructions for each component and their respective `props`.
+
+### HeroSlider
+
+The main component and default export of the package. The `HeroSlider` has wrap all of the other components, otherwise you will run into errors due to a lack of Context providers.
+
+`HeroSlider` accepts the following props:
+
+```ts
+/**
+ * `HeroSlider` props.
+ */
+export interface HeroSliderProps {
+  // Styling
+  /**
+   * CSS property. Defines the width of the slider.
+   * @default '100%'
+   */
+  width?: React.CSSProperties['width'];
+  /**
+   * CSS property. Defines the height of the slider.
+   * @default '100vh'
+   */
+  height?: React.CSSProperties['height'];
+  /**
+   * Inline CSS styling.
+   */
+  style?: Omit<React.CSSProperties, 'width' | 'height'>;
+  // Modules
+  manager?: ManagerProps;
+  settings?: SettingsProps;
+  controller?: ControllerProps;
+  accessability?: AccessabilityProps;
+  animations?: AnimationsProps;
+  autoplay?: AutoplayProps;
+}
+```
+
+#### Example
 
 ```tsx
-  slidingDuration: 500,
-  slidingDelay: 200,
-  sliderColor: 'inherit',
-  sliderFadeInDuration: 100,
-  navbarFadeInDuration: 1000,
-  navbarFadeInDelay: 500,
-  isSmartSliding: true,
-  shouldDisplayButtons: true,
-  shouldAutoplay: true,
-  shouldSlideOnArrowKeypress: false,
-  autoplayDuration: 8000,
-  autoplayHandlerTimeout: 1000,
-  width: '100%',
-  height: '100%',
+<HeroSlider
+  height="100vh"
+  autoplay
+  controller={{
+    initialSlide: 1,
+    slidingDuration: 500,
+    slidingDelay: 100,
+    onSliding: (nextSlide: number) =>
+      console.debug('onSliding(nextSlide): ', nextSlide),
+    onBeforeSliding: (previousSlide: number, nextSlide: number) =>
+      console.debug(
+        'onBeforeSliding(previousSlide, nextSlide): ',
+        previousSlide,
+        nextSlide
+      ),
+    onAfterSliding: (nextSlide: number) =>
+      console.debug('onAfterSliding(nextSlide): ', nextSlide)
+  }}
+>
+...
 ```
 
-### Nav components settings
+### HeroSlider Slide
 
-The nav components colors can be set from within the HeroSlider settings. These will affect **all** of the Navs. However, you may individually set a nav component different by passing these very same settings as props to said component.
+The `Slide` component holds whatever children you want to be part of each slide, you can also modify the background and its initial mount animation. Bear in mind that background images are lazy loaded.
 
----
+The `Slide` component accepts the following props:
 
-## Slide
+```ts
+/**
+ * `Slide` component props.
+ */
+export interface SlideProps {
+  /**
+   * Each slide has a "Mask" that serves as an adornment.
+   * They mimic the background, then offsets it a bit. It has an animation during slide transitions.
+   * @default false
+   */
+  shouldRenderMask?: boolean;
+  /**
+   * Defines the background of the `Slide`.
+   * You may pass CSS properties just like you would style the background of a regular HTML element.
+   * The main difference is that the `backgroundImage` property will work just like an image `src` property instead of the typical background image URL.
+   */
+  background?: Partial<BackgroundProps>;
+  /**
+   * If the developer is using a `MenuNav` or `ButtonsNav` component, a label for each slide may be passed.
+   * These labels will be shown in the nav components.
+   */
+  label?: string;
+  /**
+   * Inline CSS styling.
+   */
+  style?: React.CSSProperties;
+  /**
+   * Callback that executes when the background image loads.
+   */
+  onBackgroundLoad?: BackgroundProps['onLoad'];
+}
+```
 
-The Slide component holds whatever children you want to be part of each slide, you can also modify the background and its initial mount animation. Bear in mind that background images are lazy loaded.
+#### Slide Background prop
 
-The Slide component accepts the following props:
+The background of the `Slide` components can be configured just as you would configure the background of any element, with the added bonus of lazy loading and being able to pass data to the `alt` image attribute.
 
-| Prop | Type | Default | Definition |
-|:----------------:|:------------------------------------:|---------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| shouldRenderMask | `boolean` | `false` | Each slide has a "Mask" that serves as an adornment. They mimic the background, then offsets it a bit, and animate during slide transitions. |
-| background | `object` | (Shown below) | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
-| navDescription | `string` | `null` | If the developer is using a MenuNav or ButtonsNav component, a description for each slide may be passed. These descriptions will be shown in the nav components. |
-| style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
-| onBackgroundLoad | (event: React.SyntheticEvent) => any | `null` | Callback that executes when the background image loads. |
-| children | `any` | `null` | React children. |
+```ts
+/**
+ * Type definition for `BackgroundProps.backgroundAnimation`.
+ */
+export enum BackgroundAnimation {
+  FADE = 'fade',
+  ZOOM = 'zoom'
+}
 
-### Slide background settings
+/**
+ * `BackgroundProps` interface for the `Background` JSX
+ * component's props used inside the `Slide` components.
+ * The `Slide` components `background` prop is also defined
+ * by `BackgroundProps`.
+ */
+export interface BackgroundProps {
+  /**
+   * Boolean variable to allow or disable lazy loading.
+   * @default true
+   */
+  shouldLazyLoad?: boolean;
+  backdropFilter?: CSS.Properties['backdropFilter'];
+  backfaceVisibility?: CSS.Properties['backfaceVisibility'];
+  background?: CSS.Properties['background'];
+  backgroundAttachment?: CSS.Properties['backgroundAttachment'];
+  backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
+  backgroundClip?: CSS.Properties['backgroundClip'];
+  backgroundColor?: CSS.Properties['backgroundColor'];
+  /**
+   * Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`.
+   */
+  backgroundImage?: CSS.Properties['backgroundImage'];
+  backgroundOrigin?: CSS.Properties['backgroundOrigin'];
+  /**
+   * CSS property. Defines the position of the background.
+   * @default 'center top'
+   */
+  backgroundPosition?: CSS.Properties['backgroundPosition'];
+  backgroundPositionX?: CSS.Properties['backgroundPositionX'];
+  backgroundPositionY?: CSS.Properties['backgroundPositionY'];
+  backgroundRepeat?: CSS.Properties['backgroundRepeat'];
+  /**
+   * CSS property. Defines the size of the background.
+   * @default 'cover'
+   */
+  backgroundSize?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
+  backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
+  /**
+   * Background animation after the image loads.
+   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
+   * @default 'fade'
+   */
+  backgroundAnimation?: `${BackgroundAnimation}`;
+  /**
+   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
+   */
+  maskBackgroundBlendMode?:
+    | 'normal'
+    | 'multiply'
+    | 'screen'
+    | 'overlay'
+    | 'darken'
+    | 'lighten'
+    | 'color-dodge'
+    | 'saturation'
+    | 'color'
+    | 'luminosity';
+  /**
+   * CSS property. Defines the width of the background.
+   * @default '100%'
+   */
+  width?: CSS.Properties['width'];
+  /**
+   * CSS property. Defines the height of the background.
+   * @default '100%'
+   */
+  height?: CSS.Properties['height'];
+  alt?: string;
+  src?: string;
+  onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+}
+```
 
-The background of the Slide components can be configured just as you would configure the background of any element, with the added bonus of lazy loading and being able to pass data to the `alt` image attribute. Here are the allowed settings
-
-| Setting | Type | Definition |
-|:---------------------------:|:--------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| shouldLazyLoad | `boolean` | Boolean variable to allow or disable lazy loading, `true` by default. |
-| lazyLoadingOffset | `number` | Height offset to begin lazy loading, defaults to `window.innerHeight`. |
-| backdropFilter | `string` | Backdrop filter CSS property. |
-| backfaceVisibility | `string` | Backface visibility CSS property. |
-| background | `string` | Background CSS property. |
-| backgroundAttachment | `string` | Background attachment CSS property. |
-| backgroundBlendMode | `string` | Background blend mode CSS property. |
-| backgroundClip | `string` | Background clip CSS property. |
-| backgroundColor | `string` | Background color CSS property. |
-| backgroundImage | `string` | Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`. |
-| backgroundOrigin | `string` | Background origin CSS property. |
-| backgroundPosition | `string` | Background position CSS property. |
-| backgroundPositionX | `string` | Background position X CSS property. |
-| backgroundPositionY | `string` | Background position Y CSS property. |
-| backgroundRepeat | `string` | Background repeat CSS property. |
-| backgroundSize | `string` | Background size CSS property. |
-| backgroundAnimationDuration | `string` | Background animation duration after the image loads. |
-| backgroundAnimationDelay | `string` | Background animation delay after the image loads. |
-| backgroundAnimation | `string` | Background animation after the image loads. There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size. **To select the fade-in animation this prop must be equal to `'fade'`, to select the zoom animation, this prop must be equal to `'zoom'`**. |
-| maskBackgroundBlendMode | `string` | Background blend mode CSS property **for the optional mask that could render in each of the Slide components**. |
-| width | `string` | Width CSS property. |
-| height | `string` | Height CSS property. |
-| alt | `string` | HTML `img` element alt attribute. |
-
-**The following are the default settings:**
+#### Slide Example
 
 ```tsx
-  backgroundPosition: 'center top',
-  backgroundSize: 'cover',
-  width: '100%',
-  height: '100%',
+<Slide
+  background={{
+    backgroundImage: salta
+  }}
+>
+  <div>Salta - Argentina</div>
+</Slide>
 ```
 
----
+### Nav
 
-## Nav
+The basic `Nav` component, worth noting that there are three other types of (slide) navigation components named `SideNav`, `MenuNav`, and `ButtonsNav`. This component is nothing more than a nagivation bar. By default the component is positioned at the bottom, centered.
 
-The basic Nav component, there are three other types of nav components named SideNav, MenuNav, and ButtonsNav, there is more detailed information about the three latest below this whole section. The nav component is nothing more than a nagivation bar. The developer may set up three features through props:
+```ts
+/**
+ * Defines the position of the navigation component.
+ */
+export interface NavPosition {
+  top?: React.CSSProperties['top'];
+  left?: React.CSSProperties['left'];
+  bottom?: React.CSSProperties['bottom'];
+  right?: React.CSSProperties['right'];
+  transform?: React.CSSProperties['transform'];
+}
 
-1. Position.
-2. Color.
-3. Active color.
+/**
+ * `Nav` component props.
+ */
+export interface NavProps {
+  /**
+   * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
+   * Aside from the former, you can also set the CSS `transform` property to help you center the element.
+   * @default
+   * {
+   *    bottom: '1.5rem',
+   *    left: '50%',
+   *    transform: 'translateX(-50%)'
+   * }
+   */
+  position?: NavPosition;
+  /**
+   * Defines `--nav-color` CSS variable.
+   */
+  color?: string;
+  /**
+   * Defines `--nav-active-color` CSS variable.
+   */
+  activeColor?: string;
+}
+```
 
-Here is a more detailed table of the props:
+#### NavPosition
 
-| Prop | Type | Default | Definition |
-|:-----------:|:--------:|-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| position | `object` | (Shown below) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'rgba (200 , 215 , 235 , 0.6 )'` | CSS color property for the nav items. |
-| activeColor | `string` | `'rgba (200 , 215 , 235 , 1 )'` | CSS color property for the active nav item (respective to the current slide). |
+The position settings are nothing more than the `top`, `left`, `bottom`, and `right` CSS properties used by absolutely position elements. Aside from the former, you can also set the CSS `transform` property to help you position the element.
 
-### Nav position settings
-
-The position settings are nothing more than the `top`, `left`, `bottom`, and `right` CSS properties used for absolutely position elements. Aside from the former, you can also set the CSS `transform` property to help you center the element. By default the nav is positioned at the bottom, centered.
-
-**The following are the default position settings:**
+#### NavExample
 
 ```tsx
-  bottom: '1.5rem'
-  left: '50%'
-  transform: 'translateX(-50%)'
+<HeroSlider
+  ...
+>
+  ...
+
+  <Slide
+    ...
+  />
+
+  <Slide
+    ...
+  />
+
+  <Nav />
+</HeroSlider>
 ```
 
----
+### SideNav
 
-## SideNav
+When it comes to props it extends the props of the `Nav` component. There are a couple more props that can be passed to this component. Aside from that, it's worth mentioning that this component is intented to be placed at the sides of the slider.
 
-The SideNav component. When it comes to props it's almost entirely equal to the Nav component. There are a couple more props that can be passed to this component. Aside from that, it's worth mentioning that this nav is intented to be placed at the sides of the slider. Here are the props:
+```ts
+/**
+ * `SideNav` component props.
+ */
+export interface SideNavProps extends NavProps {
+  /**
+   * Defines the inline CSS property `right` of the component.
+   */
+  right?: React.CSSProperties['right'];
+  /**
+   * Defines the inline CSS property `left` of the component.
+   */
+  left?: React.CSSProperties['left'];
+  /**
+   * Defines the position. If you set it to the left, set this to false to disable any existing `right` CSS properties and avoid any conflicts.
+   * @default true
+   */
+  isPositionedRight?: boolean;
+  /**
+   * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
+   * Aside from the former, you can also set the CSS `transform` property to help you center the element.
+   * @default
+   * {
+   *    bottom: undefined,
+   *    top: '50%',
+   *    left: !isPositionedRight ? left || '1rem' : undefined,
+   *    right: isPositionedRight ? right || '1rem' : undefined,
+   *    transform: 'translateY(-50%)'
+   * }
+   */
+  position?: NavPosition;
+}
+```
 
-| Prop | Type | Default | Definition |
-|:-----------------:|:---------:|:---------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'#C8D7EB'` | The background settings. You may pass CSS background properties just like you would style the background of an HTML element. The main difference is that the `backgroundImage` property will work just like an image tag `src` property instead of the typical background image URL. More information about these settings below this table. |
-| activeColor | `string` | `'#FFF'` | CSS color property for the active nav item (respective to the current slide). |
-| right | `string` | `null` | Inline `right` CSS property for absolutely positioned elements. |
-| left | `string` | '`1rem`' | Inline `left` CSS property for absolutely positioned elements. |
-| isPositionedRight | `boolean` | `true` | Extra property to help the component sort out things. If you set it to the left, set this to false to disable any existing `right` CSS properties and avoid any conflicts. |
+#### SideNav Example
 
----
+This example would render two `SideNav` components at both sides of the screen:
 
-## MenuNav
+```tsx
+<HeroSlider
+  ...
+>
+  ...
 
-Very similar to the Nav component when it comes to setup, with the addition of four more props. The following table contains their definitions:
+  <Slide
+    ...
+  />
 
-| Prop | Type | Default | Definition |
-|:------------------:|:---------:|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'rgba(215, 225, 235, 0.6)'` | CSS color property for the menu nav multiple borders and animated bar. |
-| activeColor | `string` | `'#FFF'` | CSS color for the menu nav list items' text. |
-| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component or null. |
-| isNullAfterThreshold | `boolean` | `false` | Boolean setting that dictates if the nav should render null or a basic Nav component after the threshold is reached. |
-| extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
-| isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
+  <SideNav
+    isPositionedRight={false}
+    position={{
+      top: '50%',
+      left: '0',
+      transform: 'translateY(-50%)'
+    }}
+  />
 
----
+  <SideNav />
+</HeroSlider>
+```
 
-## ButtonsNav
+### MenuNav
 
-Very similar to the previous MenuNav component when it comes to setup. **This component accepts the same props as the MenuNav component and works exactly the same**, with the addition of an two extra props defined as `alignItems` and `backgroundColor`.
-The `alignItems` prop will align the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works, accepting `flex-start` (top), `center`, and `flex-end` (bottom) as possible values, the default setting is `flex-end`, set at the bottom.
-The `backgroundColor` sets the background of the buttons, while the `color` prop is used for the color of the text, and the `activeColor` prop is used for the background of the active nav item. Here is a more detailed table:
+Extends from the `Nav` component, with a few additional props.
 
-| Prop | Type | Default | Definition |
-|:------------------:|:---------:|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| color | `string` | `'#FFF'` | CSS color property for the nav buttons' text. |
-| backgroundColor | `string` | `'rgba(255, 255, 255, 0.8)'` | CSS background color property for the nav buttons. |
-| activeColor | `string` | `'rgb(59, 62, 69)'` | CSS background color property for the active nav button. |
-| mobileThreshold | `number` | `1024` | Given the nature of this navigation bar, it doesn't works well with devices with small screen widths. The mobile threshold is the point in which this component turns into a basic Nav component. |
-| isNullAfterThreshold | `boolean` | `false` | Boolean setting that dictates if the nav should render null or a basic Nav component after the threshold is reached. |
-| extraButton | `any` | `null` | An extra button rendered among the menu nav items in case the developer may want any extra functionality in the navbar. |
-| isExtraButtonRight | `boolean` | `true` | Renders the button to the right side of the nav if true, otherwise it will appear at the left side. |
-| alignItems | `string` | `flex-end` | Aligns the nav items to the center, top or bottom of its container working exactly as how the CSS flex-box `align-items` property works. |
+```ts
+/**
+ * `MenuNav` component props.
+ */
+export interface MenuNavProps extends NavProps {
+  /**
+   * Determines how the browser distributes space between and around nav items along the component.
+   */
+  justifyContent?: React.CSSProperties['justifyContent'];
+  /**
+   * Given the nature of this component, it doesn't work well with devices of relatively small width.
+   * The mobile threshold is the point in which this component turns into a basic `Nav` component or `null`.
+   */
+  mobileThreshold?: number;
+  /**
+   * Determines if the nav should render `null` or a basic `Nav` component after the threshold is reached.
+   * @default false
+   */
+  isNullAfterThreshold?: boolean;
+  /**
+   * An extra button rendered among the nav items in case the developer may want any extra functionality in the component.
+   */
+  extraButton?: React.ReactNode;
+  /**
+   * Renders the button to the right side of the nav if true, otherwise it will appear at the left side.
+   * @default true
+   */
+  isExtraButtonRight?: boolean;
+}
+```
 
----
+#### MenuNav Example
 
-## AutoplayButton
+```tsx
+<HeroSlider
+  ...
+>
+  ...
 
-The AutoplayButton component comes in handy whenever the hero slider is set up to autoplay. This button will play or pause the autoplay instance respectively upon clicking it. It's really easy to setup. The button is an SVG image, which means it will scale well to any width or height. **The button has to be in the first level of the HeroSlider childrens, just like a Slide component would be. If you want to place it somewhere else, you may use a React portal**.
+  <Slide
+    ...
+  />
 
-You can position it just like you would position a nav component by using passing the `position` prop, but you may also pass a CSS class or inline styling as props. Here is a more detailed table explaining the props:
+  <MenuNav />
+</HeroSlider>
+```
 
-| Prop | Type | Default | Definition |
-|:---------:|:-------------------:|:---------------------------:|:---------------------------------------------------------------------------------------------:|
-| position | `object` | (Same as the Nav component) | Object structured by the inline CSS `top`, `left`, `bottom`, and `right` position properties. |
-| style | React.CSSProperties | `null` | Inline CSS styling for the wrapper div element of the component. |
-| className | `string` | `null` | CSS class name. |
+### ButtonsNav
+
+Extends from the previous `MenuNav` component props. It works the same, with the addition of additional props defined as `alignItems` and `backgroundColor`.
+The `alignItems` prop will align the slide navigation items relative to the Slider.
+The `backgroundColor` sets the background of the buttons, while the `color` prop is used for the color of the text, and the `activeColor` prop is used for the background of the active navigation item.
+
+```ts
+/**
+ * `ButtonsNav` component props.
+ */
+export interface ButtonsNavProps extends MenuNavProps {
+  /**
+   * CSS background color property for the nav buttons.
+   */
+  backgroundColor?: React.CSSProperties['backgroundColor'];
+  /**
+   * Aligns the nav items to the center, top, or bottom of its container working exactly as how the CSS flex-box `align-items` property works.
+   */
+  alignItems?: React.CSSProperties['alignItems'];
+}
+```
+
+### AutoplayButton
+
+The `AutoplayButton` component allows the user to control the behavior of the `Autoplay` module. This button will play or pause the autoplay when clicked. It's really easy to setup.
+
+You can position it just like you would position a navigation component by using passing the `position` prop, but you may also pass a CSS class or inline styling as props.
+
+```ts
+/**
+ * `AutoplayButton` component props.
+ */
+export interface AutoplayButtonProps {
+  /**
+   * CSS class name.
+   */
+  className?: React.HTMLAttributes<HTMLElement>['className'];
+  /**
+   * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
+   * Aside from the former, you can also set the CSS `transform` property to help you center the element.
+   * @default
+   * {
+   *    bottom: '0',
+   *    left: '0'
+   * }
+   */
+  position?: NavPosition;
+  /**
+   * Inline CSS styling.
+   */
+  style?: React.CSSProperties;
+}
+```
+
+#### AutoplayButton Example
+
+```tsx
+<HeroSlider
+  ...
+>
+  <Overlay>
+    ...
+    <AutoplayButton />
+  </Overlay>
+
+  ...
+</HeroSlider>
+```
+
+### Overlay
+
+The `Overlay` is a useful component that will superpose its children over the content of the `Slide` components.
+
+#### Overlay Example
+
+```tsx
+<HeroSlider
+  ...
+>
+  <Overlay>
+    <div>On Top of the World</div>
+  </Overlay>
+
+  <Slide
+    ...
+  />
+
+  <Nav />
+</HeroSlider>
+```
 
 ---
 

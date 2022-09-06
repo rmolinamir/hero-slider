@@ -18,6 +18,10 @@ export enum BackgroundAnimation {
  * by `BackgroundProps`.
  */
 export interface BackgroundProps {
+  /**
+   * Boolean variable to allow or disable lazy loading.
+   * @default true
+   */
   shouldLazyLoad?: boolean;
   backdropFilter?: CSS.Properties['backdropFilter'];
   backfaceVisibility?: CSS.Properties['backfaceVisibility'];
@@ -26,16 +30,35 @@ export interface BackgroundProps {
   backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
   backgroundClip?: CSS.Properties['backgroundClip'];
   backgroundColor?: CSS.Properties['backgroundColor'];
+  /**
+   * Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`.
+   */
   backgroundImage?: CSS.Properties['backgroundImage'];
   backgroundOrigin?: CSS.Properties['backgroundOrigin'];
+  /**
+   * CSS property. Defines the position of the background.
+   * @default 'center top'
+   */
   backgroundPosition?: CSS.Properties['backgroundPosition'];
   backgroundPositionX?: CSS.Properties['backgroundPositionX'];
   backgroundPositionY?: CSS.Properties['backgroundPositionY'];
   backgroundRepeat?: CSS.Properties['backgroundRepeat'];
+  /**
+   * CSS property. Defines the size of the background.
+   * @default 'cover'
+   */
   backgroundSize?: CSS.Properties['backgroundSize'];
   backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
   backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
+  /**
+   * Background animation after the image loads.
+   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
+   * @default 'fade'
+   */
   backgroundAnimation?: `${BackgroundAnimation}`;
+  /**
+   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
+   */
   maskBackgroundBlendMode?:
     | 'normal'
     | 'multiply'
@@ -47,7 +70,15 @@ export interface BackgroundProps {
     | 'saturation'
     | 'color'
     | 'luminosity';
+  /**
+   * CSS property. Defines the width of the background.
+   * @default '100%'
+   */
   width?: CSS.Properties['width'];
+  /**
+   * CSS property. Defines the height of the background.
+   * @default '100%'
+   */
   height?: CSS.Properties['height'];
   alt?: string;
   src?: string;
@@ -64,7 +95,8 @@ export default function Background(props: BackgroundProps) {
     ...background
   } = props;
 
-  const { backgroundImage, backgroundAnimation } = background;
+  const { backgroundImage, backgroundAnimation = BackgroundAnimation.FADE } =
+    background;
 
   /**
    * If there is no `backgroundImage`, then there is no need to:
@@ -87,7 +119,6 @@ export default function Background(props: BackgroundProps) {
         className.push(BackgroundModuleCss.ZoomOut);
         break;
       case BackgroundAnimation.FADE:
-      default:
         className.push(BackgroundModuleCss.FadeIn);
         break;
     }

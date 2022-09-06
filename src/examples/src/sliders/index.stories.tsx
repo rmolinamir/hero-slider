@@ -10,6 +10,7 @@ import BlendModeSlider from './BlendModeSlider';
 import NavbarSlider from './NavbarSlider';
 import VerticalSlider from './VerticalSlider';
 import DebugSlider from './DebugSlider';
+import ZoomSlider from './ZoomSlider';
 
 export default {
   title: 'Example/hero-slider',
@@ -51,6 +52,13 @@ export const Buttons: Story = (args) => (
 export const BlendMode: Story = (args) => (
   <main>
     <BlendModeSlider {...args} />;
+    <Page />
+  </main>
+);
+
+export const Zoom: Story = (args) => (
+  <main>
+    <ZoomSlider {...args} />;
     <Page />
   </main>
 );

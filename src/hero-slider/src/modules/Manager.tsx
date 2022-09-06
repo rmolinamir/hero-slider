@@ -7,6 +7,10 @@ type Slide = {
 };
 
 export interface ManagerProps {
+  /**
+   * Determines if on a mobile device. If true, the control buttons at the sides of the slider won't render.
+   * @default /Mobi|Android/i.test(navigator.userAgent)
+   */
   isMobile?: boolean;
 }
 

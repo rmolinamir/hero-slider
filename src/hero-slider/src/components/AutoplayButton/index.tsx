@@ -14,8 +14,23 @@ enum ButtonType {
  * `AutoplayButton` component props.
  */
 export interface AutoplayButtonProps {
-  className?: string;
+  /**
+   * CSS class name.
+   */
+  className?: React.HTMLAttributes<HTMLElement>['className'];
+  /**
+   * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
+   * Aside from the former, you can also set the CSS `transform` property to help you center the element.
+   * @default
+   * {
+   *    bottom: '0',
+   *    left: '0'
+   * }
+   */
   position?: NavPosition;
+  /**
+   * Inline CSS styling.
+   */
   style?: React.CSSProperties;
 }
 

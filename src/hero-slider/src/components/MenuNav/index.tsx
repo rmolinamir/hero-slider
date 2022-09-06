@@ -10,15 +10,28 @@ import { composeCssClasses } from '../../utils/composeCssClasses';
  * `MenuNav` component props.
  */
 export interface MenuNavProps extends NavProps {
-  navDescriptions?: string[];
-  justifyContent?: string;
+  /**
+   * Determines how the browser distributes space between and around nav items along the component.
+   */
+  justifyContent?: React.CSSProperties['justifyContent'];
+  /**
+   * Given the nature of this component, it doesn't work well with devices of relatively small width.
+   * The mobile threshold is the point in which this component turns into a basic `Nav` component or `null`.
+   */
   mobileThreshold?: number;
   /**
-   * Determines if the nav should render `null` or a basic Nav component after the threshold is reached.
+   * Determines if the nav should render `null` or a basic `Nav` component after the threshold is reached.
    * @default false
    */
   isNullAfterThreshold?: boolean;
+  /**
+   * An extra button rendered among the nav items in case the developer may want any extra functionality in the component.
+   */
   extraButton?: React.ReactNode;
+  /**
+   * Renders the button to the right side of the nav if true, otherwise it will appear at the left side.
+   * @default true
+   */
   isExtraButtonRight?: boolean;
 }
 
@@ -31,7 +44,7 @@ export function MenuNav(props: MenuNavProps) {
       left: '50%',
       transform: 'translateX(-50%)'
     },
-    justifyContent,
+    justifyContent = 'center',
     mobileThreshold: componentMobileThreshold,
     isNullAfterThreshold,
     extraButton,
@@ -132,7 +145,7 @@ export function MenuNav(props: MenuNavProps) {
       style={{
         ...position,
         ...CSSVariables,
-        justifyContent: justifyContent || 'center'
+        justifyContent
       }}
     >
       {extraButton && (

@@ -5,15 +5,38 @@ import { PartiallyRequired } from '../utils/PartiallyRequired';
 
 export interface SettingsProps {
   /**
-   * Next and previous buttons rendering.
-   * @default true
+   * Sets up the `--slider-color` CSS variable.
+   * @default 'inherit'
    */
   sliderColor?: CSS.Properties['color'];
+  /**
+   * Inline CSS styling for the wrapper div element of the component.
+   * @default {}
+   */
   sliderStyle?: Omit<CSS.Properties, 'width' | 'height'>;
+  /**
+   * Aesthetics settings. You can configure the base color and the active color of all nav components within the `HeroSlider`. They can be set individually as well.
+   * @default
+   * {
+   *    color: undefined,
+   *    activeColor: undefined
+   * }
+   */
   navbarStyle?: {
     color?: CSS.Properties['color'];
     activeColor?: CSS.Properties['color'];
   };
+  /**
+   * Debugger logs level. Only useful if you need insights.
+   * @default
+   * {
+   *    verbose: false,
+   *    info: false,
+   *    debug: false,
+   *    warnings: true,
+   *    errors: true
+   * }
+   */
   debug?: LoggerLevels | undefined;
 }
 

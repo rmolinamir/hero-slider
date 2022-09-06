@@ -14,16 +14,36 @@ const logger = ConsoleLogger.new();
  * `Slide` component props.
  */
 export interface SlideProps {
+  /**
+   * Each slide has a "Mask" that serves as an adornment.
+   * They mimic the background, then offsets it a bit. It has an animation during slide transitions.
+   * @default false
+   */
   shouldRenderMask?: boolean;
+  /**
+   * Defines the background of the `Slide`.
+   * You may pass CSS properties just like you would style the background of a regular HTML element.
+   * The main difference is that the `backgroundImage` property will work just like an image `src` property instead of the typical background image URL.
+   */
   background?: Partial<BackgroundProps>;
+  /**
+   * If the developer is using a `MenuNav` or `ButtonsNav` component, a label for each slide may be passed.
+   * These labels will be shown in the nav components.
+   */
   label?: string;
+  /**
+   * Inline CSS styling.
+   */
   style?: React.CSSProperties;
+  /**
+   * Callback that executes when the background image loads.
+   */
   onBackgroundLoad?: BackgroundProps['onLoad'];
 }
 
 export function Slide(props: React.PropsWithChildren<SlideProps>) {
   const {
-    shouldRenderMask,
+    shouldRenderMask = false,
     style,
     background,
     onBackgroundLoad,
