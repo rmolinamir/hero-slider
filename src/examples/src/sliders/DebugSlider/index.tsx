@@ -13,7 +13,7 @@ export default function DebugSlider() {
       height={'100vh'}
       autoplay={{
         autoplayDuration: 100,
-        autoplayDebounce: 1000
+        autoplayDebounce: 500
       }}
       controller={{
         initialSlide: 1,

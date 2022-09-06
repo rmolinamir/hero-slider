@@ -161,7 +161,7 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
    * If it comes back into viewport and its idle, start or resume the autoplay instance.
    * If the autoplay is disabled, then stop.
    */
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (autoplay) {
       switch (true) {
         case state.isPausedByUser:
