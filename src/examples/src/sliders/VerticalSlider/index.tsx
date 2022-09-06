@@ -23,7 +23,7 @@ export default function VerticalSlider() {
     >
       <Overlay>
         <Wrapper>
-          <Title>Vertical Slider</Title>
+          <Title>Vertical Orientation</Title>
           <Subtitle>
             Switch to a display that supports touch, then swipe vertically. Of
             course, horizontal swiping is also supported if the{' '}

@@ -31,7 +31,7 @@ export default function ButtonsSlider() {
     >
       <Overlay>
         <Wrapper>
-          <Title>Custom Buttons Slider</Title>
+          <Title>Your Own Buttons</Title>
           <Subtitle>
             You can set up your own React components to control the{' '}
             <code>HeroSlider</code>.

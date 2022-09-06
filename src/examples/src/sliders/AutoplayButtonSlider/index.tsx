@@ -17,7 +17,8 @@ export default function AutoplayButtonSlider() {
         slidingDelay: 100
       }}
       autoplay={{
-        autoplayDuration: 2000
+        autoplayDuration: 2000,
+        autoplayDebounce: 0
       }}
       style={{
         backgroundColor: '#000'
@@ -25,7 +26,7 @@ export default function AutoplayButtonSlider() {
     >
       <Overlay>
         <Wrapper>
-          <Title>Autoplay Button Slider</Title>
+          <Title>Autoplay Button</Title>
           <AutoplayButton />
         </Wrapper>
       </Overlay>

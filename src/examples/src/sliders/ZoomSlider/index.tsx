@@ -12,7 +12,7 @@ export default function ZoomSlider() {
     <HeroSlider>
       <Overlay>
         <Wrapper>
-          <Title>Zoom Slider</Title>
+          <Title>Zoom Background Animations</Title>
           <Subtitle>
             The <code>backgroundAnimation</code> prop of the <code>Slide</code>{' '}
             child components is set to <code>zoom</code>.

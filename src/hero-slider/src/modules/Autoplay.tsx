@@ -69,10 +69,10 @@ function autoplayReducer(state: State, action: Action): State {
 function AutoplayProvider({ children, autoplay }: ProviderProps) {
   const params: Required<Props> = {
     autoplayDuration:
-      (typeof autoplay === 'object' && autoplay?.autoplayDuration) ||
+      (typeof autoplay === 'object' ? autoplay?.autoplayDuration : undefined) ??
       defaultProps.autoplayDuration,
     autoplayDebounce:
-      (typeof autoplay === 'object' && autoplay?.autoplayDebounce) ||
+      (typeof autoplay === 'object' ? autoplay?.autoplayDebounce : undefined) ??
       defaultProps.autoplayDebounce
   };
 

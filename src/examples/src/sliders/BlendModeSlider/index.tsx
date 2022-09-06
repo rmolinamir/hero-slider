@@ -24,7 +24,7 @@ export default function BlendModeSlider() {
     >
       <Overlay>
         <Wrapper>
-          <Title>Blend Mode Slider</Title>
+          <Title>Blend Mode</Title>
           <Subtitle>
             The <code>backgroundBlendMode</code> of the <code>Slide</code>{' '}
             component is set to <code>luminosity</code>.

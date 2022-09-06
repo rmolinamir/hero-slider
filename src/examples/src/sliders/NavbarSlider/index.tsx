@@ -28,7 +28,7 @@ export default function NavbarSlider() {
       <Overlay>
         <Navbar />
         <Wrapper>
-          <Title>Navbar Slider</Title>
+          <Title>You Own Navbar</Title>
           <Subtitle>Cool stuff.</Subtitle>
         </Wrapper>
       </Overlay>
