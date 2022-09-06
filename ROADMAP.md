@@ -14,9 +14,10 @@
 - [x] Add classes to `hero-slider` such as `.Slider`, `.Slide`, etc. The goal is to allow other developers to target my components through CSS and customize their styling.
 - [x] Address the open issues of v2.x.
 - [ ] Optimize the `hero-slider` if it's worth it, optimize for performance but **only when and where** it makes sense. COFL. Code First, Optimize Later.
-  - [ ] Implement a Logger singleton to easily hide telemetry, this will help to analyze re-render chain to improve performance.
-    - [ ] Telemetry static class could contain decorators to analyze rerenders and performance, not sure if possible in React though.
-- [ ] Improve the way Slide `label` works (previously `navDescription`). I think the nav should be the component getting the descriptions, or maybe support both ways with one taking priority over the other. But having it in the Slider, at least, feels awkward.
-- [ ] **(MAYBE - Depends on how much time I will ultimately invest)** Unit tests for `hero-slider`, especially for the different modules.
-- [ ] The case when a Slides is dynamically unmounted is not supported. The issue is that this would affect the slide number sequences used by the modules. A fix to this would be to, instead of using a number to identify slides, use the Slide refs. This would affect the `Controller` module however, and everything that consumes its behavior functions, and possibly other modules, such as `Autoplay`. Another option is to always "reshuffle" the slide numbers, although this might be necessary anyway. Either way, there is no rush to support this edge case. This is a **hero-slider** after all, where data will be static in the vast majority of scenarios.
+  - [x] Implement a Logger singleton to easily hide telemetry, this will help to analyze re-render chain to improve performance.
+    - [x] Telemetry static class could contain decorators to analyze rerenders and performance, not sure if possible in React though. ANSWER: Not possible, forgot decorators are limited to classes.
+- [ ] Update docs.
+- [ ] Improve the way `Slide` component `label` prop works (previously `navDescription`). I think the nav should be the component getting the descriptions, or maybe support both ways with one taking priority over the other. But having it in the `Slider`, at least, feels awkward.
 - [ ] Add `onDebounce: 'reset' | 'resume'` option/prop to the `Autoplay` module.
+- [ ] Unit tests for `hero-slider`, especially for the most complicated modules.
+- [ ] The case when a `Slide` is dynamically unmounted is not tested. I suspect an issue would arise where it would affect the slide number sequences created by the `Manager` moduled and consumed used by the modules. A fix to this would be to, instead of using a number to identify slides, use the Slide refs. This would affect the `Controller` module however, and everything that consumes its behavior functions, and possibly other modules, such as `Autoplay`. Another option is to always "reshuffle" the slide numbers, although this might be necessary anyway. Either way, I is no rush to support this edge case. I expect data to be static in the vast majority of scenarios.

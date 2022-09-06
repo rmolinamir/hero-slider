@@ -33,6 +33,9 @@ import {
   useIntersectionObserver
 } from './modules/IntersectionObserver';
 import { composeCssClasses } from './utils/composeCssClasses';
+import ConsoleLogger from './modules/ConsoleLogger';
+
+const logger = ConsoleLogger.new();
 
 /**
  * `HeroSlider` props.
@@ -57,6 +60,8 @@ function Orchestrator({
 }: React.PropsWithChildren<
   Pick<HeroSliderProps, 'width' | 'height' | 'style'>
 >) {
+  logger.info('[Orchestrator] rerender');
+
   const { shouldDisplayButtons } = useAccessability();
   const { sliderFadeInDuration, navbarFadeInDuration, navbarFadeInDelay } =
     useAnimations();

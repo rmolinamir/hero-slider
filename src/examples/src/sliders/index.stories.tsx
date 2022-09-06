@@ -9,6 +9,7 @@ import ButtonsSlider from './ButtonsSlider';
 import BlendModeSlider from './BlendModeSlider';
 import NavbarSlider from './NavbarSlider';
 import VerticalSlider from './VerticalSlider';
+import DebugSlider from './DebugSlider';
 
 export default {
   title: 'Example/hero-slider',
@@ -57,3 +58,10 @@ export const BlendMode: Story = (args) => (
 export const Navbar: Story = (args) => <NavbarSlider {...args} />;
 
 export const Vertical: Story = (args) => <VerticalSlider {...args} />;
+
+export const Debug: Story = (args) => (
+  <main>
+    <DebugSlider {...args} />;
+    <Page />
+  </main>
+);

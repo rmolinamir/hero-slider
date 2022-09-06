@@ -16,7 +16,9 @@ export interface AnimationsProps {
   navbarFadeInDuration?: number;
   navbarFadeInDelay?: number;
   /**
-   * When `true`, the `hero-slider` will know which animation should be set next. For example, if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide. The animations will essentially be the same, but moving to different directions (e.g. left or right, or right to left).
+   * When `true`, the `hero-slider` will know which animation should be set next.
+   * For example, if the user is selecting the next slide, the animation would be different to the one if the user had selected the previous slide.
+   * The animations will essentially be the same, but moving to different directions (e.g. left or right, or right to left).
    * @default true
    */
   shouldManageAnimationSequence?: boolean;

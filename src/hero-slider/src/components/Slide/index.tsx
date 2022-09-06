@@ -6,6 +6,9 @@ import { useManager } from '../../modules/Manager';
 import { useController } from '../../modules/Controller';
 import { useAnimations } from '../../modules/Animations';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import ConsoleLogger from '../../modules/ConsoleLogger';
+
+const logger = ConsoleLogger.new();
 
 /**
  * `Slide` component props.
@@ -39,6 +42,8 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
   const slideRef = React.useRef<HTMLDivElement>(null);
 
   const slide = getSlide(slideRef);
+
+  logger.info('[Slide] rerender', 'slide.number: ', slide?.number);
 
   const [classNames, setClassNames] = React.useState(
     composeCssClasses('hero-slider-slide', SlideModuleCss.Slide)

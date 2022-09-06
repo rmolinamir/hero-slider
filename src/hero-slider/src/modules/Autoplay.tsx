@@ -2,6 +2,9 @@ import React from 'react';
 import IntervalTimer, { IntervalState } from './IntervalTimer';
 import { useController } from './Controller';
 import { useIntersectionObserver } from './IntersectionObserver';
+import ConsoleLogger from './ConsoleLogger';
+
+const logger = ConsoleLogger.new();
 
 interface Props {
   /**
@@ -88,14 +91,22 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
     getSlidingCycleDuration
   } = useController();
 
-  const slidingCycleDuration = Math.max(
-    getSlidingCycleDuration(),
+  const slidingCycleDuration = getSlidingCycleDuration();
+
+  const autoplayCycleDuration = Math.max(
+    slidingCycleDuration,
     params.autoplayDuration
   );
 
+  if (params.autoplayDuration < getSlidingCycleDuration())
+    logger.warn(
+      '[Autoplay] The `autoplayDuration` is lower than the sliding cycle duration (the result of `slidingDuration + slidingDelay`).',
+      'The sliding cycle duration will be used instead for the autoplay intervals.'
+    );
+
   const autoplayInstance = IntervalTimer.new((): void => {
     changeSlide(getNextSlide(controller.activeSlide));
-  }, slidingCycleDuration);
+  }, autoplayCycleDuration);
 
   const { isInView } = useIntersectionObserver();
 
@@ -122,6 +133,7 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
    * Pauses the autoplay.
    */
   const pause = (): void => {
+    logger.debug('[Autoplay] Paused by user.');
     autoplayInstance.pause();
     dispatch({ type: 'pause' });
   };
@@ -130,6 +142,7 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
    * Resumes the autoplay.
    */
   const resume = (): void => {
+    logger.debug('[Autoplay] Resumed by user.');
     autoplayInstance.resume();
     dispatch({ type: 'resume' });
   };
@@ -155,25 +168,25 @@ function AutoplayProvider({ children, autoplay }: ProviderProps) {
           break;
         // When not in view, stop the autoplay.
         case !isInView && autoplayInstance.state !== IntervalState.IDLE:
-          console.log('STOPPPING');
           autoplayInstance.stop();
+          logger.debug('[Autoplay] Stopped.');
           break;
         // When in view and idle, start it.
         case isInView && autoplayInstance.state === IntervalState.IDLE: {
-          console.log('STARTING');
           autoplayInstance.start();
+          logger.debug('[Autoplay] Started.');
           break;
         }
         // When in view and paused, resume it.
         case isInView && autoplayInstance.state === IntervalState.PAUSED: {
-          console.log('RESUMING');
           autoplayInstance.resume();
+          logger.debug('[Autoplay] Resumed.');
           break;
         }
       }
     } else if (autoplayInstance.state !== IntervalState.IDLE) {
-      console.log('STOPPPING');
       autoplayInstance.stop();
+      logger.info('[Autoplay] Stopped.');
     }
   }, [autoplay, isInView]);
 

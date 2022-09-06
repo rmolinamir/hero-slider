@@ -34,7 +34,7 @@ export default class IntervalTimer {
   public pausedTime: number | Date = 0;
 
   private lastTimeFired?: Date;
-  private timerId?: NodeJS.Timeout;
+  private timerId?: NodeJS.Timer;
   private resumeId?: NodeJS.Timeout;
   private lastPauseTime?: Date;
 
@@ -180,7 +180,7 @@ export default class IntervalTimer {
     callback: () => void,
     interval: number,
     maxFires: number | undefined = undefined
-  ) {
+  ): IntervalTimer {
     if (!this.instance)
       this.instance = new IntervalTimer(callback, interval, maxFires);
     else {

@@ -1,5 +1,7 @@
 import React from 'react';
 import type CSS from 'csstype';
+import ConsoleLogger, { LoggerLevels } from './ConsoleLogger';
+import { PartiallyRequired } from '../utils/PartiallyRequired';
 
 export interface SettingsProps {
   /**
@@ -12,9 +14,10 @@ export interface SettingsProps {
     color?: CSS.Properties['color'];
     activeColor?: CSS.Properties['color'];
   };
+  debug?: LoggerLevels | undefined;
 }
 
-const defaultProps: Required<SettingsProps> = {
+const defaultProps: PartiallyRequired<SettingsProps, 'debug'> = {
   sliderColor: 'inherit',
   sliderStyle: {},
   navbarStyle: {
@@ -26,15 +29,23 @@ const defaultProps: Required<SettingsProps> = {
 type ProviderProps = React.PropsWithChildren<{ settings?: SettingsProps }>;
 
 const SettingsStateContext = React.createContext<
-  Required<SettingsProps> | undefined
+  PartiallyRequired<SettingsProps, 'debug'> | undefined
 >(undefined);
 
 function SettingsProvider({ children, settings }: ProviderProps) {
-  const params: Required<SettingsProps> = {
+  const params: PartiallyRequired<SettingsProps, 'debug'> = {
     sliderColor: settings?.sliderColor || defaultProps.sliderColor,
     sliderStyle: settings?.sliderStyle || defaultProps.sliderStyle,
-    navbarStyle: settings?.navbarStyle || defaultProps.navbarStyle
+    navbarStyle: settings?.navbarStyle || defaultProps.navbarStyle,
+    debug: settings?.debug
   };
+
+  /**
+   * Set up ConsoleLogger whenever the `params.debug` change.
+   */
+  React.useEffect(() => {
+    ConsoleLogger.new(params.debug);
+  }, [params.debug]);
 
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
