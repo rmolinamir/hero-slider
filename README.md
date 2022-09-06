@@ -12,10 +12,6 @@ This package contains multiple components with a fair range of options to help d
 
 The idea behind the configurability was to set up clear boundaries between *modules* and *components*. The modules will control the behavior of the `hero-slider`, while the components themselves are self explanatory and mostly relevant to styling. The documentation will be divided in two main sections, `Module`, and `Components`.
 
----
-
-## [Showcase](https://www.robertmolina.dev/codelab/hero-slider)
-
 [![Edit Hero Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/z6kky9oy63?fontsize=14)
 
 ![Navbar Slider](https://media.giphy.com/media/KeW8omQCSShZdNQMuy/giphy.gif)
