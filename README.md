@@ -2,7 +2,7 @@
 
 > This package contains multiple components with a fair range of options to help developers quickly set up a hero slider.
 
-[![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-11.6kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
+[![Storybook](https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg)](https://rmolinamir.github.io/hero-slider/?path=/story/example-hero-slider--basic) [![NPM](https://img.shields.io/npm/v/hero-slider.svg)](https://www.npmjs.com/package/hero-slider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![gzip size](https://img.shields.io/badge/gzip%20size-11.6kB-brightgreen.svg)](https://unpkg.com/hero-slider@latest/dist/index.es.js)
 
 ---
 
