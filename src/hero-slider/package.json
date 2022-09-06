@@ -5,6 +5,7 @@
   "description": "This package contains multiple components with a fair range of options to help developers quickly set up a hero slider.",
   "author": "rmolinamir",
   "license": "MIT",
+  "keywords": ["react", "react-component", "hero-slider", "slider", "slide", "carousel"],
   "repository": "rmolinamir/hero-slider",
   "exports": {
     ".": {
