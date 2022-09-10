@@ -7,31 +7,6 @@
   "license": "MIT",
   "keywords": ["react", "react-component", "hero-slider", "slider", "slide", "carousel"],
   "repository": "rmolinamir/hero-slider",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/*.js",
-      "types": "./dist/*.d.ts"
-    },
-    "./**/*": {
-      "import": "./dist/**/*.js",
-      "require": "./dist/**/*.js",
-      "types": "./dist/**/*.d.ts"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*.d.ts",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
