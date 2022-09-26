@@ -14,10 +14,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "deploy": "gh-pages -d example/build",
     "dev": "pnpm watch",
     "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
-    "predeploy": "cd example && npm install && npm run build",
     "prepublish": "pnpm build",
     "prestart": "pnpm prebuild",
     "start": "rollup -c -w",
