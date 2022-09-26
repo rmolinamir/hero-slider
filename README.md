@@ -30,7 +30,7 @@ The modules are clear boundaries that define the overall behavior of the `HeroSl
 This module will define the behavior slide transitions. You can set up the duration of the transitions, delays before the transitions begin, the initial active slide, callbacks for the transition events, and pointers to methods that will slide to the previous or next slides relative to the active slide.
 
 ```ts
-export interface ControllerProps {
+interface ControllerProps {
   /**
    * Sliding duration, in milliseconds.
    * @default 500
@@ -86,7 +86,7 @@ export interface ControllerProps {
 Defines which sliding animations will be used during slide transitions.
 
 ```ts
-export interface AnimationsProps {
+interface AnimationsProps {
   /**
    * The sliding animations during transitions.
    * @default 'wipe'
@@ -138,7 +138,7 @@ interface Props {
   autoplayDebounce?: number;
 }
 
-export type AutoplayProps = Props | boolean;
+type AutoplayProps = Props | boolean;
 ```
 
 ### Accessability
@@ -151,12 +151,12 @@ Handles accessability behaviors such as the orientation of the Slider (which aff
  * Used to define which swipes (depending on directions) will change the slides,
  * and where and how will the buttons render, if set to render.
  */
-export enum AccessabilityOrientation {
+enum AccessabilityOrientation {
   VERTICAL = 'vertical',
   HORIZONTAL = 'horizontal'
 }
 
-export interface AccessabilityProps {
+interface AccessabilityProps {
   /**
    * Controls render of the next and previous buttons.
    * @default true
@@ -189,7 +189,7 @@ export interface AccessabilityProps {
 The settings will allow you to set up CSS variables that will be available to HTML elements inside the slider, as well as debugging levels in case you are running into problems.
 
 ```ts
-export interface SettingsProps {
+interface SettingsProps {
   /**
    * Sets up the `--slider-color` CSS variable.
    * @default 'inherit'
@@ -232,7 +232,7 @@ export interface SettingsProps {
 The `Manager` will juggle the `Slide` components and from other processes behind the scenes. You can optionally set up whether the user is on a mobile device, but this will default to a standard navigator validation.
 
 ```ts
-export interface ManagerProps {
+interface ManagerProps {
   /**
    * Determines if on a mobile device. If true, the control buttons at the sides of the slider won't render.
    * @default /Mobi|Android/i.test(navigator.userAgent)
@@ -249,7 +249,7 @@ This package offers multiple components. Below you will find instructions for ea
 
 ### HeroSlider
 
-The main component and default export of the package. The `HeroSlider` has wrap all of the other components, otherwise you will run into errors due to a lack of Context providers.
+The main component and default of the package. The `HeroSlider` has wrap all of the other components, otherwise you will run into errors due to a lack of Context providers.
 
 `HeroSlider` accepts the following props:
 
@@ -257,8 +257,11 @@ The main component and default export of the package. The `HeroSlider` has wrap 
 /**
  * `HeroSlider` props.
  */
-export interface HeroSliderProps {
-  // Styling
+interface HeroSliderProps {
+  /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
   /**
    * CSS property. Defines the width of the slider.
    * @default '100%'
@@ -273,6 +276,7 @@ export interface HeroSliderProps {
    * Inline CSS styling.
    */
   style?: Omit<React.CSSProperties, 'width' | 'height'>;
+
   // Modules
   manager?: ManagerProps;
   settings?: SettingsProps;
@@ -318,7 +322,11 @@ The `Slide` component accepts the following props:
 /**
  * `Slide` component props.
  */
-export interface SlideProps {
+interface SlideProps {
+  /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
   /**
    * Each slide has a "Mask" that serves as an adornment.
    * They mimic the background, then offsets it a bit. It has an animation during slide transitions.
@@ -355,7 +363,7 @@ The background of the `Slide` components can be configured just as you would con
 /**
  * Type definition for `BackgroundProps.backgroundAnimation`.
  */
-export enum BackgroundAnimation {
+enum BackgroundAnimation {
   FADE = 'fade',
   ZOOM = 'zoom'
 }
@@ -366,59 +374,7 @@ export enum BackgroundAnimation {
  * The `Slide` components `background` prop is also defined
  * by `BackgroundProps`.
  */
-export interface BackgroundProps {
-  /**
-   * Boolean variable to allow or disable lazy loading.
-   * @default true
-   */
-  shouldLazyLoad?: boolean;
-  backdropFilter?: CSS.Properties['backdropFilter'];
-  backfaceVisibility?: CSS.Properties['backfaceVisibility'];
-  background?: CSS.Properties['background'];
-  backgroundAttachment?: CSS.Properties['backgroundAttachment'];
-  backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
-  backgroundClip?: CSS.Properties['backgroundClip'];
-  backgroundColor?: CSS.Properties['backgroundColor'];
-  /**
-   * Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`.
-   */
-  backgroundImage?: CSS.Properties['backgroundImage'];
-  backgroundOrigin?: CSS.Properties['backgroundOrigin'];
-  /**
-   * CSS property. Defines the position of the background.
-   * @default 'center top'
-   */
-  backgroundPosition?: CSS.Properties['backgroundPosition'];
-  backgroundPositionX?: CSS.Properties['backgroundPositionX'];
-  backgroundPositionY?: CSS.Properties['backgroundPositionY'];
-  backgroundRepeat?: CSS.Properties['backgroundRepeat'];
-  /**
-   * CSS property. Defines the size of the background.
-   * @default 'cover'
-   */
-  backgroundSize?: CSS.Properties['backgroundSize'];
-  backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
-  backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
-  /**
-   * Background animation after the image loads.
-   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
-   * @default 'fade'
-   */
-  backgroundAnimation?: `${BackgroundAnimation}`;
-  /**
-   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
-   */
-  maskBackgroundBlendMode?:
-    | 'normal'
-    | 'multiply'
-    | 'screen'
-    | 'overlay'
-    | 'darken'
-    | 'lighten'
-    | 'color-dodge'
-    | 'saturation'
-    | 'color'
-    | 'luminosity';
+interface BackgroundProps {
   /**
    * CSS property. Defines the width of the background.
    * @default '100%'
@@ -429,8 +385,34 @@ export interface BackgroundProps {
    * @default '100%'
    */
   height?: CSS.Properties['height'];
-  alt?: string;
-  src?: string;
+  backgroundColor?: CSS.Properties['backgroundColor'];
+  backgroundAnimationDuration?: CSS.Properties['animationDuration'];
+  backgroundAnimationDelay?: CSS.Properties['animationDelay'];
+  /**
+   * Background animation after the image loads.
+   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
+   * @default 'fade'
+   */
+  backgroundAnimation?: `${BackgroundAnimation}`;
+  /**
+   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
+   */
+  maskBackgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
+  /**
+   * Background image.
+   */
+  backgroundImageClassName?: HTMLImageElement['sizes'];
+  backgroundImageBlendMode?: CSS.Properties['mixBlendMode'];
+  backgroundImageSizes?: HTMLImageElement['sizes'];
+  backgroundImageSrcSet?: HTMLImageElement['srcset'];
+  backgroundImageSrc?: HTMLImageElement['src'];
+  backgroundImageAlt?: HTMLImageElement['alt'];
+  backgroundImageStyle?: React.CSSProperties;
+  /**
+   * Boolean variable to allow or disable lazy loading.
+   * @default true
+   */
+  shouldLazyLoad?: boolean;
   onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 ```
@@ -455,7 +437,7 @@ The basic `Nav` component, worth noting that there are three other types of (sli
 /**
  * Defines the position of the navigation component.
  */
-export interface NavPosition {
+interface NavPosition {
   top?: React.CSSProperties['top'];
   left?: React.CSSProperties['left'];
   bottom?: React.CSSProperties['bottom'];
@@ -466,7 +448,7 @@ export interface NavPosition {
 /**
  * `Nav` component props.
  */
-export interface NavProps {
+interface NavProps {
   /**
    * Object of CSS properties `top`, `left`, `bottom`, and `right` used to absolutely position elements.
    * Aside from the former, you can also set the CSS `transform` property to help you center the element.
@@ -521,7 +503,7 @@ When it comes to props it extends the props of the `Nav` component. There are a 
 /**
  * `SideNav` component props.
  */
-export interface SideNavProps extends NavProps {
+interface SideNavProps extends NavProps {
   /**
    * Defines the inline CSS property `right` of the component.
    */
@@ -586,7 +568,7 @@ Extends from the `Nav` component, with a few additional props.
 /**
  * `MenuNav` component props.
  */
-export interface MenuNavProps extends NavProps {
+interface MenuNavProps extends NavProps {
   /**
    * Determines how the browser distributes space between and around nav items along the component.
    */
@@ -639,7 +621,7 @@ The `backgroundColor` sets the background of the buttons, while the `color` prop
 /**
  * `ButtonsNav` component props.
  */
-export interface ButtonsNavProps extends MenuNavProps {
+interface ButtonsNavProps extends MenuNavProps {
   /**
    * CSS background color property for the nav buttons.
    */
@@ -661,7 +643,7 @@ You can position it just like you would position a navigation component by using
 /**
  * `AutoplayButton` component props.
  */
-export interface AutoplayButtonProps {
+interface AutoplayButtonProps {
   /**
    * CSS class name.
    */
@@ -701,6 +683,18 @@ export interface AutoplayButtonProps {
 ### Overlay
 
 The `Overlay` is a useful component that will superpose its children over the content of the `Slide` components.
+
+```ts
+/**
+ * `Overlay` component props.
+ */
+interface OverlayProps {
+  /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
+}
+```
 
 #### Overlay Example
 

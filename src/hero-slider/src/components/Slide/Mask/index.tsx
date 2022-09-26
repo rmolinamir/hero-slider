@@ -23,7 +23,7 @@ export default function Mask({ background, isActive }: MaskProps) {
   const style: React.CSSProperties = {
     backgroundColor: background?.backgroundColor,
     backgroundBlendMode: background?.maskBackgroundBlendMode,
-    backgroundImage: `url('${background?.backgroundImage}')`
+    backgroundImage: `url('${background?.backgroundImageSrc}')`
   };
 
   const isLoaded = className === MaskModuleCss.Loaded;
@@ -38,10 +38,10 @@ export default function Mask({ background, isActive }: MaskProps) {
       )}
     >
       <img
-        alt={background?.alt || ''}
+        alt={background?.backgroundImageAlt || ''}
         className={MaskModuleCss.Loader}
         onLoad={onLoadHandler}
-        src={background?.backgroundImage}
+        src={background?.backgroundImageSrc}
         loading={background?.shouldLazyLoad ? 'lazy' : 'eager'}
       />
       {isLoaded && (

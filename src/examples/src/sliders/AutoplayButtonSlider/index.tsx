@@ -20,9 +20,6 @@ export default function AutoplayButtonSlider() {
         autoplayDuration: 2000,
         autoplayDebounce: 0
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Overlay>
         <Wrapper>
@@ -36,7 +33,7 @@ export default function AutoplayButtonSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: kyoto,
+          backgroundImageSrc: kyoto,
           backgroundAnimation: 'fade'
         }}
       />
@@ -46,7 +43,7 @@ export default function AutoplayButtonSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: tenryuJiTemple,
+          backgroundImageSrc: tenryuJiTemple,
           backgroundAnimation: 'fade'
         }}
       />
@@ -56,7 +53,7 @@ export default function AutoplayButtonSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: hakone,
+          backgroundImageSrc: hakone,
           backgroundAnimation: 'fade'
         }}
       />
@@ -66,7 +63,7 @@ export default function AutoplayButtonSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: byodoInTemple,
+          backgroundImageSrc: byodoInTemple,
           backgroundAnimation: 'fade'
         }}
       />

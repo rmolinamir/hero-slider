@@ -18,9 +18,6 @@ export default function BlendModeSlider() {
         slidingDuration: 400,
         slidingDelay: 100
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Overlay>
         <Wrapper>
@@ -41,9 +38,9 @@ export default function BlendModeSlider() {
         label="Rocky Waterfall"
         background={{
           backgroundColor: '#2D7791',
-          backgroundBlendMode: 'luminosity',
-          maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: rockyWaterfall
+          backgroundImageBlendMode: 'luminosity',
+          backgroundImageSrc: rockyWaterfall,
+          maskBackgroundBlendMode: 'luminosity'
         }}
       />
 
@@ -52,9 +49,9 @@ export default function BlendModeSlider() {
         label="Palau - Pacific Ocean"
         background={{
           backgroundColor: '#8A8A8A',
-          backgroundBlendMode: 'luminosity',
-          maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: palauPacificOcean
+          backgroundImageBlendMode: 'luminosity',
+          backgroundImageSrc: palauPacificOcean,
+          maskBackgroundBlendMode: 'luminosity'
         }}
       />
 
@@ -63,9 +60,9 @@ export default function BlendModeSlider() {
         label="Quepos - Costa Rica"
         background={{
           backgroundColor: '#EA2329',
-          backgroundBlendMode: 'luminosity',
-          maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: queposCostaRica
+          backgroundImageBlendMode: 'luminosity',
+          backgroundImageSrc: queposCostaRica,
+          maskBackgroundBlendMode: 'luminosity'
         }}
       />
 
@@ -74,9 +71,9 @@ export default function BlendModeSlider() {
         label="Mountain View"
         background={{
           backgroundColor: '#6D9B98',
-          backgroundBlendMode: 'luminosity',
-          maskBackgroundBlendMode: 'luminosity',
-          backgroundImage: mountainView
+          backgroundImageBlendMode: 'luminosity',
+          backgroundImageSrc: mountainView,
+          maskBackgroundBlendMode: 'luminosity'
         }}
       />
 

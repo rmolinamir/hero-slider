@@ -21,9 +21,6 @@ export default function NavbarSlider() {
         slidingDuration: 400,
         slidingDelay: 100
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Overlay>
         <Navbar />
@@ -37,8 +34,7 @@ export default function NavbarSlider() {
         shouldRenderMask
         label="Kyoto - Japan"
         background={{
-          backgroundColor: '#6D9B98',
-          backgroundImage: kyoto
+          backgroundImageSrc: kyoto
         }}
       />
 
@@ -46,8 +42,7 @@ export default function NavbarSlider() {
         shouldRenderMask
         label="Tenryu-ji Temple - KyÅto-shi - Japan"
         background={{
-          backgroundColor: '#8A8A8A',
-          backgroundImage: tenryuJiTemple
+          backgroundImageSrc: tenryuJiTemple
         }}
       />
 
@@ -55,8 +50,7 @@ export default function NavbarSlider() {
         shouldRenderMask
         label="Hakone - Japan"
         background={{
-          backgroundColor: '#EA2329',
-          backgroundImage: hakone
+          backgroundImageSrc: hakone
         }}
       />
 
@@ -64,8 +58,7 @@ export default function NavbarSlider() {
         shouldRenderMask
         label="Byodo-In Temple - Kaneohe - United States"
         background={{
-          backgroundColor: '#2D7791',
-          backgroundImage: byodoInTemple
+          backgroundImageSrc: byodoInTemple
         }}
       />
 

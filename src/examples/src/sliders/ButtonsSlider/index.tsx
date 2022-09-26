@@ -25,9 +25,6 @@ export default function ButtonsSlider() {
         goToNextSlidePointer: goToNextSlidePointer,
         goToPreviousSlidePointer: goToPreviousSlidePointer
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Overlay>
         <Wrapper>
@@ -63,7 +60,7 @@ export default function ButtonsSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'multiply',
-          backgroundImage: bogliasco,
+          backgroundImageSrc: bogliasco,
           backgroundAnimation: 'fade'
         }}
       />
@@ -73,7 +70,7 @@ export default function ButtonsSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'multiply',
-          backgroundImage: countyClare,
+          backgroundImageSrc: countyClare,
           backgroundAnimation: 'fade'
         }}
       />
@@ -83,7 +80,7 @@ export default function ButtonsSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'multiply',
-          backgroundImage: craterRock,
+          backgroundImageSrc: craterRock,
           backgroundAnimation: 'fade'
         }}
       />
@@ -93,7 +90,7 @@ export default function ButtonsSlider() {
         background={{
           backgroundColor: '#8A8A8A',
           maskBackgroundBlendMode: 'multiply',
-          backgroundImage: giauPass,
+          backgroundImageSrc: giauPass,
           backgroundAnimation: 'fade'
         }}
       />

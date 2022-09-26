@@ -17,9 +17,6 @@ export default function VerticalSlider() {
         slidingDuration: 400,
         slidingDelay: 100
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Overlay>
         <Wrapper>
@@ -37,9 +34,8 @@ export default function VerticalSlider() {
         shouldRenderMask
         label="Black Widow"
         background={{
-          backgroundAttachment: 'fixed',
           backgroundColor: '#6D9B98',
-          backgroundImage: salta
+          backgroundImageSrc: salta
         }}
       />
 
@@ -47,9 +43,8 @@ export default function VerticalSlider() {
         shouldRenderMask
         label="Captain America"
         background={{
-          backgroundAttachment: 'fixed',
           backgroundColor: '#8A8A8A',
-          backgroundImage: scharbeutz
+          backgroundImageSrc: scharbeutz
         }}
       />
 
@@ -57,9 +52,8 @@ export default function VerticalSlider() {
         shouldRenderMask
         label="Iron Man"
         background={{
-          backgroundAttachment: 'fixed',
           backgroundColor: '#EA2329',
-          backgroundImage: selvaDiValGardena
+          backgroundImageSrc: selvaDiValGardena
         }}
       />
 
@@ -67,9 +61,8 @@ export default function VerticalSlider() {
         shouldRenderMask
         label="Thor"
         background={{
-          backgroundAttachment: 'fixed',
           backgroundColor: '#2D7791',
-          backgroundImage: seoraksanMountains
+          backgroundImageSrc: seoraksanMountains
         }}
       />
 

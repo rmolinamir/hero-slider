@@ -1,6 +1,6 @@
 {
   "name": "hero-slider",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "private": false,
   "description": "This package contains multiple components with a fair range of options to help developers quickly set up a hero slider.",
   "author": "rmolinamir",
@@ -26,31 +26,32 @@
     "watch": "tsc --project tsconfig.build.json --watch"
   },
   "dependencies": {
-    "react-intersection-observer": "9.4.0",
-    "react-lazy-load": "4.0.0"
+    "react-intersection-observer": "9.4.0"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "16 - 18",
+    "react-dom": "16 - 18"
   },
   "devDependencies": {
+    "@config/eslint": "workspace:*",
+    "@config/tsconfig": "workspace:*",
     "@rollup/plugin-commonjs": "22.0.2",
-    "@rollup/plugin-node-resolve": "13.3.0",
-    "@rollup/plugin-typescript": "8.4.0",
+    "@rollup/plugin-node-resolve": "14.1.0",
+    "@rollup/plugin-typescript": "8.5.0",
     "@svgr/rollup": "6.3.1",
-    "@types/node": "18.7.13",
-    "@types/react": "18.0.17",
+    "@types/node": "18.7.22",
+    "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@types/react-lazyload": "3.2.0",
-    "csstype": "3.1.0",
+    "csstype": "3.1.1",
     "gh-pages": "4.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
-    "rollup": "2.78.1",
+    "rollup": "2.79.1",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-postcss": "4.0.2",
     "tslib": "2.4.0",
-    "typescript": "4.8.2"
+    "typescript": "4.8.3"
   }
 }

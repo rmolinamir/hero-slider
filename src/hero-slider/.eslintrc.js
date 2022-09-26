@@ -1,1 +1,1 @@
-module.exports = require('../../config/eslint/react-preset');
+module.exports = require('@config/eslint/react-preset');

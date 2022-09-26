@@ -10,7 +10,7 @@ import giauPass from './backgrounds/Giau Pass - Italy.jpg';
 export default function DebugSlider() {
   return (
     <HeroSlider
-      height={'100vh'}
+      height="100vh"
       autoplay={{
         autoplayDuration: 100,
         autoplayDebounce: 500
@@ -55,32 +55,28 @@ export default function DebugSlider() {
       <Slide
         label="Giau Pass - Italy"
         background={{
-          backgroundImage: giauPass,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: giauPass
         }}
       />
 
       <Slide
         label="Bogliasco - Italy"
         background={{
-          backgroundImage: bogliasco,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: bogliasco
         }}
       />
 
       <Slide
         label="County Clare - Ireland"
         background={{
-          backgroundImage: countyClare,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: countyClare
         }}
       />
 
       <Slide
         label="Crater Rock, OR - United States"
         background={{
-          backgroundImage: craterRock,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: craterRock
         }}
       />
 

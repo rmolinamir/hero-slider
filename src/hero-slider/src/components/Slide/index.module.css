@@ -25,6 +25,7 @@
 .Slide {
   /* property name | duration | timing function | delay */
   transition: transform 0ms ease-in-out var(--sliding-delay, 0ms);
+  will-change: transform;
 }
 
 .Slide:not(.Active) {
@@ -37,7 +38,8 @@
 .Container {
   backface-visibility: hidden;
   /* property name | duration | timing function | delay */
-  transition: all 300ms ease-in-out var(--sliding-delay, 200ms);;
+  transition: all 300ms ease-in-out var(--sliding-delay, 200ms);
+  will-change: transform;
 }
 
 .Container:not(.Active) {

@@ -2,7 +2,14 @@ import React from 'react';
 import { composeCssClasses } from '../../utils/composeCssClasses';
 import OverlayModuleCss from './index.module.css';
 
-export function Overlay(props: React.PropsWithChildren) {
+interface OverlayProps {
+  /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
+}
+
+export function Overlay(props: React.PropsWithChildren<OverlayProps>) {
   return (
     <div
       className={composeCssClasses(

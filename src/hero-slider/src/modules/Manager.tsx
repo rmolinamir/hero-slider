@@ -9,7 +9,7 @@ type Slide = {
 export interface ManagerProps {
   /**
    * Determines if on a mobile device. If true, the control buttons at the sides of the slider won't render.
-   * @default /Mobi|Android/i.test(navigator.userAgent)
+   * @default /Mobi|Android/i.test(navigator.userAgentData || navigator.userAgent)
    */
   isMobile?: boolean;
 }
@@ -51,10 +51,16 @@ type ProviderProps = React.PropsWithChildren<{ manager?: ManagerProps }>;
 function isMobile(): boolean {
   // But first, detect if running on the browser in case of SSR:
   const isBrowser = typeof window !== 'undefined';
+
   if (isBrowser) {
-    if (navigator && /Mobi|Android/i.test(navigator.userAgent)) return true;
+    if (
+      navigator &&
+      /Mobi|Android/i.test(navigator.userAgentData || navigator.userAgent)
+    )
+      return true;
     else return false;
   }
+
   return false;
 }
 

@@ -23,7 +23,7 @@ export default function ZoomSlider() {
       <Slide
         label="Hallstatt - Austria"
         background={{
-          backgroundImage: hallstatt,
+          backgroundImageSrc: hallstatt,
           backgroundAnimation: 'zoom'
         }}
       />
@@ -31,7 +31,7 @@ export default function ZoomSlider() {
       <Slide
         label="Hvitserkur - Iceland"
         background={{
-          backgroundImage: hvitserkur,
+          backgroundImageSrc: hvitserkur,
           backgroundAnimation: 'zoom'
         }}
       />
@@ -39,7 +39,7 @@ export default function ZoomSlider() {
       <Slide
         label="Jacksonville - USA"
         background={{
-          backgroundImage: jacksonville,
+          backgroundImageSrc: jacksonville,
           backgroundAnimation: 'zoom'
         }}
       />
@@ -47,7 +47,7 @@ export default function ZoomSlider() {
       <Slide
         label="Moraine Lake - Canada"
         background={{
-          backgroundImage: moraineLake,
+          backgroundImageSrc: moraineLake,
           backgroundAnimation: 'zoom'
         }}
       />

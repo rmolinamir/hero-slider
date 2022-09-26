@@ -1,7 +1,6 @@
 import HeroSlider, { Slide, Overlay, Nav } from 'hero-slider';
 import Wrapper from '../../ui/Wrapper';
 import Title from '../../ui/Title';
-import Subtitle from '../../ui/Subtitle';
 import bogliasco from './backgrounds/Bogliasco - Italy.jpg';
 import countyClare from './backgrounds/County Clare - Ireland.jpg';
 import craterRock from './backgrounds/Crater Rock - United States.jpg';
@@ -10,7 +9,7 @@ import giauPass from './backgrounds/Giau Pass - Italy.jpg';
 export default function BasicSlider() {
   return (
     <HeroSlider
-      height={'100vh'}
+      height="100vh"
       autoplay
       controller={{
         initialSlide: 1,
@@ -31,42 +30,34 @@ export default function BasicSlider() {
       <Overlay>
         <Wrapper>
           <Title>Basic Setup</Title>
-          <Subtitle>
-            The <code>backgroundAttachment</code> prop of the <code>Slide</code>{' '}
-            components set to <code>fixed</code>.
-          </Subtitle>
         </Wrapper>
       </Overlay>
 
       <Slide
         label="Giau Pass - Italy"
         background={{
-          backgroundImage: giauPass,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: giauPass
         }}
       />
 
       <Slide
         label="Bogliasco - Italy"
         background={{
-          backgroundImage: bogliasco,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: bogliasco
         }}
       />
 
       <Slide
         label="County Clare - Ireland"
         background={{
-          backgroundImage: countyClare,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: countyClare
         }}
       />
 
       <Slide
         label="Crater Rock, OR - United States"
         background={{
-          backgroundImage: craterRock,
-          backgroundAttachment: 'fixed'
+          backgroundImageSrc: craterRock
         }}
       />
 

@@ -19,58 +19,6 @@ export enum BackgroundAnimation {
  */
 export interface BackgroundProps {
   /**
-   * Boolean variable to allow or disable lazy loading.
-   * @default true
-   */
-  shouldLazyLoad?: boolean;
-  backdropFilter?: CSS.Properties['backdropFilter'];
-  backfaceVisibility?: CSS.Properties['backfaceVisibility'];
-  background?: CSS.Properties['background'];
-  backgroundAttachment?: CSS.Properties['backgroundAttachment'];
-  backgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
-  backgroundClip?: CSS.Properties['backgroundClip'];
-  backgroundColor?: CSS.Properties['backgroundColor'];
-  /**
-   * Background image. **Not the same as the CSS property**, just pass the `string` uri, not the typical `url([link])`.
-   */
-  backgroundImage?: CSS.Properties['backgroundImage'];
-  backgroundOrigin?: CSS.Properties['backgroundOrigin'];
-  /**
-   * CSS property. Defines the position of the background.
-   * @default 'center top'
-   */
-  backgroundPosition?: CSS.Properties['backgroundPosition'];
-  backgroundPositionX?: CSS.Properties['backgroundPositionX'];
-  backgroundPositionY?: CSS.Properties['backgroundPositionY'];
-  backgroundRepeat?: CSS.Properties['backgroundRepeat'];
-  /**
-   * CSS property. Defines the size of the background.
-   * @default 'cover'
-   */
-  backgroundSize?: CSS.Properties['backgroundSize'];
-  backgroundAnimationDuration?: CSS.Properties['backgroundSize'];
-  backgroundAnimationDelay?: CSS.Properties['backgroundSize'];
-  /**
-   * Background animation after the image loads.
-   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
-   * @default 'fade'
-   */
-  backgroundAnimation?: `${BackgroundAnimation}`;
-  /**
-   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
-   */
-  maskBackgroundBlendMode?:
-    | 'normal'
-    | 'multiply'
-    | 'screen'
-    | 'overlay'
-    | 'darken'
-    | 'lighten'
-    | 'color-dodge'
-    | 'saturation'
-    | 'color'
-    | 'luminosity';
-  /**
    * CSS property. Defines the width of the background.
    * @default '100%'
    */
@@ -80,81 +28,112 @@ export interface BackgroundProps {
    * @default '100%'
    */
   height?: CSS.Properties['height'];
-  alt?: string;
-  src?: string;
+  backgroundColor?: CSS.Properties['backgroundColor'];
+  backgroundAnimationDuration?: CSS.Properties['animationDuration'];
+  backgroundAnimationDelay?: CSS.Properties['animationDelay'];
+  /**
+   * Background animation after the image loads.
+   * There are currently two options, a fade-in animation, or a zoom in animation that lasts 30 secs, the background zooms in until it reaches its original size.
+   * @default 'fade'
+   */
+  backgroundAnimation?: `${BackgroundAnimation}`;
+  /**
+   * Background blend mode CSS property **for the optional mask that could render in each of the Slide components**.
+   */
+  maskBackgroundBlendMode?: CSS.Properties['backgroundBlendMode'];
+  /**
+   * Background image.
+   */
+  backgroundImageClassName?: HTMLImageElement['sizes'];
+  backgroundImageBlendMode?: CSS.Properties['mixBlendMode'];
+  backgroundImageSizes?: HTMLImageElement['sizes'];
+  backgroundImageSrcSet?: HTMLImageElement['srcset'];
+  backgroundImageSrc?: HTMLImageElement['src'];
+  backgroundImageAlt?: HTMLImageElement['alt'];
+  backgroundImageStyle?: React.CSSProperties;
+  /**
+   * Boolean variable to allow or disable lazy loading.
+   * @default true
+   */
+  shouldLazyLoad?: boolean;
   onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 
 export default function Background(props: BackgroundProps) {
   const {
+    backgroundAnimation = BackgroundAnimation.FADE,
+    backgroundImageClassName,
+    backgroundImageBlendMode,
+    backgroundImageSizes,
+    backgroundImageSrcSet,
+    backgroundImageSrc,
+    backgroundImageAlt,
+    backgroundImageStyle,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    maskBackgroundBlendMode: _, // Not used.
     shouldLazyLoad = true,
-    width,
-    height,
     onLoad,
-    alt,
     ...background
   } = props;
 
-  const { backgroundImage, backgroundAnimation = BackgroundAnimation.FADE } =
-    background;
-
-  /**
-   * If there is no `backgroundImage`, then there is no need to:
-   * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
-   * - `img` tag element will not render.
-   */
-  const [className, setClassName] = React.useState(
-    backgroundImage ? BackgroundModuleCss.Loading : BackgroundModuleCss.Loaded
-  );
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   const onLoadHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ): void => {
     if (onLoad) onLoad(event);
 
-    const className = [BackgroundModuleCss.Loaded];
+    setIsLoaded(true);
+  };
 
+  /**
+   * If there is no `backgroundImageSrc`, then there is no need to:
+   * - Add the `Loading` class is not needed, instead the default class is `Loaded`.
+   * - `img` tag element will not render.
+   */
+  const imageBackgroundClassNames: string[] = [];
+
+  if (isLoaded) {
+    imageBackgroundClassNames.push(BackgroundModuleCss.Loaded);
     switch (backgroundAnimation) {
       case BackgroundAnimation.ZOOM:
-        className.push(BackgroundModuleCss.ZoomOut);
+        imageBackgroundClassNames.push(BackgroundModuleCss.ZoomOut);
         break;
       case BackgroundAnimation.FADE:
-        className.push(BackgroundModuleCss.FadeIn);
+        imageBackgroundClassNames.push(BackgroundModuleCss.FadeIn);
         break;
     }
+  } else {
+    imageBackgroundClassNames.push(BackgroundModuleCss.Loading);
+  }
 
-    setClassName(className.join(' '));
-  };
-
-  const style: React.CSSProperties = {
-    backgroundPosition: 'center top',
-    backgroundSize: 'cover',
-    width: width || '100%',
-    height: height || '100%',
-    ...background,
-    backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined
-  };
-
-  const content = (
-    <>
-      {backgroundImage && (
-        <img
-          className={composeCssClasses(
-            'hero-slider-slide-background-loader',
-            BackgroundModuleCss.Loader
-          )}
-          onLoad={onLoadHandler}
-          alt={alt}
-          loading={shouldLazyLoad ? 'lazy' : 'eager'}
-          src={backgroundImage}
-        />
+  return (
+    <div
+      className={composeCssClasses(
+        'hero-slider-slide-background',
+        backgroundImageClassName,
+        BackgroundModuleCss.Background
       )}
-      <div
-        style={style}
-        className={composeCssClasses('hero-slider-slide-background', className)}
+      style={background}
+    >
+      <img
+        className={composeCssClasses(
+          'hero-slider-slide-background-image',
+          backgroundImageClassName,
+          BackgroundModuleCss.Image,
+          ...imageBackgroundClassNames
+        )}
+        sizes={backgroundImageSizes}
+        srcSet={backgroundImageSrcSet}
+        src={backgroundImageSrc}
+        alt={backgroundImageAlt}
+        style={{
+          mixBlendMode: backgroundImageBlendMode,
+          ...backgroundImageStyle
+        }}
+        onLoad={onLoadHandler}
+        loading={shouldLazyLoad ? 'lazy' : 'eager'}
       />
-    </>
+    </div>
   );
-
-  return shouldLazyLoad ? <div>{content}</div> : content;
 }

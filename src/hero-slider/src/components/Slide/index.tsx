@@ -15,6 +15,10 @@ const logger = ConsoleLogger.new();
  */
 export interface SlideProps {
   /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
+  /**
    * Each slide has a "Mask" that serves as an adornment.
    * They mimic the background, then offsets it a bit. It has an animation during slide transitions.
    * @default false
@@ -43,6 +47,7 @@ export interface SlideProps {
 
 export function Slide(props: React.PropsWithChildren<SlideProps>) {
   const {
+    className,
     shouldRenderMask = false,
     style,
     background,
@@ -66,7 +71,7 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
   logger.info('[Slide] rerender', 'slide.number: ', slide?.number);
 
   const [classNames, setClassNames] = React.useState(
-    composeCssClasses('hero-slider-slide', SlideModuleCss.Slide)
+    composeCssClasses('hero-slider-slide', SlideModuleCss.Slide, className)
   );
 
   const isActive = activeSlide === slide?.number;

@@ -41,7 +41,10 @@ const logger = ConsoleLogger.new();
  * `HeroSlider` props.
  */
 export interface HeroSliderProps {
-  // Styling
+  /**
+   * Slider className.
+   */
+  className?: React.HTMLProps<HTMLDivElement>['className'];
   /**
    * CSS property. Defines the width of the slider.
    * @default '100%'
@@ -56,6 +59,7 @@ export interface HeroSliderProps {
    * Inline CSS styling.
    */
   style?: Omit<React.CSSProperties, 'width' | 'height'>;
+
   // Modules
   manager?: ManagerProps;
   settings?: SettingsProps;
@@ -66,12 +70,13 @@ export interface HeroSliderProps {
 }
 
 function Orchestrator({
+  className,
   width = '100%',
   height = '100vh',
   style,
   children
 }: React.PropsWithChildren<
-  Pick<HeroSliderProps, 'width' | 'height' | 'style'>
+  Pick<HeroSliderProps, 'className' | 'width' | 'height' | 'style'>
 >) {
   logger.info('[Orchestrator] rerender');
 
@@ -110,7 +115,10 @@ function Orchestrator({
   };
 
   return (
-    <div className="hero-slider-root" ref={elementObservedRef}>
+    <div
+      className={composeCssClasses('hero-slider-root', className)}
+      ref={elementObservedRef}
+    >
       <div
         ref={layout.slider}
         className={composeCssClasses(
@@ -148,6 +156,7 @@ export default function HeroSlider(
                 <IntersectionObserverProvider>
                   <AutoplayProvider autoplay={props.autoplay}>
                     <Orchestrator
+                      className={props.className}
                       width={props.width}
                       height={props.height}
                       style={props.style}

@@ -16,13 +16,10 @@ export default function SlidesWithContentSlider() {
         slidingDuration: 600,
         slidingDelay: 100
       }}
-      style={{
-        backgroundColor: '#000'
-      }}
     >
       <Slide
         background={{
-          backgroundImage: salta
+          backgroundImageSrc: salta
         }}
       >
         <Wrapper>
@@ -32,7 +29,7 @@ export default function SlidesWithContentSlider() {
 
       <Slide
         background={{
-          backgroundImage: scharbeutz
+          backgroundImageSrc: scharbeutz
         }}
       >
         <Wrapper>
@@ -42,7 +39,7 @@ export default function SlidesWithContentSlider() {
 
       <Slide
         background={{
-          backgroundImage: selvaDiValGardena
+          backgroundImageSrc: selvaDiValGardena
         }}
       >
         <Wrapper>
@@ -52,7 +49,7 @@ export default function SlidesWithContentSlider() {
 
       <Slide
         background={{
-          backgroundImage: seoraksanMountains
+          backgroundImageSrc: seoraksanMountains
         }}
       >
         <Wrapper>

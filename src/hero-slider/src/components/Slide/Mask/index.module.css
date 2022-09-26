@@ -11,6 +11,7 @@
   clip-path: polygon(0% 0%, 0% 100%, 16% 100%, 15% 15%, 85% 15%, 85% 85%, 15% 85%, 16% 100%, 100% 100%, 100% 0%);
   transform: translate3d(-33.33%, -50%, 0);
   transition: all calc(var(--mask-duration, 200ms) * 1.5) ease 0s;
+  will-change: transform;
 }
 
 .Mask:not(.Active) {
@@ -34,6 +35,7 @@
   -webkit-transform-origin: 50% 16.5vh;
   transform-origin: 50% 16.5vh;
   transition: all calc(var(--mask-duration, 200ms) * 1.66) ease 0s;
+  will-change: transform;
 }
 
 .Inner.Sliding {

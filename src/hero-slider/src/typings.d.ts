@@ -7,4 +7,10 @@ declare module '*.css' {
   export default content;
 }
 
-type SvgrComponent = React.StatelessComponent<React.SVGAttributes<SVGElement>>;
+// WICG Spec: https://wicg.github.io/ua-client-hints
+declare interface Navigator extends NavigatorUA {}
+
+// https://wicg.github.io/ua-client-hints/#navigatorua
+declare interface NavigatorUA {
+  readonly userAgentData?: NavigatorUAData;
+}
