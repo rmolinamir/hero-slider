@@ -1,4 +1,5 @@
 import React from 'react';
+
 import HeroSliderModuleCss from '../HeroSlider.module.css';
 import { AccessabilityOrientation, useAccessability } from './Accessability';
 

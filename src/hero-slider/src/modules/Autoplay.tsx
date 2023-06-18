@@ -1,8 +1,9 @@
 import React from 'react';
-import IntervalTimer, { IntervalState } from './IntervalTimer';
+
+import ConsoleLogger from './ConsoleLogger';
 import { useController } from './Controller';
 import { useIntersectionObserver } from './IntersectionObserver';
-import ConsoleLogger from './ConsoleLogger';
+import IntervalTimer, { IntervalState } from './IntervalTimer';
 
 const logger = ConsoleLogger.new();
 

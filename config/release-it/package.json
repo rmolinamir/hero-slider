@@ -1,0 +1,6 @@
+{
+  "name": "@config/release-it",
+  "version": "0.0.0",
+  "private": true,
+  "files": ["."]
+}

@@ -1,5 +1,5 @@
-import React from 'react';
 import type CSS from 'csstype';
+import React from 'react';
 
 const mobileThreshold = 1024;
 

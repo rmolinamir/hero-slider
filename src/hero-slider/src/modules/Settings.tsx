@@ -1,7 +1,8 @@
-import React from 'react';
 import type CSS from 'csstype';
-import ConsoleLogger, { LoggerLevels } from './ConsoleLogger';
+import React from 'react';
+
 import { PartiallyRequired } from '../utils/PartiallyRequired';
+import ConsoleLogger, { LoggerLevels } from './ConsoleLogger';
 
 export interface SettingsProps {
   /**

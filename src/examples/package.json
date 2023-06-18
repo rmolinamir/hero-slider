@@ -11,10 +11,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build": "react-scripts build",
     "deploy": "storybook-to-ghpages",
     "dev": "pnpm storybook:start",
-    "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
     "start": "react-scripts start",
     "storybook:build": "build-storybook -s public",
     "storybook:start": "start-storybook -p 6006 -s public",

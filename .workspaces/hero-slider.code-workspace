@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "monorepo",
+			"path": "../"
+		},
+		{
+			"name": "storybook",
+			"path": "../src/examples"
+		},
+		{
+			"name": "hero-slider",
+			"path": "../src/hero-slider"
+		}
+	]
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useManager } from './Manager';
 
 interface GetNextSlide {

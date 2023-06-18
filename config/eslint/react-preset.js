@@ -11,5 +11,10 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
     'react/prop-types': 'off'
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
   }
 };

@@ -716,6 +716,52 @@ interface OverlayProps {
 
 ---
 
+## Development
+
+This project is using [Storybook](https://storybook.js.org/) for development. On top of that, it's using Turborepo to manage the monorepo. The project is divided in two main packages, `hero-slider` and `examples`. The former is the package that contains the `hero-slider` component, and the latter is a package that runs a Storybook instance to showcase the `hero-slider` component and do end-to-end testing.
+
+The `hero-slider` package is using [Rollup](https://rollupjs.org/) to bundle the code, and [TypeScript](https://www.typescriptlang.org/) to type check the code.
+
+Finally, the project is using [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) to format and lint the code, [Jest](https://jestjs.io/) for unit testing, and [pnpm](https://pnpm.js.org/) as the package manager.
+
+Below you will find instructions on how to install, develop, build, and test the project.
+
+### Install
+
+To install the project, you will need to install [pnpm](https://pnpm.js.org/) first. Then, you can run the following command:
+
+```bash
+pnpm i
+```
+
+### Develop
+
+When developing, you will need to run the following command:
+
+```bash
+pnpm dev
+```
+
+This will start the Storybook instance and a watcher for the `hero-slider` package.
+
+### Build
+
+To build the project, you will need to run the following command:
+
+```bash
+pnpm build
+```
+
+### Test
+
+To test the project, you will need to run the following command:
+
+```bash
+pnpm test
+```
+
+---
+
 ## License
 
 MIT © [rmolinamir](https://github.com/rmolinamir)

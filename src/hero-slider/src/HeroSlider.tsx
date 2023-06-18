@@ -1,39 +1,40 @@
 import React from 'react';
-import HeroSliderModuleCss from './HeroSlider.module.css';
+
 import Buttons from './components/Buttons';
-import {
-  SettingsProps,
-  SettingsProvider,
-  useSettings
-} from './modules/Settings';
-import {
-  AnimationsProps,
-  AnimationsProvider,
-  useAnimations
-} from './modules/Animations';
-import {
-  ControllerProps,
-  ControllerProvider,
-  useController
-} from './modules/Controller';
-import { LayoutProvider, useLayout } from './modules/Layout';
+import HeroSliderModuleCss from './HeroSlider.module.css';
 import {
   AccessabilityProps,
   AccessabilityProvider,
   useAccessability
 } from './modules/Accessability';
 import {
+  AnimationsProps,
+  AnimationsProvider,
+  useAnimations
+} from './modules/Animations';
+import {
   AutoplayProps,
   AutoplayProvider,
   useAutoplay
 } from './modules/Autoplay';
-import { ManagerProps, ManagerProvider } from './modules/Manager';
+import ConsoleLogger from './modules/ConsoleLogger';
+import {
+  ControllerProps,
+  ControllerProvider,
+  useController
+} from './modules/Controller';
 import {
   IntersectionObserverProvider,
   useIntersectionObserver
 } from './modules/IntersectionObserver';
+import { LayoutProvider, useLayout } from './modules/Layout';
+import { ManagerProps, ManagerProvider } from './modules/Manager';
+import {
+  SettingsProps,
+  SettingsProvider,
+  useSettings
+} from './modules/Settings';
 import { composeCssClasses } from './utils/composeCssClasses';
-import ConsoleLogger from './modules/ConsoleLogger';
 
 const logger = ConsoleLogger.new();
 
@@ -132,8 +133,8 @@ function Orchestrator({
         style={{
           ...(CSSVariables as React.CSSProperties),
           ...style,
-          width: width,
-          height: height
+          width,
+          height
         }}
       >
         {children}
