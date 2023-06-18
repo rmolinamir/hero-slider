@@ -15,10 +15,15 @@
   "scripts": {
     "build": "pnpm rollup -c",
     "dev": "pnpm watch",
+    "lint:fix": "tsc --noEmit && eslint --fix",
+    "lint:prepublish": "tsc --project tsconfig.build.json --noEmit && eslint",
+    "lint": "tsc --noEmit && eslint",
     "prebuild": "rm -rf tsconfig.build.tsbuildinfo ./dist",
     "prepublish": "pnpm build",
     "prestart": "pnpm prebuild",
     "start": "pnpm rollup -c -w",
+    "release:dry": "pnpm release-it --dry-run",
+    "release": "pnpm release-it",
     "test": "pnpm jest",
     "test:watch": "pnpm jest --watch",
     "watch": "tsc --project tsconfig.build.json --watch"
