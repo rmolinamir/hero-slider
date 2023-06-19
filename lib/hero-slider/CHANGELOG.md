@@ -1,5 +1,7 @@
 # Changelog
 
+## [3.2.0](https://github.com/rmolinamir/hero-slider/compare/hero-slider-v3.1.1...${npm.name}-v3.2.0) (2023-06-19)
+
 ### 3.1.1 (2023-06-18)
 
 
