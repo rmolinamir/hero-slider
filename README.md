@@ -718,7 +718,7 @@ interface OverlayProps {
 
 ## Development
 
-This project is using [Storybook](https://storybook.js.org/) for development. On top of that, it's using Turborepo to manage the monorepo. The project is divided in two main packages, `hero-slider` and `examples`. The former is the package that contains the `hero-slider` component, and the latter is a package that runs a Storybook instance to showcase the `hero-slider` component and do end-to-end testing.
+This project is using [Storybook](https://storybook.js.org/) for development. On top of that, it's using Turborepo to manage the monorepo. The project is divided in two main packages, `hero-slider` and `storybook`. The former is the package that contains the `hero-slider` component, and the latter is a package that runs a Storybook instance to showcase the `hero-slider` component, interact, and do manual end-to-end testing.
 
 The `hero-slider` package is using [Rollup](https://rollupjs.org/) to bundle the code, and [TypeScript](https://www.typescriptlang.org/) to type check the code.
 
