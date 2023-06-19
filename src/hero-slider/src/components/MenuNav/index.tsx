@@ -1,10 +1,11 @@
 import React from 'react';
-import MenuNavModuleCss from './index.module.css';
-import { Nav, NavProps } from '../Nav';
+
+import { useController } from '../../modules/Controller';
 import { useLayout } from '../../modules/Layout';
 import { useManager } from '../../modules/Manager';
-import { useController } from '../../modules/Controller';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import { Nav, NavProps } from '../Nav';
+import MenuNavModuleCss from './index.module.css';
 
 /**
  * `MenuNav` component props.

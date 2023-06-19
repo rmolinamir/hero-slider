@@ -3,10 +3,10 @@ import React from 'react';
 import Buttons from './components/Buttons';
 import HeroSliderModuleCss from './HeroSlider.module.css';
 import {
-  AccessabilityProps,
-  AccessabilityProvider,
-  useAccessability
-} from './modules/Accessability';
+  AccessibilityProps,
+  AccessibilityProvider,
+  useAccessibility
+} from './modules/Accessibility';
 import {
   AnimationsProps,
   AnimationsProvider,
@@ -65,7 +65,7 @@ export interface HeroSliderProps {
   manager?: ManagerProps;
   settings?: SettingsProps;
   controller?: ControllerProps;
-  accessability?: AccessabilityProps;
+  accessibility?: AccessibilityProps;
   animations?: AnimationsProps;
   autoplay?: AutoplayProps;
 }
@@ -81,7 +81,7 @@ function Orchestrator({
 >) {
   logger.info('[Orchestrator] rerender');
 
-  const { shouldDisplayButtons } = useAccessability();
+  const { shouldDisplayButtons } = useAccessibility();
   const { sliderFadeInDuration, navbarFadeInDuration, navbarFadeInDelay } =
     useAnimations();
   const { state: layout } = useLayout();
@@ -90,13 +90,13 @@ function Orchestrator({
   const settings = useSettings();
   const { debounce } = useAutoplay();
   const { onTouchStartHandler, onTouchMoveHandler, onTouchEndHandler } =
-    useAccessability();
+    useAccessibility();
   const { elementObservedRef } = useIntersectionObserver();
 
   /**
    * CSS variables for the transitions.
    */
-  const CSSVariables = {
+  const cssVariables = {
     '--sliding-duration': `${slidingDuration}ms`,
     '--sliding-delay': `${slidingDelay}ms`,
     '--slide-transition-delay': `${getSlidingCycleDuration()}ms`,
@@ -117,10 +117,12 @@ function Orchestrator({
 
   return (
     <div
-      className={composeCssClasses('hero-slider-root', className)}
+      data-testid="hero-slider"
+      className={composeCssClasses('hero-slider', className)}
       ref={elementObservedRef}
     >
       <div
+        data-testid="hero-slider-wrapper"
         ref={layout.slider}
         className={composeCssClasses(
           'hero-slider-wrapper',
@@ -131,7 +133,7 @@ function Orchestrator({
         onTouchEnd={onTouchEndHandler}
         onMouseMoveCapture={debounce}
         style={{
-          ...(CSSVariables as React.CSSProperties),
+          ...(cssVariables as React.CSSProperties),
           ...style,
           width,
           height
@@ -152,7 +154,7 @@ export default function HeroSlider(
       <ManagerProvider manager={props.manager}>
         <SettingsProvider settings={props.settings}>
           <ControllerProvider controller={props.controller}>
-            <AccessabilityProvider accessability={props.accessability}>
+            <AccessibilityProvider accessibility={props.accessibility}>
               <AnimationsProvider animations={props.animations}>
                 <IntersectionObserverProvider>
                   <AutoplayProvider autoplay={props.autoplay}>
@@ -167,7 +169,7 @@ export default function HeroSlider(
                   </AutoplayProvider>
                 </IntersectionObserverProvider>
               </AnimationsProvider>
-            </AccessabilityProvider>
+            </AccessibilityProvider>
           </ControllerProvider>
         </SettingsProvider>
       </ManagerProvider>

@@ -1,9 +1,10 @@
+import HeroSlider, { Overlay, Slide } from 'hero-slider';
 import React from 'react';
-import HeroSlider, { Slide, Overlay } from 'hero-slider';
+
 import { Button } from '../../ui/Button';
-import Wrapper from '../../ui/Wrapper';
-import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
+import Title from '../../ui/Title';
+import Wrapper from '../../ui/Wrapper';
 
 const bogliasco = 'https://i.imgur.com/Gu5Cznz.jpg';
 const countyClare = 'https://i.imgur.com/idjXzVQ.jpg';
@@ -22,8 +23,8 @@ export default function ButtonsSlider() {
       controller={{
         slidingDuration: 400,
         slidingDelay: 100,
-        goToNextSlidePointer: goToNextSlidePointer,
-        goToPreviousSlidePointer: goToPreviousSlidePointer
+        goToNextSlidePointer,
+        goToPreviousSlidePointer
       }}
     >
       <Overlay>
@@ -47,7 +48,7 @@ export default function ButtonsSlider() {
               primary
               size="large"
               onClick={() =>
-                goToNextSlidePointer.current && goToNextSlidePointer?.current()
+                goToNextSlidePointer.current && goToNextSlidePointer.current()
               }
               label="Next"
             />

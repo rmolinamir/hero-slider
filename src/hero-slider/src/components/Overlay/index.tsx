@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { composeCssClasses } from '../../utils/composeCssClasses';
 import OverlayModuleCss from './index.module.css';
 
@@ -12,6 +13,7 @@ interface OverlayProps {
 export function Overlay(props: React.PropsWithChildren<OverlayProps>) {
   return (
     <div
+      data-testid="hero-slider-overlay"
       className={composeCssClasses(
         'hero-slider-overlay',
         OverlayModuleCss.Container

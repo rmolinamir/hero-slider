@@ -3,16 +3,16 @@ import React from 'react';
 import { useController } from './Controller';
 
 /**
- * `AccessabilityOrientation` definition used for the `SliderProps.orientation` prop.
+ * `AccessibilityOrientation` definition used for the `SliderProps.orientation` prop.
  * Used to define which swipes (depending on directions) will change the slides,
  * and where and how will the buttons render, if set to render.
  */
-export enum AccessabilityOrientation {
+export enum AccessibilityOrientation {
   VERTICAL = 'vertical',
   HORIZONTAL = 'horizontal'
 }
 
-export interface AccessabilityProps {
+export interface AccessibilityProps {
   /**
    * Controls render of the next and previous buttons.
    * @default true
@@ -31,7 +31,7 @@ export interface AccessabilityProps {
    * Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides).
    * @default 'horizontal'
    */
-  orientation?: `${AccessabilityOrientation}`;
+  orientation?: `${AccessibilityOrientation}`;
   /**
    * Pixel threshold for the Slider to register a swiping command to change slides.
    * @default 50
@@ -56,21 +56,21 @@ type State = {
   currentY: number | undefined;
 };
 type ProviderProps = React.PropsWithChildren<{
-  accessability?: AccessabilityProps;
+  accessibility?: AccessibilityProps;
 }>;
 
-const defaultProps: Required<AccessabilityProps> = {
+const defaultProps: Required<AccessibilityProps> = {
   shouldDisplayButtons: true,
   shouldSlideOnArrowKeypress: true,
-  orientation: AccessabilityOrientation.HORIZONTAL,
+  orientation: AccessibilityOrientation.HORIZONTAL,
   thresholdToSlide: 50
 };
 
-const AccessabilityStateContext = React.createContext<
+const AccessibilityStateContext = React.createContext<
   | {
       state: State;
       shouldDisplayButtons: boolean;
-      orientation: AccessabilityOrientation;
+      orientation: AccessibilityOrientation;
       onTouchStartHandler: (event: React.TouchEvent<HTMLDivElement>) => void;
       onTouchMoveHandler: (event: React.TouchEvent<HTMLDivElement>) => void;
       onTouchEndHandler: () => void;
@@ -78,7 +78,7 @@ const AccessabilityStateContext = React.createContext<
   | undefined
 >(undefined);
 
-function accessabilityReducer(state: State, action: Action): State {
+function accessibilityReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'start-motion': {
       return {
@@ -110,19 +110,19 @@ function accessabilityReducer(state: State, action: Action): State {
   }
 }
 
-function AccessabilityProvider({ children, accessability }: ProviderProps) {
-  const params: Required<AccessabilityProps> = {
+function AccessibilityProvider({ children, accessibility }: ProviderProps) {
+  const params: Required<AccessibilityProps> = {
     shouldDisplayButtons:
-      accessability?.shouldDisplayButtons ?? defaultProps.shouldDisplayButtons,
+      accessibility?.shouldDisplayButtons ?? defaultProps.shouldDisplayButtons,
     shouldSlideOnArrowKeypress:
-      accessability?.shouldSlideOnArrowKeypress ??
+      accessibility?.shouldSlideOnArrowKeypress ??
       defaultProps.shouldSlideOnArrowKeypress,
-    orientation: accessability?.orientation || defaultProps.orientation,
+    orientation: accessibility?.orientation || defaultProps.orientation,
     thresholdToSlide:
-      accessability?.thresholdToSlide ?? defaultProps.thresholdToSlide
+      accessibility?.thresholdToSlide ?? defaultProps.thresholdToSlide
   };
 
-  const [state, dispatch] = React.useReducer(accessabilityReducer, {
+  const [state, dispatch] = React.useReducer(accessibilityReducer, {
     initialX: undefined,
     initialY: undefined,
     currentX: undefined,
@@ -168,9 +168,9 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
 
     const isSlidingHorizontally: boolean = Math.abs(diffX) > Math.abs(diffY);
     const isSliderSetHorizontally: boolean =
-      params.orientation === AccessabilityOrientation.HORIZONTAL;
-    const isSliderVertically: boolean =
-      params.orientation === AccessabilityOrientation.VERTICAL;
+      params.orientation === AccessibilityOrientation.HORIZONTAL;
+    const isSliderSetVertically: boolean =
+      params.orientation === AccessibilityOrientation.VERTICAL;
 
     if (
       isSlidingHorizontally &&
@@ -181,7 +181,8 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
       if (isSwipingRight) goToNextSlide();
       else goToPreviousSlide();
     } else if (
-      isSliderVertically &&
+      !isSlidingHorizontally &&
+      isSliderSetVertically &&
       Math.abs(diffY) >= params.thresholdToSlide
     ) {
       const isSwipingUp = diffY > 0;
@@ -195,24 +196,26 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
   const onArrowKeypressHandler = (e: KeyboardEvent): void => {
     if (!params.shouldSlideOnArrowKeypress) return;
 
+    const code = e.code || e.charCode || e.keyCode;
+
     const isHorizontal =
-      params.orientation === AccessabilityOrientation.HORIZONTAL;
+      params.orientation === AccessibilityOrientation.HORIZONTAL;
 
     switch (true) {
       // Left keypress.
-      case isHorizontal && e.keyCode === 37:
+      case isHorizontal && code === '37':
         goToPreviousSlide();
         break;
       // Right keypress.
-      case isHorizontal && e.keyCode === 39:
+      case isHorizontal && code === '39':
         goToNextSlide();
         break;
       // Up keypress.
-      case !isHorizontal && e.keyCode === 38:
+      case !isHorizontal && code === '38':
         goToPreviousSlide();
         break;
       // Down keypress.
-      case !isHorizontal && e.keyCode === 40:
+      case !isHorizontal && code === '40':
         goToNextSlide();
         break;
       default: // Do nothing.
@@ -237,29 +240,29 @@ function AccessabilityProvider({ children, accessability }: ProviderProps) {
   const value = {
     state,
     shouldDisplayButtons: params.shouldDisplayButtons,
-    orientation: params.orientation as AccessabilityOrientation,
+    orientation: params.orientation as AccessibilityOrientation,
     onTouchStartHandler,
     onTouchMoveHandler,
     onTouchEndHandler
   };
 
   return (
-    <AccessabilityStateContext.Provider value={value}>
+    <AccessibilityStateContext.Provider value={value}>
       {children}
-    </AccessabilityStateContext.Provider>
+    </AccessibilityStateContext.Provider>
   );
 }
 
-function useAccessability() {
-  const context = React.useContext(AccessabilityStateContext);
+function useAccessibility() {
+  const context = React.useContext(AccessibilityStateContext);
 
   if (context === undefined) {
     throw new Error(
-      'useAccessability must be used within a AccessabilityProvider'
+      'useAccessibility must be used within a AccessibilityProvider'
     );
   }
 
   return context;
 }
 
-export { AccessabilityProvider, useAccessability };
+export { AccessibilityProvider, useAccessibility };

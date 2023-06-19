@@ -1,8 +1,9 @@
 import React from 'react';
-import MaskModuleCss from './index.module.css';
-import { BackgroundProps } from '../Background';
+
 import { useController } from '../../../modules/Controller';
 import { composeCssClasses } from '../../../utils/composeCssClasses';
+import { BackgroundProps } from '../Background';
+import MaskModuleCss from './index.module.css';
 
 export interface MaskProps {
   background?: Partial<BackgroundProps>;

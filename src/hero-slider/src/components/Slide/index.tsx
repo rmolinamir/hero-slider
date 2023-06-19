@@ -1,12 +1,13 @@
 import React from 'react';
-import SlideModuleCss from './index.module.css';
-import Background, { BackgroundProps } from './Background';
-import Mask from './Mask';
-import { useManager } from '../../modules/Manager';
-import { useController } from '../../modules/Controller';
+
 import { useAnimations } from '../../modules/Animations';
-import { composeCssClasses } from '../../utils/composeCssClasses';
 import ConsoleLogger from '../../modules/ConsoleLogger';
+import { useController } from '../../modules/Controller';
+import { useManager } from '../../modules/Manager';
+import { composeCssClasses } from '../../utils/composeCssClasses';
+import Background, { BackgroundProps } from './Background';
+import SlideModuleCss from './index.module.css';
+import Mask from './Mask';
 
 const logger = ConsoleLogger.new();
 
@@ -60,7 +61,7 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
 
   const {
     state: { activeSlide, isSliding, prevActiveSlide, slidingDirection }
-  } = useController(); // controller
+  } = useController();
 
   const { getSlidingAnimationCssClass } = useAnimations();
 
@@ -118,9 +119,15 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
       : null
   };
 
+  const isHidden = isSliding
+    ? slide.number !== activeSlide && slide.number !== prevActiveSlide
+    : slide.number !== activeSlide;
+
   return (
     <div
+      data-testid={`hero-slider-slide-${slide.number}`}
       ref={slideRef}
+      hidden={isHidden}
       className={classNames}
       style={{
         ...style,
@@ -128,6 +135,7 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
       }}
     >
       <Background {...background} onLoad={onBackgroundLoad} />
+
       <div
         className={composeCssClasses(
           'hero-slider-slide-wrapper',
@@ -144,7 +152,10 @@ export function Slide(props: React.PropsWithChildren<SlideProps>) {
           className={composeCssClasses(
             'hero-slider-slide-container',
             SlideModuleCss.Container,
-            { className: SlideModuleCss.Active, useIf: isActive && !isSliding }
+            {
+              className: SlideModuleCss.Active,
+              useIf: isActive && !isSliding
+            }
           )}
         >
           {children}

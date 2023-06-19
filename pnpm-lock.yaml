@@ -228,6 +228,9 @@ importers:
       '@types/react-lazyload':
         specifier: 3.2.0
         version: 3.2.0
+      '@types/testing-library__jest-dom':
+        specifier: ^5.14.5
+        version: 5.14.5
       csstype:
         specifier: 3.1.1
         version: 3.1.1
@@ -240,6 +243,9 @@ importers:
       jest-environment-jsdom:
         specifier: ~29.5.0
         version: 29.5.0
+      jsdom-testing-mocks:
+        specifier: ^1.9.0
+        version: 1.9.0
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -6735,6 +6741,10 @@ packages:
       open: 7.4.2
     dev: true
 
+  /bezier-easing@2.1.0:
+    resolution: {integrity: sha512-gbIqZ/eslnUFC1tjEvtz0sgx+xTK20wDnYMIA27VA04R7w6xxXQPZDbibjA9DTWZRA2CXtwHykkVzlCaAJAZig==}
+    dev: true
+
   /bfj@7.0.2:
     resolution: {integrity: sha512-+e/UqUzwmzJamNF50tBV6tZPTORow7gQ96iFow+8b562OdMpEK0BcJEq2OSPEDmAbSMBQ7PKZ87ubFkgxpYWgw==}
     engines: {node: '>= 8.0.0'}
@@ -8166,6 +8176,10 @@ packages:
       postcss-value-parser: 4.2.0
       semver: 7.5.2
       webpack: 5.74.0
+
+  /css-mediaquery@0.1.2:
+    resolution: {integrity: sha512-COtn4EROW5dBGlE/4PiKnh6rZpAPxDeFLaEEwt4i10jpDMFt2EhQGS79QmmrO+iKCHv0PU/HrOWEhijFd1x99Q==}
+    dev: true
 
   /css-minimizer-webpack-plugin@3.4.1(webpack@5.74.0):
     resolution: {integrity: sha512-1u6D71zeIfgngN2XNRJefc/hY7Ybsxd74Jm4qngIXyUEk7fss3VUzuHxLAq/R8NAba4QU9OUSaMZlbpRc7bM4Q==}
@@ -13096,6 +13110,14 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
+
+  /jsdom-testing-mocks@1.9.0:
+    resolution: {integrity: sha512-NsuAqHFi0j4FcxIzSp8NOBNB+ln2T5PvJ0ShFgEXwMnTP2K68dRv5mJE/yJadbMAhzYqUL85Aj+cjhG9lHGapQ==}
+    engines: {node: '>=14'}
+    dependencies:
+      bezier-easing: 2.1.0
+      css-mediaquery: 0.1.2
+    dev: true
 
   /jsdom@16.7.0:
     resolution: {integrity: sha512-u9Smc2G1USStM+s/x1ru5Sxrl6mPYCbByG1U/hUmqaVsm4tbNyS7CicOSRyuGQYZhTu0h84qkZZQ/I+dzizSVw==}

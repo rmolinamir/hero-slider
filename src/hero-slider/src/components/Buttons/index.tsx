@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
-import ButtonsModuleCss from './index.module.css';
-import { useManager } from '../../modules/Manager';
+
 import {
-  AccessabilityOrientation,
-  useAccessability
-} from '../../modules/Accessability';
+  AccessibilityOrientation,
+  useAccessibility
+} from '../../modules/Accessibility';
 import { useController } from '../../modules/Controller';
+import { useManager } from '../../modules/Manager';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import ButtonsModuleCss from './index.module.css';
 
 function ArrowSvg() {
   return (
@@ -30,18 +31,19 @@ export default function Buttons() {
     state: { isMobile }
   } = useManager();
 
-  const { orientation } = useAccessability();
+  const { orientation } = useAccessibility();
 
   const { goToPreviousSlide, goToNextSlide } = useController();
 
   if (isMobile) return null;
 
-  const isHorizontal = orientation === AccessabilityOrientation.HORIZONTAL;
+  const isHorizontal = orientation === AccessibilityOrientation.HORIZONTAL;
 
   return (
     <>
       {/* Previous */}
       <div
+        data-testid="hero-slider-previous"
         className={composeCssClasses(
           'hero-slider-previous',
           ButtonsModuleCss.Previous,
@@ -57,6 +59,7 @@ export default function Buttons() {
           )}
         >
           <button
+            data-testid="hero-slider-previous-button"
             className={composeCssClasses(
               'hero-slider-previous-button',
               ButtonsModuleCss.Button
@@ -69,6 +72,7 @@ export default function Buttons() {
       </div>
       {/* Next */}
       <div
+        data-testid="hero-slider-next"
         className={composeCssClasses(
           'hero-slider-next',
           ButtonsModuleCss.Next,
@@ -84,6 +88,7 @@ export default function Buttons() {
           )}
         >
           <button
+            data-testid="hero-slider-next-button"
             className={composeCssClasses(
               'hero-slider-next-button',
               ButtonsModuleCss.Button

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HeroSliderModuleCss from '../HeroSlider.module.css';
-import { AccessabilityOrientation, useAccessability } from './Accessability';
+import { AccessibilityOrientation, useAccessibility } from './Accessibility';
 
 enum SlidingAnimation {
   TOP_TO_BOTTOM = 'top_to_bottom',
@@ -78,7 +78,7 @@ const AnimationsStateContext = React.createContext<
 >(undefined);
 
 function AnimationsProvider({ children, animations }: ProviderProps) {
-  const { orientation } = useAccessability();
+  const { orientation } = useAccessibility();
 
   const params: Required<AnimationsProps> = {
     slidingAnimation:
@@ -113,11 +113,11 @@ function AnimationsProvider({ children, animations }: ProviderProps) {
           }
 
           if (direction === 'forward')
-            return orientation === AccessabilityOrientation.HORIZONTAL
+            return orientation === AccessibilityOrientation.HORIZONTAL
               ? SlidingAnimation.RIGHT_TO_LEFT
               : SlidingAnimation.BOTTOM_TO_TOP;
           else
-            return orientation === AccessabilityOrientation.HORIZONTAL
+            return orientation === AccessibilityOrientation.HORIZONTAL
               ? SlidingAnimation.LEFT_TO_RIGHT
               : SlidingAnimation.TOP_TO_BOTTOM;
         }

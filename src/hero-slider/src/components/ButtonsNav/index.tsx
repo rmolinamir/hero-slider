@@ -1,11 +1,12 @@
 import React from 'react';
-import ButtonsNavModuleCss from './index.module.css';
-import { Nav } from '../Nav';
-import { MenuNavProps } from '../MenuNav';
-import { useManager } from '../../modules/Manager';
+
 import { useController } from '../../modules/Controller';
 import { useLayout } from '../../modules/Layout';
+import { useManager } from '../../modules/Manager';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import { MenuNavProps } from '../MenuNav';
+import { Nav } from '../Nav';
+import ButtonsNavModuleCss from './index.module.css';
 
 /**
  * `ButtonsNav` component props.

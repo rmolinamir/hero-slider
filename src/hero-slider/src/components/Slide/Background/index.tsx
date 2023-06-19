@@ -1,7 +1,8 @@
-import React from 'react';
 import type CSS from 'csstype';
-import BackgroundModuleCss from './index.module.css';
+import React from 'react';
+
 import { composeCssClasses } from '../../../utils/composeCssClasses';
+import BackgroundModuleCss from './index.module.css';
 
 /**
  * Type definition for `BackgroundProps.backgroundAnimation`.

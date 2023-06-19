@@ -77,9 +77,8 @@ function LayoutProvider({ children }: React.PropsWithChildren) {
 function useLayout() {
   const context = React.useContext(LayoutStateContext);
 
-  if (context === undefined) {
+  if (context === undefined)
     throw new Error('useLayout must be used within a LayoutProvider');
-  }
 
   return context;
 }

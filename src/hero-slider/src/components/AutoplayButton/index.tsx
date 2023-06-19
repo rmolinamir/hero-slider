@@ -1,9 +1,10 @@
 import React from 'react';
-import AutoplayButtonModuleCss from './index.module.css';
-import { NavPosition } from '../Nav';
+
 import { useAutoplay } from '../../modules/Autoplay';
 import { IntervalState } from '../../modules/IntervalTimer';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import { NavPosition } from '../Nav';
+import AutoplayButtonModuleCss from './index.module.css';
 
 enum ButtonType {
   PLAY = 'play',
@@ -35,11 +36,11 @@ export interface AutoplayButtonProps {
 }
 
 class AutoplaySvg {
-  public static playPath =
-    'M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z' as const;
+  private static readonly playPath =
+    'M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z';
 
-  public static pausePath =
-    'M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z' as const;
+  private static readonly pausePath =
+    'M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z';
 
   public static getPath(buttonType: ButtonType): string {
     if (buttonType === ButtonType.PAUSE) return AutoplaySvg.pausePath;
@@ -86,6 +87,7 @@ export function AutoplayButton(props: AutoplayButtonProps) {
 
   return (
     <button
+      data-testid="hero-slider-autoplay-button"
       className={composeCssClasses(
         'hero-slider-autoplay-button',
         AutoplayButtonModuleCss.Button,

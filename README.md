@@ -55,7 +55,7 @@ interface ControllerProps {
    */
   onBeforeSliding?(activeSlide: number, nextSlide: number): void;
   /**
-   * Callback executed after the sliding ends similar to `onBeforeSliding`.
+   * Callback executed once the sliding starts similar to `onBeforeSliding`.
    * @param activeSlide
    * @param prevSlide
    * @default undefined
@@ -141,22 +141,22 @@ interface Props {
 type AutoplayProps = Props | boolean;
 ```
 
-### Accessability
+### Accessibility
 
-Handles accessability behaviors such as the orientation of the Slider (which affects the swipe motions used to command slide transtisions), and whether to render next and previous buttons.
+Handles accessibility behaviors such as the orientation of the Slider (which affects the swipe motions used to command slide transtisions), and whether to render next and previous buttons.
 
 ```ts
 /**
- * `AccessabilityOrientation` definition used for the `SliderProps.orientation` prop.
+ * `AccessibilityOrientation` definition used for the `SliderProps.orientation` prop.
  * Used to define which swipes (depending on directions) will change the slides,
  * and where and how will the buttons render, if set to render.
  */
-enum AccessabilityOrientation {
+enum AccessibilityOrientation {
   VERTICAL = 'vertical',
   HORIZONTAL = 'horizontal'
 }
 
-interface AccessabilityProps {
+interface AccessibilityProps {
   /**
    * Controls render of the next and previous buttons.
    * @default true
@@ -175,7 +175,7 @@ interface AccessabilityProps {
    * Swipe (touch) gestures in mobile devices to change slides will also be configured automatically depending on the orientation (e.g. if horizontal, swiping vertically won't change slides).
    * @default 'horizontal'
    */
-  orientation?: `${AccessabilityOrientation}`;
+  orientation?: `${AccessibilityOrientation}`;
   /**
    * Pixel threshold for the Slider to register a swiping command to change slides.
    * @default 50
@@ -229,7 +229,7 @@ interface SettingsProps {
 
 ### Manager
 
-The `Manager` will juggle the `Slide` components and from other processes behind the scenes. You can optionally set up whether the user is on a mobile device, but this will default to a standard navigator validation.
+The `Manager` will handle the `Slide` components and perform other processes behind the scenes. You can optionally set up whether the user is on a mobile device, but this will default to a standard navigator validation.
 
 ```ts
 interface ManagerProps {
@@ -281,7 +281,7 @@ interface HeroSliderProps {
   manager?: ManagerProps;
   settings?: SettingsProps;
   controller?: ControllerProps;
-  accessability?: AccessabilityProps;
+  accessibility?: AccessibilityProps;
   animations?: AnimationsProps;
   autoplay?: AutoplayProps;
 }

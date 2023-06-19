@@ -51,7 +51,7 @@ export interface ControllerProps {
    */
   onBeforeSliding?(activeSlide: number, nextSlide: number): void;
   /**
-   * Callback executed after the sliding ends similar to `onBeforeSliding`.
+   * Callback executed once the sliding starts similar to `onBeforeSliding`.
    * @param activeSlide
    * @param prevSlide
    * @default undefined
@@ -283,7 +283,7 @@ function ControllerProvider({ children, controller }: ProviderProps) {
     dispatch({
       type: 'set-delay-timeout',
       payload: setTimeout(() => {
-        if (controller?.onSliding)
+        if (state.isSliding && controller?.onSliding)
           controller.onSliding(state.activeSlide, state.prevActiveSlide);
       }, params.slidingDelay)
     });
@@ -293,7 +293,7 @@ function ControllerProvider({ children, controller }: ProviderProps) {
       payload: setTimeout(() => {
         dispatch({ type: 'finish-sliding' });
 
-        if (controller?.onAfterSliding)
+        if (!state.isSliding && controller?.onAfterSliding)
           controller.onAfterSliding(state.activeSlide, state.prevActiveSlide);
       }, getSlidingCycleDuration())
     });

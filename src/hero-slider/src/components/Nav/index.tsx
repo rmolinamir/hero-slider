@@ -1,8 +1,9 @@
 import React from 'react';
-import NavModuleCss from './index.module.css';
+
 import { useController } from '../../modules/Controller';
 import { useManager } from '../../modules/Manager';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import NavModuleCss from './index.module.css';
 
 /**
  * Defines the position of the navigation component.

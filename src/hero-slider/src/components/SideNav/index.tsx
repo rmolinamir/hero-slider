@@ -1,9 +1,10 @@
 import React from 'react';
-import SideNavModuleCss from './index.module.css';
-import { NavPosition, NavProps } from '../Nav';
+
 import { useController } from '../../modules/Controller';
 import { useManager } from '../../modules/Manager';
 import { composeCssClasses } from '../../utils/composeCssClasses';
+import { NavPosition, NavProps } from '../Nav';
+import SideNavModuleCss from './index.module.css';
 
 /**
  * `SideNav` component props.
