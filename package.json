@@ -19,8 +19,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "prebuild": "pnpm clean:dist",
-    "preclean:dist": "pnpm clean:tsbuildinfo",
     "preclean:deps": "pnpm clean:pnpm",
+    "preclean:dist": "pnpm clean:tsbuildinfo",
+    "test": "turbo run test --parallel --no-deps",
     "watch": "turbo run build --watch"
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ export default function ButtonsSlider() {
 
   return (
     <HeroSlider
-      accessability={{
+      accessibility={{
         shouldDisplayButtons: false
       }}
       controller={{

@@ -1,7 +1,8 @@
-import HeroSlider, { Slide, Overlay, Nav, SideNav } from 'hero-slider';
-import Wrapper from '../../ui/Wrapper';
-import Title from '../../ui/Title';
+import HeroSlider, { Nav, Overlay, SideNav, Slide } from 'hero-slider';
+
 import Subtitle from '../../ui/Subtitle';
+import Title from '../../ui/Title';
+import Wrapper from '../../ui/Wrapper';
 import salta from './backgrounds/Salta - Argentina.jpg';
 import scharbeutz from './backgrounds/Scharbeutz - Germany.jpg';
 import selvaDiValGardena from './backgrounds/Selva Di Val Gardena - Italy.jpg';
@@ -10,7 +11,7 @@ import seoraksanMountains from './backgrounds/Seoraksan Mountains - South Korea.
 export default function VerticalSlider() {
   return (
     <HeroSlider
-      accessability={{
+      accessibility={{
         orientation: 'vertical'
       }}
       controller={{

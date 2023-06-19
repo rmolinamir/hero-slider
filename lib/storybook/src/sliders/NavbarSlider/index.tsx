@@ -1,18 +1,19 @@
-import HeroSlider, { Slide, Overlay, MenuNav } from 'hero-slider';
+import HeroSlider, { MenuNav, Overlay, Slide } from 'hero-slider';
+
 import Navbar from '../../ui/Navbar';
-import Wrapper from '../../ui/Wrapper';
-import Title from '../../ui/Title';
 import Subtitle from '../../ui/Subtitle';
+import Title from '../../ui/Title';
+import Wrapper from '../../ui/Wrapper';
+import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United States.jpg';
+import hakone from './backgrounds/Hakone - Japan.jpg';
 import kyoto from './backgrounds/Kyoto - Japan.jpg';
 import tenryuJiTemple from './backgrounds/Tenryu-ji Temple - Kyōto-shi - Japan.jpg';
-import hakone from './backgrounds/Hakone - Japan.jpg';
-import byodoInTemple from './backgrounds/Byodo-In Temple - Kaneohe - United States.jpg';
 
 export default function NavbarSlider() {
   return (
     <HeroSlider
       height="100vh"
-      accessability={{
+      accessibility={{
         shouldDisplayButtons: false,
         orientation: 'vertical'
       }}

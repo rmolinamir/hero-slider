@@ -196,26 +196,26 @@ function AccessibilityProvider({ children, accessibility }: ProviderProps) {
   const onArrowKeypressHandler = (e: KeyboardEvent): void => {
     if (!params.shouldSlideOnArrowKeypress) return;
 
-    const code = e.code || e.charCode || e.keyCode;
+    const code = e.key || e.code || e.keyCode;
 
     const isHorizontal =
       params.orientation === AccessibilityOrientation.HORIZONTAL;
 
     switch (true) {
       // Left keypress.
-      case isHorizontal && code === '37':
+      case isHorizontal && (code === 'ArrowLeft' || code === 37):
         goToPreviousSlide();
         break;
       // Right keypress.
-      case isHorizontal && code === '39':
+      case isHorizontal && (code === 'ArrowRight' || code === 39):
         goToNextSlide();
         break;
       // Up keypress.
-      case !isHorizontal && code === '38':
+      case !isHorizontal && (code === 'ArrowUp' || code === 38):
         goToPreviousSlide();
         break;
       // Down keypress.
-      case !isHorizontal && code === '40':
+      case !isHorizontal && (code === 'ArrowDown' || code === 40):
         goToNextSlide();
         break;
       default: // Do nothing.
