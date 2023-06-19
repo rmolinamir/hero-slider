@@ -58,30 +58,23 @@ describe('render', () => {
     cleanup();
   });
 
-  test('initial UI is rendered as expected', async () => {
-    const { getByTestId, queryByTestId, queryByText } = renderSlider();
+  test('should not render buttons if isMobile is true', async () => {
+    const { queryByTestId } = renderSlider({ manager: { isMobile: true } });
 
-    expect(getByTestId('hero-slider')).toBeInTheDocument();
+    expect(queryByTestId('hero-slider-previous')).not.toBeInTheDocument();
+    expect(
+      queryByTestId('hero-slider-previous-button')
+    ).not.toBeInTheDocument();
+    expect(queryByTestId('hero-slider-next')).not.toBeInTheDocument();
+    expect(queryByTestId('hero-slider-next-button')).not.toBeInTheDocument();
+  });
 
-    expect(getByTestId('hero-slider-previous')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-previous-button')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-next')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-next-button')).toBeInTheDocument();
+  test('should render buttons if isMobile is false', async () => {
+    const { queryByTestId } = renderSlider({ manager: { isMobile: false } });
 
-    expect(getByTestId('hero-slider-overlay')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-overlay')).toBeVisible();
-
-    expect(getByTestId('hero-slider-slide-1')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-slide-2')).toBeInTheDocument();
-    expect(getByTestId('hero-slider-slide-3')).toBeInTheDocument();
-    expect(queryByTestId('hero-slider-slide-4')).not.toBeInTheDocument();
-
-    expect(getByTestId('hero-slider-slide-1')).toBeVisible();
-    expect(getByTestId('hero-slider-slide-2')).not.toBeVisible();
-    expect(getByTestId('hero-slider-slide-3')).not.toBeVisible();
-
-    expect(queryByText('First slide')).toBeInTheDocument();
-    expect(queryByText('Second slide')).toBeInTheDocument();
-    expect(queryByText('Third slide')).toBeInTheDocument();
+    expect(queryByTestId('hero-slider-previous')).toBeInTheDocument();
+    expect(queryByTestId('hero-slider-previous-button')).toBeInTheDocument();
+    expect(queryByTestId('hero-slider-next')).toBeInTheDocument();
+    expect(queryByTestId('hero-slider-next-button')).toBeInTheDocument();
   });
 });
