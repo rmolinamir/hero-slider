@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useAnimations } from '../../modules/Animations';
 import ConsoleLogger from '../../modules/ConsoleLogger';
 import { useController } from '../../modules/Controller';

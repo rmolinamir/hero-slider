@@ -716,6 +716,26 @@ interface OverlayProps {
 
 ---
 
+## React Server Components
+
+If you are working with React Server Components (e.g. Next.js), it recommended to import the CSS file of the package to avoid "popping" effects when the CSS is loaded. You can do this by importing the `index.css` file from the `hero-slider` package. For example:
+
+```tsx
+'use client';
+import 'hero-slider/dist/index.css';
+import HeroSlider, { Nav, Overlay, Slide } from 'hero-slider';
+
+export default function BasicSlider() {
+  return (
+    <HeroSlider className='h-full w-full'>
+      ...
+    </HeroSlider>
+  );
+}
+```
+
+If you don't import the CSS file, the `HeroSlider` component will still work, but the CSS will be loaded after the component is mounted, which will cause a "popping" effect.
+
 ## Development
 
 This project is using [Storybook](https://storybook.js.org/) for development. On top of that, it's using Turborepo to manage the monorepo. The project is divided in two main packages, `hero-slider` and `storybook`. The former is the package that contains the `hero-slider` component, and the latter is a package that runs a Storybook instance to showcase the `hero-slider` component, interact, and do manual end-to-end testing.

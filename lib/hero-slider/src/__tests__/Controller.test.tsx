@@ -1,6 +1,5 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
-
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import HeroSlider, { Overlay, Slide } from '../';
 import { wait } from '../../tests/helpers/wait';
 import { intersectionObserverMock } from '../../tests/mocks/intersectionObserverMock';
@@ -31,13 +30,17 @@ function TestSuiteSlider(props: HeroSliderProps = {}) {
             goToPreviousSlidePointer?.current &&
             goToPreviousSlidePointer.current()
           }
-        />
+        >
+          Previous
+        </button>
         <button
           data-testid="custom-next-button"
           onClick={() =>
             goToNextSlidePointer?.current && goToNextSlidePointer.current()
           }
-        />
+        >
+          Next
+        </button>
       </Overlay>
 
       <Slide
@@ -343,7 +346,7 @@ describe('sliding callbacks', () => {
     cleanup();
   });
 
-  test('onBeforeSliding and onSliding are called as expected', async () => {
+  test('callbacks are called as expected', async () => {
     const onBeforeSliding = jest.fn();
     const onSliding = jest.fn();
     const onAfterSliding = jest.fn();
@@ -368,9 +371,9 @@ describe('sliding callbacks', () => {
 
     await wait(100);
 
-    expect(onBeforeSliding).toBeCalledTimes(1);
-    expect(onSliding).toBeCalledTimes(1);
-    expect(onAfterSliding).toBeCalledTimes(1);
+    expect(onBeforeSliding).toHaveBeenCalledTimes(1);
+    expect(onSliding).toHaveBeenCalledTimes(1);
+    expect(onAfterSliding).toHaveBeenCalledTimes(1);
   });
 });
 

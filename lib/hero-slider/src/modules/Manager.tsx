@@ -85,6 +85,8 @@ function managerReducer(state: State, action: Action): State {
     }
     case 'register-slide': {
       const { slides } = state;
+      if (slides.has(action.payload.ref))
+        return { ...state, totalSlides: slides.size };
       slides.set(action.payload.ref, {
         ref: action.payload.ref,
         number: slides.size + 1,
@@ -94,6 +96,7 @@ function managerReducer(state: State, action: Action): State {
     }
     case 'remove-slide': {
       const { slides } = state;
+      if (!slides.has(action.payload)) return state;
       slides.delete(action.payload);
       return { isMobile: state.isMobile, slides, totalSlides: slides.size };
     }
@@ -153,7 +156,12 @@ function ManagerProvider({ children, manager }: ProviderProps) {
 
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, getSlide, registerSlide, removeSlide };
+  const value = {
+    state,
+    getSlide,
+    registerSlide,
+    removeSlide
+  };
 
   return (
     <ManagerStateContext.Provider value={value}>

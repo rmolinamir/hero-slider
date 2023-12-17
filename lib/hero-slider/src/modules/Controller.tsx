@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useManager } from './Manager';
 
 interface GetNextSlide {
@@ -125,6 +124,7 @@ const ControllerStateContext = React.createContext<
 function settingsReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'start-sliding': {
+      if (state.isSliding) return state;
       return {
         ...state,
         isSliding: true,
@@ -134,6 +134,7 @@ function settingsReducer(state: State, action: Action): State {
       };
     }
     case 'finish-sliding': {
+      if (!state.isSliding) return state;
       return {
         ...state,
         isSliding: false,
@@ -205,11 +206,11 @@ function ControllerProvider({ children, controller }: ProviderProps) {
 
     const isNotFirstSlide = aSlide > 1;
 
-    let nextSlide: number;
-    if (isNotFirstSlide) nextSlide = aSlide - 1;
-    else nextSlide = lastSlide;
+    let prevSlide: number;
+    if (isNotFirstSlide) prevSlide = aSlide - 1;
+    else prevSlide = lastSlide;
 
-    return nextSlide;
+    return prevSlide;
   };
 
   /**
@@ -280,30 +281,33 @@ function ControllerProvider({ children, controller }: ProviderProps) {
    * Saves the timeout ID to `slidingTimeout`. The `onSliding` and `onAfterSliding` events are executed here.
    */
   React.useEffect(() => {
+    const delayTimeout = setTimeout(() => {
+      if (state.isSliding && controller?.onSliding)
+        controller.onSliding(state.activeSlide, state.prevActiveSlide);
+    }, params.slidingDelay);
+
+    const slidingTimeout = setTimeout(() => {
+      dispatch({ type: 'finish-sliding' });
+      if (controller?.onAfterSliding)
+        controller.onAfterSliding(state.activeSlide, state.prevActiveSlide);
+    }, getSlidingCycleDuration());
+
     dispatch({
       type: 'set-delay-timeout',
-      payload: setTimeout(() => {
-        if (state.isSliding && controller?.onSliding)
-          controller.onSliding(state.activeSlide, state.prevActiveSlide);
-      }, params.slidingDelay)
+      payload: delayTimeout
     });
 
     dispatch({
       type: 'set-sliding-timeout',
-      payload: setTimeout(() => {
-        dispatch({ type: 'finish-sliding' });
-
-        if (!state.isSliding && controller?.onAfterSliding)
-          controller.onAfterSliding(state.activeSlide, state.prevActiveSlide);
-      }, getSlidingCycleDuration())
+      payload: slidingTimeout
     });
 
     /**
      * Clearing any existing timeouts to avoid memory leaks, and clear event listener.
      */
     return () => {
-      if (state.delayTimeout) clearTimeout(state.delayTimeout);
-      if (state.slidingTimeout) clearTimeout(state.slidingTimeout);
+      clearTimeout(delayTimeout);
+      clearTimeout(slidingTimeout);
     };
   }, [state.activeSlide]);
 

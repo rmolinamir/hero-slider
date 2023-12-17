@@ -21,6 +21,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "pnpm rollup -c",
+    "build:watch": "pnpm rollup -c --watch",
     "dev": "pnpm watch",
     "lint:fix": "tsc --noEmit && eslint --fix",
     "lint:prepublish": "tsc --project tsconfig.build.json --noEmit && eslint",
