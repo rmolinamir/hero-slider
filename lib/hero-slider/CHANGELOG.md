@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.2.1](https://github.com/rmolinamir/hero-slider/compare/hero-slider-v3.2.0...${npm.name}-v3.2.1) (2023-12-17)
+
+
+### Bug Fixes
+
+* **rsc:** fixed RSC compatibility & sliding callbacks ([009888b](https://github.com/rmolinamir/hero-slider/commit/009888b1e051c060146aafd19bb5a568e8ad575c)), closes [#14](https://github.com/rmolinamir/hero-slider/issues/14)
+
 ## [3.2.0](https://github.com/rmolinamir/hero-slider/compare/hero-slider-v3.1.1...${npm.name}-v3.2.0) (2023-06-19)
 
 ### 3.1.1 (2023-06-18)
